@@ -290,16 +290,16 @@ export default defineConfig({
               link: '/zh-cn/stage-1/1.4-complete-project-practice/'
             },
             {
-              text: '5. 大作业：完成一个 Web 应用原型',
-              link: '/zh-cn/stage-1/1.5-final-project/'
-            },
-            {
               text: '附录 A：产品思维补充',
               link: '/zh-cn/stage-1/appendix-a-product-thinking/'
             },
             {
               text: '附录 B：常见报错及解决方案',
               link: '/zh-cn/stage-1/appendix-b-common-errors/'
+            },
+            {
+              text: '附录 C：产业多分类场景方向参考',
+              link: '/zh-cn/stage-1/appendix-industry-scenarios/'
             },
             {
               text: '扩展阅读 1：7 款主流 Vibe Coding 在线平台实测对比',
@@ -626,6 +626,10 @@ export default defineConfig({
               ]
             }
           ]
+        },
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
         }
       }
     },
@@ -667,7 +671,11 @@ export default defineConfig({
           { text: 'Appendix', link: '/en-us/appendix/ai-capability-dictionary' }
         ],
         // TODO: Add English sidebar when content is ready
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
 
@@ -708,7 +716,11 @@ export default defineConfig({
           { text: '付録', link: '/ja-jp/appendix/ai-capability-dictionary' }
         ],
         // TODO: Add Japanese sidebar when content is ready
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'zh-tw': {
@@ -746,7 +758,11 @@ export default defineConfig({
           },
           { text: '附錄', link: '/zh-tw/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'ko-kr': {
@@ -781,7 +797,11 @@ export default defineConfig({
           },
           { text: '부록', link: '/ko-kr/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'es-es': {
@@ -819,7 +839,11 @@ export default defineConfig({
           },
           { text: 'Apéndice', link: '/es-es/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'fr-fr': {
@@ -854,7 +878,11 @@ export default defineConfig({
           },
           { text: 'Annexe', link: '/fr-fr/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'de-de': {
@@ -889,7 +917,11 @@ export default defineConfig({
           },
           { text: 'Anhang', link: '/de-de/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'ar-sa': {
@@ -927,7 +959,11 @@ export default defineConfig({
           },
           { text: 'ملحق', link: '/ar-sa/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     },
     'vi-vn': {
@@ -962,7 +998,11 @@ export default defineConfig({
           },
           { text: 'Phụ lục', link: '/vi-vn/appendix/ai-capability-dictionary' }
         ],
-        sidebar: {}
+        sidebar: {},
+        footer: {
+          message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a>',
+          copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+        }
       }
     }
   }
