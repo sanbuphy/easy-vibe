@@ -8,6 +8,9 @@ import { onMounted, watch, nextTick } from 'vue'
 import { useRoute, useData } from 'vitepress'
 import './style.css'
 import Layout from './Layout.vue'
+import HomeFeatures from './components/HomeFeatures.vue'
+import CategoryIndex from './components/CategoryIndex.vue'
+import ArticleGrid from './components/ArticleGrid.vue'
 import StepBar from './components/StepBar.vue'
 import ChapterIntroduction from './components/ChapterIntroduction.vue'
 import WebTerminal from './components/appendix/terminal-intro/WebTerminal.vue'
@@ -268,6 +271,9 @@ export default {
   Layout,
   enhanceApp({ app }) {
     app.use(ElementPlus)
+    app.component('HomeFeatures', HomeFeatures)
+    app.component('CategoryIndex', CategoryIndex)
+    app.component('ArticleGrid', ArticleGrid)
     app.component('StepBar', StepBar)
     app.component('ChapterIntroduction', ChapterIntroduction)
     app.component('WebTerminal', WebTerminal)
