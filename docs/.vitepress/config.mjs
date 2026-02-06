@@ -196,8 +196,10 @@ const commonThemeConfig = {
     level: [1, 6]
   },
   footer: {
-    message: '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a> | <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010602202215" rel="noreferrer" target="_blank">京公网安备11010602202215号</a>',
-    copyright: '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
+    message:
+      '<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2026002630号-1</a> | <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010602202215" rel="noreferrer" target="_blank">京公网安备11010602202215号</a>',
+    copyright:
+      '本作品采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议（CC BY-NC-SA 4.0）</a> 进行许可'
   }
 }
 
@@ -311,18 +313,18 @@ export default defineConfig({
         nav: [
           { text: '首页', link: '/zh-cn/' },
           {
-            text: '产品经理',
+            text: '新手与产品原型',
             link: '/zh-cn/stage-0/'
           },
           {
             text: '初中级开发',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/intro'
           },
           {
             text: '高级开发',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/intro'
           },
-          { text: '附录', link: '/zh-cn/appendix/' }
+          { text: '附录', link: '/zh-cn/appendix/intro' }
         ],
         sidebar: {
           '/zh-cn/stage-0/': productManagerSidebar,
@@ -604,6 +606,22 @@ export default defineConfig({
                 {
                   text: '浏览器调试器',
                   link: '/zh-cn/appendix/browser-devtools'
+                },
+                {
+                  text: '浏览器渲染原理',
+                  link: '/zh-cn/appendix/browser-rendering-pipeline'
+                },
+                {
+                  text: '前端路由原理',
+                  link: '/zh-cn/appendix/frontend-routing'
+                },
+                {
+                  text: '组件状态管理',
+                  link: '/zh-cn/appendix/component-state-management'
+                },
+                {
+                  text: '前端工程化',
+                  link: '/zh-cn/appendix/frontend-engineering'
                 }
               ]
             },
@@ -616,15 +634,47 @@ export default defineConfig({
                   link: '/zh-cn/appendix/backend-evolution'
                 },
                 {
+                  text: '后端分层架构',
+                  link: '/zh-cn/appendix/backend-layered-architecture'
+                },
+                {
                   text: '后端编程语言',
                   link: '/zh-cn/appendix/backend-languages'
+                },
+                {
+                  text: '并发编程模型',
+                  link: '/zh-cn/appendix/concurrency-models'
+                },
+                {
+                  text: '接口设计规范',
+                  link: '/zh-cn/appendix/api-design'
                 },
                 { text: '数据库原理', link: '/zh-cn/appendix/database-intro' },
                 { text: '系统缓存设计', link: '/zh-cn/appendix/cache-design' },
                 { text: '消息队列设计', link: '/zh-cn/appendix/queue-design' },
                 { text: '鉴权原理与实战', link: '/zh-cn/appendix/auth-design' },
+                { text: '网关与反向代理', link: '/zh-cn/appendix/gateway-proxy' },
+                { text: '负载均衡策略', link: '/zh-cn/appendix/load-balancing' },
                 { text: '埋点设计', link: '/zh-cn/appendix/tracking-design' },
                 { text: '线上运维', link: '/zh-cn/appendix/operations' }
+              ]
+            },
+            {
+              text: '云计算与服务',
+              collapsed: false,
+              items: [
+                {
+                  text: '云服务基础',
+                  link: '/zh-cn/appendix/cloud-services'
+                },
+                {
+                  text: 'IAM 权限管理',
+                  link: '/zh-cn/appendix/cloud-iam'
+                },
+                {
+                  text: '对象存储与 CDN',
+                  link: '/zh-cn/appendix/cloud-storage-cdn'
+                }
               ]
             },
             {
@@ -643,7 +693,7 @@ export default defineConfig({
               ]
             }
           ]
-        },
+        }
       }
     },
 
@@ -669,21 +719,21 @@ export default defineConfig({
         nav: [
           { text: 'Home', link: '/en-us/' },
           {
-            text: 'Product Manager',
+            text: 'Novice & PM',
             link: '/en-us/stage-0/'
           },
           {
             text: 'Full-Stack Development',
-            link: '/en-us/stage-2/'
+            link: '/en-us/stage-2/intro'
           },
           {
             text: 'Advanced Development',
-            link: '/en-us/stage-3/'
+            link: '/en-us/stage-3/intro'
           },
-          { text: 'Appendix', link: '/en-us/appendix/' }
+          { text: 'Appendix', link: '/en-us/appendix/intro' }
         ],
         // TODO: Add English sidebar when content is ready
-        sidebar: {},
+        sidebar: {}
       }
     },
 
@@ -709,21 +759,21 @@ export default defineConfig({
         nav: [
           { text: 'ホーム', link: '/ja-jp/' },
           {
-            text: 'AI プロダクトマネージャー',
+            text: '初心者とPM',
             link: '/ja-jp/stage-0/'
           },
           {
             text: 'フルスタック開発',
-            link: '/ja-jp/stage-2/'
+            link: '/ja-jp/stage-2/intro'
           },
           {
             text: '上級開発',
-            link: '/ja-jp/stage-3/'
+            link: '/ja-jp/stage-3/intro'
           },
-          { text: '付録', link: '/ja-jp/appendix/' }
+          { text: '付録', link: '/ja-jp/appendix/intro' }
         ],
         // TODO: Add Japanese sidebar when content is ready
-        sidebar: {},
+        sidebar: {}
       }
     },
     'zh-tw': {
@@ -747,20 +797,20 @@ export default defineConfig({
         nav: [
           { text: '首頁', link: '/zh-tw/' },
           {
-            text: '產品經理',
+            text: '新手與產品原型',
             link: '/zh-tw/stage-0/'
           },
           {
             text: '初中級開發',
-            link: '/zh-tw/stage-2/'
+            link: '/zh-tw/stage-2/intro'
           },
           {
             text: '高級開發',
-            link: '/zh-tw/stage-3/'
+            link: '/zh-tw/stage-3/intro'
           },
-          { text: '附錄', link: '/zh-tw/appendix/' }
+          { text: '附錄', link: '/zh-tw/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'ko-kr': {
@@ -783,18 +833,18 @@ export default defineConfig({
         },
         nav: [
           { text: '홈', link: '/ko-kr/' },
-          { text: 'AI PM', link: '/ko-kr/stage-0/' },
+          { text: '초보자 & PM', link: '/ko-kr/stage-0/' },
           {
             text: '풀스택 개발',
-            link: '/ko-kr/stage-2/'
+            link: '/ko-kr/stage-2/intro'
           },
           {
             text: '고급 개발',
-            link: '/ko-kr/stage-3/'
+            link: '/ko-kr/stage-3/intro'
           },
-          { text: '부록', link: '/ko-kr/appendix/' }
+          { text: '부록', link: '/ko-kr/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'es-es': {
@@ -818,20 +868,20 @@ export default defineConfig({
         nav: [
           { text: 'Inicio', link: '/es-es/' },
           {
-            text: 'PM de IA',
+            text: 'Principiante y PM',
             link: '/es-es/stage-0/'
           },
           {
             text: 'Desarrollo Full Stack',
-            link: '/es-es/stage-2/'
+            link: '/es-es/stage-2/intro'
           },
           {
             text: 'Desarrollo Avanzado',
-            link: '/es-es/stage-3/'
+            link: '/es-es/stage-3/intro'
           },
-          { text: 'Apéndice', link: '/es-es/appendix/' }
+          { text: 'Apéndice', link: '/es-es/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'fr-fr': {
@@ -854,18 +904,18 @@ export default defineConfig({
         },
         nav: [
           { text: 'Accueil', link: '/fr-fr/' },
-          { text: 'PM IA', link: '/fr-fr/stage-0/' },
+          { text: 'Débutant & PM', link: '/fr-fr/stage-0/' },
           {
             text: 'Développement Full Stack',
-            link: '/fr-fr/stage-2/'
+            link: '/fr-fr/stage-2/intro'
           },
           {
             text: 'Développement Avancé',
-            link: '/fr-fr/stage-3/'
+            link: '/fr-fr/stage-3/intro'
           },
-          { text: 'Annexe', link: '/fr-fr/appendix/' }
+          { text: 'Annexe', link: '/fr-fr/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'de-de': {
@@ -888,18 +938,18 @@ export default defineConfig({
         },
         nav: [
           { text: 'Start', link: '/de-de/' },
-          { text: 'KI-PM', link: '/de-de/stage-0/' },
+          { text: 'Anfänger & PM', link: '/de-de/stage-0/' },
           {
             text: 'Full Stack Entwicklung',
-            link: '/de-de/stage-2/'
+            link: '/de-de/stage-2/intro'
           },
           {
             text: 'Fortgeschrittene Entwicklung',
-            link: '/de-de/stage-3/'
+            link: '/de-de/stage-3/intro'
           },
-          { text: 'Anhang', link: '/de-de/appendix/' }
+          { text: 'Anhang', link: '/de-de/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'ar-sa': {
@@ -923,20 +973,20 @@ export default defineConfig({
         nav: [
           { text: 'الرئيسية', link: '/ar-sa/' },
           {
-            text: 'مدير منتج AI',
+            text: 'مبتدأ & PM',
             link: '/ar-sa/stage-0/'
           },
           {
             text: 'تطوير Full Stack',
-            link: '/ar-sa/stage-2/'
+            link: '/ar-sa/stage-2/intro'
           },
           {
             text: 'تطوير متقدم',
-            link: '/ar-sa/stage-3/'
+            link: '/ar-sa/stage-3/intro'
           },
-          { text: 'ملحق', link: '/ar-sa/appendix/' }
+          { text: 'ملحق', link: '/ar-sa/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     },
     'vi-vn': {
@@ -960,20 +1010,20 @@ export default defineConfig({
         nav: [
           { text: 'Trang chủ', link: '/vi-vn/' },
           {
-            text: 'PM AI',
+            text: 'Người mới & PM',
             link: '/vi-vn/stage-0/'
           },
           {
             text: 'Phát triển Full Stack',
-            link: '/vi-vn/stage-2/'
+            link: '/vi-vn/stage-2/intro'
           },
           {
             text: 'Phát triển Nâng cao',
-            link: '/vi-vn/stage-3/'
+            link: '/vi-vn/stage-3/intro'
           },
-          { text: 'Phụ lục', link: '/vi-vn/appendix/' }
+          { text: 'Phụ lục', link: '/vi-vn/appendix/intro' }
         ],
-        sidebar: {},
+        sidebar: {}
       }
     }
   }

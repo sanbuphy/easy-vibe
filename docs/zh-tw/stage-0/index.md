@@ -1,24 +1,66 @@
-# AI 产品经理
+# 新手與產品原型
 
-欢迎来到 AI 产品经理阶段。在这里，你将从零开始，掌握 Vibe Coding 工作流，成为能够独立完成产品设计的超级个体。
+歡迎來到 **AI 產品經理** 階段！這是 Easy-Vibe 教程的起點，專為零基礎學習者設計。
 
-## 阶段概览
+## 你將學到什麼
 
-### 新手入门
-适合产品、运营及非技术背景。通过做游戏理解 AI 编程逻辑，建立信心。
+在這個階段，你將從零開始，掌握 Vibe Coding 工作流，成為能夠獨立完成產品設計的超級個體。
 
-- [1. 学习地图](/zh-tw/stage-0/0.1-learning-map/)
-- [2. AI 时代，会说话就会编程](/zh-tw/stage-0/0.2-ai-capabilities-through-games/)
+### 新手入門
 
-### 产品经理
-掌握 Vibe Coding 工作流。学会拆解需求，独立完成高保真 Web 应用原型。
+適合產品、運營及非技術背景。通過做遊戲理解 AI 編程邏輯，建立信心：
+<NavGrid>
+  <NavCard
+    href="/zh-tw/stage-0/0.1-learning-map/"
+    title="學習地圖"
+    description="了解整個學習路徑，明確每個階段的目標和收穫"
+  />
+  <NavCard
+    href="/zh-tw/stage-0/0.2-ai-capabilities-through-games/"
+    title="AI 時代，會說話就會編程"
+    description="通過貪吃蛇等小遊戲，體驗 AI 編程的魅力，打破對編程的恐懼"
+  />
+</NavGrid>
 
-- [1. 认识 AI IDE 工具](/zh-tw/stage-1/1.1-introduction-to-ai-ide/)
-- [2. 动手做出原型](/zh-tw/stage-1/1.2-building-prototype/)
-- [3. 给原型加上 AI 能力](/zh-tw/stage-1/1.3-integrating-ai-capabilities/)
-- [4. 完整项目实战](/zh-tw/stage-1/1.4-complete-project-practice/)
-- [附录 A：产品思维补充](/zh-tw/stage-1/appendix-a-product-thinking/)
-- [附录 B：常见报错及解决方案](/zh-tw/stage-1/appendix-b-common-errors/)
-- [附录 C：产业多分类场景方向参考](/zh-tw/stage-1/appendix-industry-scenarios/)
-- [扩展阅读 1：7 款主流 Vibe Coding 在线平台实测对比](/zh-tw/stage-1/appendix-articles/example0-1/vibe-coding-tools-snake-game-tutorial)
-- [扩展阅读 2：用编程和设计智能体开发网站](/zh-tw/stage-1/appendix-articles/example0-2/vibe-coding-tools-build-website-with-ai-coding-and-design-agents)
+
+### 產品經理
+
+掌握 Vibe Coding 工作流。學會拆解需求，獨立完成高保真 Web 應用原型：
+<NavGrid>
+  <NavCard
+    href="/zh-tw/stage-1/1.1-introduction-to-ai-ide/"
+    title="認識 AI IDE 工具"
+    description="了解當前主流的 AI 編程工具，選擇最適合你的開發搭檔"
+  />
+  <NavCard
+    href="/zh-tw/stage-1/1.2-building-prototype/"
+    title="動手做出原型"
+    description="學習如何快速將產品想法轉化為可視化的原型，進行低成本試錯"
+  />
+  <NavCard
+    href="/zh-tw/stage-1/1.3-integrating-ai-capabilities/"
+    title="給原型加上 AI 能力"
+    description="通過集成簡單的 AI API，讓你的原型具備智能交互能力"
+  />
+  <NavCard
+    href="/zh-tw/stage-1/1.4-complete-project-practice/"
+    title="完整項目實戰"
+    description="綜合運用所學知識，從 0 到 1 完成一個完整的產品原型開發"
+  />
+</NavGrid>
+
+
+## 適合人群
+
+- 零基礎的產品經理、運營人員
+- 想要快速驗證想法的創業者
+- 對 AI 編程感興趣的非技術背景人士
+- 希望提升原型設計能力的設計師
+
+## 學習路徑
+
+```
+新手入門 → 產品經理基礎 → AI 能力集成 → 完整項目實戰
+```
+
+準備好開始你的 AI 編程之旅了嗎？點擊左側導航開始學習吧！

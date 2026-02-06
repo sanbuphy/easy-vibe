@@ -1,315 +1,446 @@
-<template>
-  <div class="rag-simulation-demo">
-    <div class="layout">
-      <!-- Left: Long-term Memory (Vector DB) -->
-      <div class="panel vector-db">
-        <div class="panel-header">📚 Long-term Memory (Vector DB)</div>
-        <div class="documents">
-          <div
-            v-for="doc in documents"
-            :key="doc.id"
-            class="doc-card"
-            :class="{ retrieved: doc.retrieved }"
-          >
-            <div class="doc-icon">📄</div>
-            <div class="doc-content">{{ doc.content }}</div>
-            <div class="doc-meta">
-              ID: {{ doc.id }} | Vector: {{ doc.vector }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Center: Query & Retrieval Process -->
-      <div class="process-area">
-        <div class="search-box">
-          <input
-            v-model="query"
-            placeholder="Ask a question..."
-            @keyup.enter="search"
-          />
-          <button @click="search" :disabled="isSearching">
-            {{ isSearching ? 'Searching...' : '🔍 Retrieve' }}
-          </button>
-        </div>
-
-        <div class="arrow-down">⬇️</div>
-
-        <div class="retrieval-status" :class="{ active: isSearching }">
-          <div class="status-step" v-if="step >= 1">1. Embed Query</div>
-          <div class="status-step" v-if="step >= 2">2. Semantic Search</div>
-          <div class="status-step" v-if="step >= 3">3. Retrieve Top-K</div>
-        </div>
-
-        <div class="arrow-down">⬇️</div>
-
-        <!-- Right: Augmented Context -->
-        <div class="panel context-builder">
-          <div class="panel-header">📦 Augmented Context</div>
-          <div class="context-content">
-            <div class="context-section system">
-              <span class="label">System:</span>
-              You are a helpful assistant. Use the following context to answer
-              the user.
-            </div>
-            <div
-              class="context-section retrieved"
-              v-if="retrievedDocs.length > 0"
-            >
-              <span class="label">Retrieved Context:</span>
-              <div
-                v-for="doc in retrievedDocs"
-                :key="doc.id"
-                class="retrieved-item"
-              >
-                - {{ doc.content }}
-              </div>
-            </div>
-            <div class="context-section user">
-              <span class="label">User:</span>
-              {{ lastQuery }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+<!--
+ * Component: RAGSimulationDemo.vue
+ * Description: Demonstrates the Retrieval-Augmented Generation (RAG) process with a vertical, intuitive flow.
+-->
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-const query = ref('How do I reset my password?')
+const query = ref('如何重置密码？')
 const lastQuery = ref('')
 const isSearching = ref(false)
-const step = ref(0)
+const currentStep = ref(0) // 0: Idle, 1: Searching/Scanning, 2: Retrieved/Assembling, 3: Done
 
 const documents = ref([
   {
     id: 1,
-    content: 'To reset password, go to settings page.',
-    vector: '[0.1, 0.9]',
-    retrieved: false
+    title: '密码重置指南',
+    content: '用户可以通过点击设置页面的"忘记密码"链接来重置密码。系统会发送验证邮件。',
+    score: 0
   },
   {
     id: 2,
-    content: 'Pricing starts at $10/month.',
-    vector: '[0.8, 0.2]',
-    retrieved: false
+    title: '定价策略',
+    content: '基础版每月 $10，专业版每月 $29。企业版需要联系销售团队获取报价。',
+    score: 0
   },
   {
     id: 3,
-    content: 'Contact support at support@example.com.',
-    vector: '[0.3, 0.5]',
-    retrieved: false
+    title: 'API 文档',
+    content: '所有 API 请求都需要在 Header 中包含 Bearer Token 进行身份验证。',
+    score: 0
   },
   {
     id: 4,
-    content: 'Click "Forgot Password" on login screen.',
-    vector: '[0.2, 0.8]',
-    retrieved: false
+    title: '账户安全',
+    content: '为了账户安全，建议开启双重认证 (2FA)。定期修改密码也是好习惯。',
+    score: 0
   }
 ])
 
-const retrievedDocs = ref([])
+const retrievedDocs = computed(() => {
+  return documents.value
+    .filter(doc => doc.score > 0.6)
+    .sort((a, b) => b.score - a.score)
+})
+
+const calculateSimilarity = (q, docContent) => {
+  // Simple keyword matching simulation
+  if (q.includes('密码') && (docContent.includes('密码') || docContent.includes('安全'))) return 0.95
+  if (q.includes('价格') && docContent.includes('价')) return 0.9
+  if (q.includes('API') && docContent.includes('API')) return 0.9
+  
+  // Random noise for non-matches
+  return Math.random() * 0.3
+}
 
 const search = async () => {
-  if (isSearching.value) return
+  if (isSearching.value || !query.value) return
+  
   isSearching.value = true
   lastQuery.value = query.value
-  step.value = 0
+  currentStep.value = 1
+  
+  // Reset scores
+  documents.value.forEach(d => d.score = 0)
 
-  // Reset previous state
-  documents.value.forEach((d) => (d.retrieved = false))
-  retrievedDocs.value = []
-
-  // Step 1: Embedding
-  await wait(500)
-  step.value = 1
-
-  // Step 2: Search
-  await wait(500)
-  step.value = 2
-
-  // Mock semantic search logic (simple keyword match for demo)
-  const keywords = query.value.toLowerCase().split(' ')
-  const matches = documents.value
-    .map((doc) => {
-      let score = 0
-      keywords.forEach((k) => {
-        if (doc.content.toLowerCase().includes(k)) score++
-      })
-      return { ...doc, score }
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 2) // Top 2
-
-  // Step 3: Retrieve
-  await wait(500)
-  step.value = 3
-
-  matches.forEach((m) => {
-    const doc = documents.value.find((d) => d.id === m.id)
-    if (doc) doc.retrieved = true
+  // Step 1: Simulate Scanning (1.5s)
+  await new Promise(r => setTimeout(r, 600))
+  
+  // Calculate scores
+  documents.value.forEach(doc => {
+    doc.score = calculateSimilarity(query.value, doc.content + doc.title)
   })
-
-  retrievedDocs.value = matches
-
+  
+  await new Promise(r => setTimeout(r, 800)) // Wait for scan animation to finish visual impact
+  
+  currentStep.value = 2 // Transition to retrieval
+  
+  // Step 2: Assemble Context (1s)
+  await new Promise(r => setTimeout(r, 1000))
+  currentStep.value = 3 // Done
+  
   isSearching.value = false
 }
-
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 </script>
 
+<template>
+  <div class="rag-demo">
+    
+    <!-- Step 1: User Input -->
+    <div class="step-section input-section">
+      <div class="step-label">
+        <span class="step-num">1</span>
+        <span class="step-text">用户提问 (User Query)</span>
+      </div>
+      <div class="search-box">
+        <input 
+          v-model="query" 
+          type="text" 
+          placeholder="输入问题..."
+          @keyup.enter="search"
+          :disabled="isSearching"
+        />
+        <button 
+          class="action-btn" 
+          @click="search"
+          :disabled="isSearching || !query"
+        >
+          {{ isSearching ? '检索中...' : '🚀 开始检索' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Arrow Connection -->
+    <div class="flow-arrow" :class="{ active: currentStep >= 1 }">
+      <div class="line"></div>
+      <div class="icon">🔍</div>
+    </div>
+
+    <!-- Step 2: Library Scanning -->
+    <div class="step-section library-section" :class="{ 'is-scanning': currentStep === 1 }">
+      <div class="step-label">
+        <span class="step-num">2</span>
+        <span class="step-text">图书馆检索 (Retrieval)</span>
+        <span class="status-badge" v-if="currentStep === 1">正在扫描...</span>
+        <span class="status-badge success" v-if="currentStep >= 2">命中 {{ retrievedDocs.length }} 条</span>
+      </div>
+      
+      <div class="docs-grid">
+        <div 
+          v-for="doc in documents" 
+          :key="doc.id"
+          class="doc-card"
+          :class="{ 
+            'matched': doc.score > 0.6 && currentStep >= 2,
+            'ignored': doc.score <= 0.6 && currentStep >= 2
+          }"
+        >
+          <div class="doc-header">
+            <span class="doc-icon">📄</span>
+            <span class="doc-title">{{ doc.title }}</span>
+            <span class="doc-score" v-if="currentStep >= 2 && doc.score > 0.6">
+              {{ (doc.score * 100).toFixed(0) }}% 相关
+            </span>
+          </div>
+          <div class="doc-content">{{ doc.content }}</div>
+          
+          <!-- Visual effect for scanning -->
+          <div class="scan-line" v-if="currentStep === 1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow Connection -->
+    <div class="flow-arrow" :class="{ active: currentStep >= 2 }">
+      <div class="line"></div>
+      <div class="icon">✂️ 复制粘贴</div>
+    </div>
+
+    <!-- Step 3: Context Assembly -->
+    <div class="step-section context-section" :class="{ active: currentStep >= 3 }">
+      <div class="step-label">
+        <span class="step-num">3</span>
+        <span class="step-text">最终上下文 (Final Prompt)</span>
+      </div>
+      
+      <div class="blackboard">
+        <div class="chalk-text system">
+          <span class="role-badge">SYSTEM</span>
+          你是一个专业的 AI 助手。请基于下方【检索到的资料】回答用户的提问。
+        </div>
+        
+        <div class="retrieved-block" v-if="currentStep >= 2">
+          <div class="block-header">📚 检索到的资料 (Context)</div>
+          <div v-if="retrievedDocs.length > 0">
+             <div v-for="doc in retrievedDocs" :key="doc.id" class="retrieved-item">
+               {{ doc.content }}
+             </div>
+          </div>
+          <div v-else class="empty-state">
+            (未找到相关资料)
+          </div>
+        </div>
+        
+        <div class="chalk-text user">
+          <span class="role-badge">USER</span>
+          {{ lastQuery || '等待提问...' }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
 <style scoped>
-.rag-simulation-demo {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  background-color: var(--vp-c-bg-soft);
-  padding: 1.5rem;
-  margin: 1rem 0;
-  font-family: var(--vp-font-family-mono);
-}
-
-.layout {
+.rag-demo {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 1rem auto;
 }
 
-.panel {
-  flex: 1;
+.step-section {
+  position: relative;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   padding: 1rem;
-  min-width: 250px;
+  transition: all 0.3s ease;
 }
 
-.panel-header {
-  font-weight: bold;
-  border-bottom: 1px solid var(--vp-c-divider);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.doc-card {
-  padding: 0.5rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-  background: var(--vp-c-bg-alt);
-  transition: all 0.3s;
-  font-size: 0.8rem;
-}
-
-.doc-card.retrieved {
-  border-color: #10b981;
-  background: #ecfdf5;
-  transform: translateX(5px);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
-}
-
-.doc-meta {
-  font-size: 0.7rem;
-  color: var(--vp-c-text-3);
-  margin-top: 4px;
-}
-
-.process-area {
-  flex: 1;
+.step-label {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  min-width: 250px;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--vp-c-text-1);
 }
 
+.step-num {
+  background: var(--vp-c-brand);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Input Section */
 .search-box {
   display: flex;
-  width: 100%;
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
 input {
   flex: 1;
   padding: 0.6rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  background: var(--vp-c-brand);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-}
-
-.retrieval-status {
-  padding: 1rem;
-  background: var(--vp-c-bg);
-  border: 1px dashed var(--vp-c-divider);
   border-radius: 6px;
-  width: 100%;
-  text-align: center;
-  margin: 0.5rem 0;
-}
-
-.status-step {
-  color: var(--vp-c-brand);
-  font-weight: bold;
-  margin: 0.2rem 0;
+  background: var(--vp-c-bg-alt);
   font-size: 0.9rem;
 }
 
-.context-content {
-  font-size: 0.85rem;
-  display: flex;
-  flex-direction: column;
+.action-btn {
+  background: var(--vp-c-brand);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Library Section */
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.8rem;
 }
 
-.context-section {
-  padding: 0.5rem;
-  border-radius: 4px;
+.doc-card {
   background: var(--vp-c-bg-alt);
-  border-left: 3px solid #ccc;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.context-section.system {
-  border-color: #f59e0b;
-}
-.context-section.retrieved {
-  border-color: #10b981;
-  background: #ecfdf5;
-}
-.context-section.user {
-  border-color: #3b82f6;
+.doc-card.matched {
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand-dimm);
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.3rem;
+.doc-card.ignored {
+  opacity: 0.4;
+  filter: grayscale(0.8);
+}
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.doc-score {
+  color: var(--vp-c-brand);
   font-size: 0.75rem;
-  text-transform: uppercase;
+}
+
+.doc-content {
   color: var(--vp-c-text-2);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scanning Animation */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: scan 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Context Section */
+.blackboard {
+  background: #2b2b2b;
+  color: #e0e0e0;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 2px solid #444;
+}
+
+.role-badge {
+  display: inline-block;
+  background: #444;
+  color: #aaa;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.chalk-text {
+  margin-bottom: 0.8rem;
+}
+
+.retrieved-block {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--vp-c-brand);
+  padding: 0.6rem;
+  margin: 0.5rem 0 1rem 0;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.block-header {
+  color: var(--vp-c-brand);
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
 }
 
 .retrieved-item {
-  margin-bottom: 0.3rem;
-  color: #047857;
+  margin-bottom: 0.4rem;
+  padding-left: 0.8rem;
+  position: relative;
+}
+.retrieved-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #888;
 }
 
-.arrow-down {
-  color: var(--vp-c-text-3);
-  margin: 0.5rem 0;
+/* Arrows */
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  color: var(--vp-c-divider);
+  position: relative;
+}
+
+.flow-arrow .line {
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background: var(--vp-c-divider);
+  z-index: 0;
+}
+
+.flow-arrow .icon {
+  background: var(--vp-c-bg-soft);
+  padding: 4px;
+  z-index: 1;
+  font-size: 1.2rem;
+}
+
+.flow-arrow.active .line {
+  background: var(--vp-c-brand);
+}
+.flow-arrow.active .icon {
+  animation: bounce 1s infinite;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+
+.status-badge.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
 }
 </style>

@@ -1,19 +1,66 @@
-# AI Product Manager
+# Anfänger und Produktprototyp
 
-Welcome to the AI Product Manager stage. Here, you will start from scratch and master the Vibe Coding workflow to become a super individual capable of independent product design.
+Willkommen in der Phase **KI-Produktmanager**! Dies ist der Ausgangspunkt des Easy-Vibe-Tutorials, entwickelt für Lernende ohne Programmiererfahrung.
 
-## Stage Overview
+## Was du lernen wirst
 
-### Getting Started
-Suitable for product, operations, and non-technical backgrounds. Understand AI programming logic through games and build confidence.
+In dieser Phase startest du von Null und beherrschst den Vibe Coding-Workflow, um zu einem Super-Individuum zu werden, das in der Lage ist, Produkte unabhängig zu entwerfen.
 
-- [1. Learning Map](/de-de/stage-0/0.1-learning-map/)
-- [2. If you can speak, you can code](/de-de/stage-0/0.2-ai-capabilities-through-games/)
+### Erste Schritte
 
-### Product Manager
-Master the Vibe Coding workflow. Learn to break down requirements and independently complete high-fidelity web application prototypes.
+Geeignet für Produkt, Betrieb und nicht-technische Hintergründe. Verstehe die KI-Programmierlogik durch Spiele und baue Vertrauen auf:
+<NavGrid>
+  <NavCard
+    href="/de-de/stage-0/0.1-learning-map/"
+    title="Lernkarte"
+    description="Verstehe den gesamten Lernpfad und kläre die Ziele und Ergebnisse jeder Phase"
+  />
+  <NavCard
+    href="/de-de/stage-0/0.2-ai-capabilities-through-games/"
+    title="KI-Ära: Wenn du sprechen kannst, kannst du programmieren"
+    description="Erlebe den Charme der KI-Programmierung durch Spiele wie Snake und überwinde die Angst vor dem Codieren"
+  />
+</NavGrid>
 
-- [1. Introduction to AI IDE](/de-de/stage-1/1.1-introduction-to-ai-ide/)
-- [2. Building a Prototype](/de-de/stage-1/1.2-building-prototype/)
-- [3. Integrating AI Capabilities](/de-de/stage-1/1.3-integrating-ai-capabilities/)
-- [4. Complete Project Practice](/de-de/stage-1/1.4-complete-project-practice/)
+
+### Produktmanager
+
+Beherrsche den Vibe Coding-Workflow. Lerne, Anforderungen zu zerlegen und unabhängig hochfidele Webanwendungsprototypen zu vervollständigen:
+<NavGrid>
+  <NavCard
+    href="/de-de/stage-1/1.1-introduction-to-ai-ide/"
+    title="Einführung in KI-IDE-Tools"
+    description="Lerne die aktuellen KI-Programmierungstools kennen und wähle den besten Entwicklungspartner für dich"
+  />
+  <NavCard
+    href="/de-de/stage-1/1.2-building-prototype/"
+    title="Prototypenerstellung"
+    description="Lerne, wie du Produktideen schnell in visuelle Prototypen umwandeln kannst, um kostengünstig zu testen"
+  />
+  <NavCard
+    href="/de-de/stage-1/1.3-integrating-ai-capabilities/"
+    title="Integration von KI-Fähigkeiten"
+    description="Integriere einfache KI-APIs, um deinem Prototyp Intelligenz zu verleihen"
+  />
+  <NavCard
+    href="/de-de/stage-1/1.4-complete-project-practice/"
+    title="Vollständige Projektpraxis"
+    description="Wende das Gelernte umfassend an, um die Entwicklung eines vollständigen Produktprototyps von 0 bis 1 abzuschließen"
+  />
+</NavGrid>
+
+
+## Für wen es ist
+
+- Produktmanager und Betriebspersonal ohne Programmiererfahrung
+- Unternehmer, die Ideen schnell validieren möchten
+- Nicht-technische Personen, die sich für KI-Programmierung interessieren
+- Designer, die ihre Prototyping-Fähigkeiten verbessern möchten
+
+## Lernpfad
+
+```
+Erste Schritte → Grundlagen des Produktmanagements → Integration von KI-Fähigkeiten → Vollständige Projektpraxis
+```
+
+Bereit, deine KI-Programmierreise zu beginnen? Klicke auf die linke Navigation, um mit dem Lernen zu beginnen!
