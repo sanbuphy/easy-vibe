@@ -216,43 +216,63 @@ const productManagerSidebar = [
     ]
   },
   {
-    text: '产品经理',
+    text: '产品原型实战',
     collapsed: false,
     items: [
       {
-        text: '1. 认识 AI IDE 工具',
+        text: '1. 学会 AI 编程工具',
         link: '/zh-cn/stage-1/1.1-introduction-to-ai-ide/'
       },
       {
-        text: '2. 动手做出原型',
+        text: '2. 找到好点子',
+        link: '/zh-cn/stage-1/1.0-finding-great-idea/'
+      },
+      {
+        text: '3. 搭建产品原型',
         link: '/zh-cn/stage-1/1.2-building-prototype/'
       },
       {
-        text: '3. 给原型加上 AI 能力',
+        text: '4. 接入 AI 能力',
         link: '/zh-cn/stage-1/1.3-integrating-ai-capabilities/'
       },
       {
-        text: '4. 完整项目实战',
+        text: '5. 完整项目实战',
         link: '/zh-cn/stage-1/1.4-complete-project-practice/'
-      },
+      }
+    ]
+  },
+  {
+    text: '附录：业务思维',
+    collapsed: false,
+    items: [
       {
-        text: '附录 A：产品思维补充',
+        text: '产品思维与方案设计',
         link: '/zh-cn/stage-1/appendix-a-product-thinking/'
       },
       {
-        text: '附录 B：常见报错及解决方案',
-        link: '/zh-cn/stage-1/appendix-b-common-errors/'
-      },
-      {
-        text: '附录 C：产业多分类场景方向参考',
+        text: 'AI 行业应用场景参考 (B端)',
         link: '/zh-cn/stage-1/appendix-industry-scenarios/'
       },
       {
-        text: '扩展阅读 1：7 款主流 Vibe Coding 在线平台实测对比',
+        text: 'AI 消费场景灵感参考 (C端)',
+        link: '/zh-cn/stage-1/appendix-c-consumer-scenarios/'
+      }
+    ]
+  },
+  {
+    text: '附录：技术方案',
+    collapsed: false,
+    items: [
+      {
+        text: '写代码时遇到错误怎么办',
+        link: '/zh-cn/stage-1/appendix-b-common-errors/'
+      },
+      {
+        text: '七款 AI 编程工具对比',
         link: '/zh-cn/stage-1/appendix-articles/example0-1/vibe-coding-tools-snake-game-tutorial'
       },
       {
-        text: '扩展阅读 2：用编程和设计智能体开发网站',
+        text: '用设计和编程 Agent 设计网站',
         link: '/zh-cn/stage-1/appendix-articles/example0-2/vibe-coding-tools-build-website-with-ai-coding-and-design-agents'
       }
     ]
@@ -313,7 +333,7 @@ export default defineConfig({
         nav: [
           { text: '首页', link: '/zh-cn/' },
           {
-            text: '新手与产品原型',
+            text: '零基础入门',
             link: '/zh-cn/stage-0/'
           },
           {
@@ -377,7 +397,7 @@ export default defineConfig({
                   link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/extra1-what-is-git-and-what-is-github'
                 },
                 {
-                  text: '后端五：Zeabur 部署',
+                  text: '后端五：如何部署 Web 应用',
                   link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/extra6-zeabur-what-is-it-and-how-to-deploy-web-applications'
                 },
                 {
