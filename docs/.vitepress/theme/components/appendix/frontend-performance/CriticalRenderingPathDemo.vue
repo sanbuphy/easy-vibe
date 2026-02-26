@@ -5,7 +5,9 @@
 <template>
   <div class="crp-demo">
     <div class="header">
-      <div class="title">关键渲染路径 (Critical Rendering Path)</div>
+      <div class="title">
+        关键渲染路径 (Critical Rendering Path)
+      </div>
       <div class="subtitle">
         浏览器如何将 HTML、CSS 和 JavaScript 转换为像素
       </div>
@@ -32,87 +34,158 @@
       </div>
 
       <div class="arrow-section">
-        <div class="arrow">→</div>
+        <div class="arrow">
+          →
+        </div>
       </div>
 
       <div class="process-section">
-        <div class="step" :class="{ active: currentStep === 'dom' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'dom' }"
+        >
           <div class="step-header">
-            <div class="step-icon">🌲</div>
-            <div class="step-title">DOM 树</div>
+            <div class="step-icon">
+              🌲
+            </div>
+            <div class="step-title">
+              DOM 树
+            </div>
           </div>
           <div class="tree-visualization">
-            <div class="tree-node root">html</div>
+            <div class="tree-node root">
+              html
+            </div>
             <div class="tree-children">
-              <div class="tree-node">head</div>
-              <div class="tree-node">body</div>
+              <div class="tree-node">
+                head
+              </div>
+              <div class="tree-node">
+                body
+              </div>
               <div class="tree-children">
-                <div class="tree-node">div.container</div>
+                <div class="tree-node">
+                  div.container
+                </div>
                 <div class="tree-children">
-                  <div class="tree-node">h1</div>
-                  <div class="tree-node">p</div>
+                  <div class="tree-node">
+                    h1
+                  </div>
+                  <div class="tree-node">
+                    p
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="step" :class="{ active: currentStep === 'cssom' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'cssom' }"
+        >
           <div class="step-header">
-            <div class="step-icon">🎨</div>
-            <div class="step-title">CSSOM 树</div>
+            <div class="step-icon">
+              🎨
+            </div>
+            <div class="step-title">
+              CSSOM 树
+            </div>
           </div>
           <div class="tree-visualization">
-            <div class="tree-node root">body</div>
+            <div class="tree-node root">
+              body
+            </div>
             <div class="tree-children">
-              <div class="tree-node">.container</div>
+              <div class="tree-node">
+                .container
+              </div>
               <div class="tree-children">
-                <div class="tree-node">h1</div>
-                <div class="tree-node">p</div>
+                <div class="tree-node">
+                  h1
+                </div>
+                <div class="tree-node">
+                  p
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="step" :class="{ active: currentStep === 'render' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'render' }"
+        >
           <div class="step-header">
-            <div class="step-icon">🖼️</div>
-            <div class="step-title">渲染树</div>
+            <div class="step-icon">
+              🖼️
+            </div>
+            <div class="step-title">
+              渲染树
+            </div>
           </div>
           <div class="tree-visualization">
-            <div class="tree-node root">body</div>
+            <div class="tree-node root">
+              body
+            </div>
             <div class="tree-children">
-              <div class="tree-node">div.container</div>
+              <div class="tree-node">
+                div.container
+              </div>
               <div class="tree-children">
-                <div class="tree-node">h1</div>
-                <div class="tree-node">p</div>
+                <div class="tree-node">
+                  h1
+                </div>
+                <div class="tree-node">
+                  p
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="step" :class="{ active: currentStep === 'layout' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'layout' }"
+        >
           <div class="step-header">
-            <div class="step-icon">📐</div>
-            <div class="step-title">布局 (Layout)</div>
+            <div class="step-icon">
+              📐
+            </div>
+            <div class="step-title">
+              布局 (Layout)
+            </div>
           </div>
           <div class="layout-demo">
             <div class="layout-box container">
-              <div class="layout-label">container</div>
+              <div class="layout-label">
+                container
+              </div>
               <div class="layout-box h1">
-                <div class="layout-label">h1</div>
+                <div class="layout-label">
+                  h1
+                </div>
               </div>
               <div class="layout-box p">
-                <div class="layout-label">p</div>
+                <div class="layout-label">
+                  p
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="step" :class="{ active: currentStep === 'paint' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'paint' }"
+        >
           <div class="step-header">
-            <div class="step-icon">🖌️</div>
-            <div class="step-title">绘制 (Paint)</div>
+            <div class="step-icon">
+              🖌️
+            </div>
+            <div class="step-title">
+              绘制 (Paint)
+            </div>
           </div>
           <div class="paint-demo">
             <div class="paint-box container">
@@ -124,26 +197,43 @@
           </div>
         </div>
 
-        <div class="step" :class="{ active: currentStep === 'composite' }">
+        <div
+          class="step"
+          :class="{ active: currentStep === 'composite' }"
+        >
           <div class="step-header">
-            <div class="step-icon">✨</div>
-            <div class="step-title">合成 (Composite)</div>
+            <div class="step-icon">
+              ✨
+            </div>
+            <div class="step-title">
+              合成 (Composite)
+            </div>
           </div>
           <div class="composite-demo">
-            <div class="composite-layer">图层 1: 背景</div>
-            <div class="composite-layer">图层 2: 内容</div>
-            <div class="composite-layer">图层 3: 装饰</div>
-            <div class="composite-result">= 最终页面</div>
+            <div class="composite-layer">
+              图层 1: 背景
+            </div>
+            <div class="composite-layer">
+              图层 2: 内容
+            </div>
+            <div class="composite-layer">
+              图层 3: 装饰
+            </div>
+            <div class="composite-result">
+              = 最终页面
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="timeline">
-      <div class="timeline-header">渲染时间线</div>
+      <div class="timeline-header">
+        渲染时间线
+      </div>
       <div class="timeline-bar">
         <div
-          v-for="(step, index) in timelineSteps"
+          v-for="step in timelineSteps"
           :key="step.name"
           class="timeline-segment"
           :class="{ active: currentStep === step.name }"
@@ -154,7 +244,10 @@
           }"
           @click="setStep(step.name)"
         >
-          <div class="segment-label" :style="{ color: step.color }">
+          <div
+            class="segment-label"
+            :style="{ color: step.color }"
+          >
             {{ step.label }}
           </div>
         </div>
@@ -167,7 +260,9 @@
 
     <div class="optimization-tips">
       <div class="tip-card">
-        <div class="tip-icon">⚡</div>
+        <div class="tip-icon">
+          ⚡
+        </div>
         <div class="tip-content">
           <h4>优化 DOM 构建</h4>
           <p>减少 HTML 嵌套层级，避免不必要的标签。使用语义化 HTML。</p>
@@ -175,7 +270,9 @@
       </div>
 
       <div class="tip-card">
-        <div class="tip-icon">🎨</div>
+        <div class="tip-icon">
+          🎨
+        </div>
         <div class="tip-content">
           <h4>优化 CSS</h4>
           <p>CSS 是渲染阻塞资源。将关键 CSS 内联，异步加载非关键 CSS。</p>
@@ -183,7 +280,9 @@
       </div>
 
       <div class="tip-card">
-        <div class="tip-icon">⚙️</div>
+        <div class="tip-icon">
+          ⚙️
+        </div>
         <div class="tip-content">
           <h4>优化 JavaScript</h4>
           <p>
@@ -194,7 +293,9 @@
       </div>
 
       <div class="tip-card">
-        <div class="tip-icon">📐</div>
+        <div class="tip-icon">
+          📐
+        </div>
         <div class="tip-content">
           <h4>减少重排</h4>
           <p>
@@ -295,8 +396,8 @@ function setStep(step) {
 .code-block {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   overflow-x: auto;
 }
 
@@ -329,8 +430,8 @@ code {
 .step {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   transition: all 0.3s;
   opacity: 0.6;
 }
@@ -437,8 +538,8 @@ code {
 .paint-box {
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
   border: 2px solid var(--vp-c-brand);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   min-width: 120px;
 }
 
@@ -542,8 +643,8 @@ code {
 .tip-card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   display: flex;
   gap: 0.8rem;
 }

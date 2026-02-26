@@ -5,8 +5,12 @@
 <template>
   <div class="tracking-types-demo">
     <div class="header">
-      <div class="title">埋点类型对比</div>
-      <div class="subtitle">三种埋点方式的优缺点与适用场景</div>
+      <div class="title">
+        埋点类型对比
+      </div>
+      <div class="subtitle">
+        三种埋点方式的优缺点与适用场景
+      </div>
     </div>
 
     <div class="type-tabs">
@@ -24,10 +28,16 @@
     <div class="type-content">
       <div class="type-info">
         <div class="type-header">
-          <div class="type-icon">{{ currentType.icon }}</div>
+          <div class="type-icon">
+            {{ currentType.icon }}
+          </div>
           <div class="type-title">
-            <div class="name">{{ currentType.name }}</div>
-            <div class="subtitle">{{ currentType.subtitle }}</div>
+            <div class="name">
+              {{ currentType.name }}
+            </div>
+            <div class="subtitle">
+              {{ currentType.subtitle }}
+            </div>
           </div>
         </div>
 
@@ -36,7 +46,9 @@
         </div>
 
         <div class="characteristics">
-          <div class="characteristics-title">主要特征</div>
+          <div class="characteristics-title">
+            主要特征
+          </div>
           <div class="characteristics-list">
             <div
               v-for="(char, index) in currentType.characteristics"
@@ -50,17 +62,25 @@
         </div>
 
         <div class="use-cases">
-          <div class="use-cases-title">典型场景</div>
+          <div class="use-cases-title">
+            典型场景
+          </div>
           <div class="use-cases-list">
             <div
               v-for="(useCase, index) in currentType.useCases"
               :key="index"
               class="use-case-item"
             >
-              <div class="use-case-icon">{{ useCase.icon }}</div>
+              <div class="use-case-icon">
+                {{ useCase.icon }}
+              </div>
               <div class="use-case-info">
-                <div class="use-case-name">{{ useCase.name }}</div>
-                <div class="use-case-desc">{{ useCase.desc }}</div>
+                <div class="use-case-name">
+                  {{ useCase.name }}
+                </div>
+                <div class="use-case-desc">
+                  {{ useCase.desc }}
+                </div>
               </div>
             </div>
           </div>
@@ -68,54 +88,88 @@
       </div>
 
       <div class="type-architecture">
-        <div class="architecture-title">架构示意</div>
+        <div class="architecture-title">
+          架构示意
+        </div>
         <div class="architecture-diagram">
           <div class="diagram-layer">
-            <div class="layer-label">用户</div>
-            <div class="layer-icon">👤</div>
+            <div class="layer-label">
+              用户
+            </div>
+            <div class="layer-icon">
+              👤
+            </div>
           </div>
-          <div class="diagram-arrow">↓</div>
+          <div class="diagram-arrow">
+            ↓
+          </div>
           <div class="diagram-layer client">
-            <div class="layer-label">客户端</div>
+            <div class="layer-label">
+              客户端
+            </div>
             <div class="layer-content">
               <div
                 v-if="selectedType === 'frontend'"
                 class="layer-box frontend"
               >
                 <div>前端埋点 SDK</div>
-                <div class="layer-detail">采集用户交互</div>
+                <div class="layer-detail">
+                  采集用户交互
+                </div>
               </div>
-              <div v-if="selectedType === 'backend'" class="layer-box backend">
+              <div
+                v-if="selectedType === 'backend'"
+                class="layer-box backend"
+              >
                 <div>业务代码</div>
-                <div class="layer-detail">调用后端埋点</div>
+                <div class="layer-detail">
+                  调用后端埋点
+                </div>
               </div>
-              <div v-if="selectedType === 'full'" class="layer-box full">
+              <div
+                v-if="selectedType === 'full'"
+                class="layer-box full"
+              >
                 <div>前端埋点 SDK</div>
                 <div>后端埋点</div>
-                <div class="layer-detail">全链路追踪</div>
+                <div class="layer-detail">
+                  全链路追踪
+                </div>
               </div>
             </div>
           </div>
-          <div class="diagram-arrow">↓</div>
+          <div class="diagram-arrow">
+            ↓
+          </div>
           <div
             v-if="selectedType === 'backend' || selectedType === 'full'"
             class="diagram-layer server"
           >
-            <div class="layer-label">服务端</div>
+            <div class="layer-label">
+              服务端
+            </div>
             <div class="layer-content">
               <div class="layer-box server">
                 <div>埋点服务</div>
-                <div class="layer-detail">处理埋点请求</div>
+                <div class="layer-detail">
+                  处理埋点请求
+                </div>
               </div>
             </div>
           </div>
-          <div class="diagram-arrow">↓</div>
+          <div class="diagram-arrow">
+            ↓
+          </div>
           <div class="diagram-layer data">
-            <div class="layer-label">数据平台</div>
+            <div class="layer-label">
+              数据平台
+            </div>
             <div class="layer-content">
               <div class="layer-box data">
                 <div>数据仓库</div>
-                <div class="layer-detail">存储与分析</div>
+                <div class="layer-detail">
+                  存储与分析
+                </div>
               </div>
             </div>
           </div>
@@ -124,19 +178,29 @@
     </div>
 
     <div class="comparison-table">
-      <div class="comparison-title">详细对比</div>
+      <div class="comparison-title">
+        详细对比
+      </div>
       <table class="comparison">
         <thead>
           <tr>
             <th>对比维度</th>
-            <th v-for="type in trackingTypes" :key="type.id">
+            <th
+              v-for="type in trackingTypes"
+              :key="type.id"
+            >
               {{ type.name }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in comparisonData" :key="index">
-            <td class="dimension">{{ row.dimension }}</td>
+          <tr
+            v-for="(row, index) in comparisonData"
+            :key="index"
+          >
+            <td class="dimension">
+              {{ row.dimension }}
+            </td>
             <td
               v-for="type in trackingTypes"
               :key="type.id"
@@ -144,7 +208,10 @@
               :class="{ best: row.best === type.id }"
             >
               {{ row.values[type.id] }}
-              <span v-if="row.best === type.id" class="best-badge">最优</span>
+              <span
+                v-if="row.best === type.id"
+                class="best-badge"
+              >最优</span>
             </td>
           </tr>
         </tbody>
@@ -327,7 +394,7 @@ const selectType = (typeId) => {
   padding: 0.75rem 2rem;
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -431,7 +498,7 @@ const selectType = (typeId) => {
   gap: 0.75rem;
   padding: 0.75rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .use-case-icon {
@@ -474,7 +541,7 @@ const selectType = (typeId) => {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg-soft);
   border-radius: 10px;
   border: 2px solid var(--vp-c-divider);
@@ -507,7 +574,7 @@ const selectType = (typeId) => {
 .layer-box {
   background: white;
   border: 2px solid var(--vp-c-brand);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
   text-align: center;
   font-size: 0.85rem;

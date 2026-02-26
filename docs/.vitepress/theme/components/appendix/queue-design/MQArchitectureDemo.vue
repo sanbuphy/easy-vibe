@@ -2,10 +2,15 @@
   <div class="demo-container">
     <div class="demo-header">
       <h4>{{ title }}</h4>
-      <p class="hint">{{ description }}</p>
+      <p class="hint">
+        {{ description }}
+      </p>
     </div>
     <div class="demo-content">
-      <el-alert type="info" :closable="false">
+      <el-alert
+        type="info"
+        :closable="false"
+      >
         消息队列架构演示组件占位符 - 待实现具体交互
       </el-alert>
     </div>
@@ -22,7 +27,7 @@ const description = ref('展示消息队列的整体架构，包括生产者、�
 <style scoped>
 .demo-container {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   background: var(--vp-c-bg-soft);
 }

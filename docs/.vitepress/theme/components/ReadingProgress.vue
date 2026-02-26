@@ -4,10 +4,10 @@
       v-if="showProgress" 
       class="reading-progress"
       :class="{ 'is-dragging': isDragging }"
+      :title="isDragging ? '拖动调整位置' : '阅读进度 ' + progress + '%'"
       @mousedown="startDrag"
       @touchstart="startDrag"
       @click="handleClick"
-      :title="isDragging ? '拖动调整位置' : '阅读进度 ' + progress + '%'"
     >
       <svg class="progress-ring" viewBox="0 0 56 56">
         <circle
@@ -35,20 +35,21 @@
   </Transition>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const progress = ref(0)
 const showProgress = ref(false)
 const showArrow = ref(false)
-const circumference = 2 * Math.PI * 24 // 2πr，r=24
-let scrollTimer: number | null = null
+// Circle circumference = 2 * PI * r, where r=24
+const circumference = 2 * Math.PI * 24
+let scrollTimer = null
 
 // 拖拽相关状态
 const isDragging = ref(false)
 const startY = ref(0)
 const startProgress = ref(0)
-let dragRafId: number | null = null
+let dragRafId = null
 
 const updateProgress = () => {
   // 拖拽时不更新进度，避免冲突
@@ -78,7 +79,7 @@ const updateProgress = () => {
 }
 
 // 开始拖拽
-const startDrag = (e: MouseEvent | TouchEvent) => {
+const startDrag = (e) => {
   e.preventDefault()
   
   isDragging.value = true
@@ -93,7 +94,7 @@ const startDrag = (e: MouseEvent | TouchEvent) => {
 }
 
 // 拖拽中
-const onDrag = (e: MouseEvent | TouchEvent) => {
+const onDrag = (e) => {
   if (!isDragging.value) return
   e.preventDefault()
   
@@ -149,7 +150,7 @@ const endDrag = () => {
 }
 
 // 点击回到顶部
-const handleClick = (e: MouseEvent) => {
+const handleClick = (e) => {
   // 如果是拖拽结束后的点击，不触发回到顶部
   if (isDragging.value) return
   

@@ -31,16 +31,24 @@
             :class="{ active: selectedControl === control.id }"
             @click="selectedControl = control.id"
           >
-            <div class="control-icon">{{ control.icon }}</div>
-            <div class="control-name">{{ control.name }}</div>
-            <div class="control-desc">{{ control.description }}</div>
+            <div class="control-icon">
+              {{ control.icon }}
+            </div>
+            <div class="control-name">
+              {{ control.name }}
+            </div>
+            <div class="control-desc">
+              {{ control.description }}
+            </div>
           </div>
         </div>
 
         <!-- 可视化流程 -->
         <div class="workflow-viz">
           <div class="workflow-step">
-            <div class="step-label">输入图像</div>
+            <div class="step-label">
+              输入图像
+            </div>
             <canvas
               ref="inputCanvas"
               width="200"
@@ -50,12 +58,18 @@
           </div>
 
           <div class="workflow-arrow">
-            <el-icon :size="24"><ArrowRight /></el-icon>
-            <div class="arrow-label">提取</div>
+            <el-icon :size="24">
+              <ArrowRight />
+            </el-icon>
+            <div class="arrow-label">
+              提取
+            </div>
           </div>
 
           <div class="workflow-step">
-            <div class="step-label">控制信号</div>
+            <div class="step-label">
+              控制信号
+            </div>
             <canvas
               ref="controlCanvas"
               width="200"
@@ -65,12 +79,18 @@
           </div>
 
           <div class="workflow-arrow">
-            <el-icon :size="24"><ArrowRight /></el-icon>
-            <div class="arrow-label">+ 提示词</div>
+            <el-icon :size="24">
+              <ArrowRight />
+            </el-icon>
+            <div class="arrow-label">
+              + 提示词
+            </div>
           </div>
 
           <div class="workflow-step">
-            <div class="step-label">生成结果</div>
+            <div class="step-label">
+              生成结果
+            </div>
             <canvas
               ref="outputCanvas"
               width="200"
@@ -84,7 +104,12 @@
         <div class="strength-control">
           <div class="strength-header">
             <span>控制强度 (Control Strength)</span>
-            <el-tag type="primary" effect="dark">{{ controlStrength }}</el-tag>
+            <el-tag
+              type="primary"
+              effect="dark"
+            >
+              {{ controlStrength }}
+            </el-tag>
           </div>
           <el-slider
             v-model="controlStrength"
@@ -105,11 +130,15 @@
 
         <!-- 对比展示 -->
         <div class="comparison-section">
-          <div class="comparison-title">对比：有无 ControlNet</div>
+          <div class="comparison-title">
+            对比：有无 ControlNet
+          </div>
           <div class="comparison-grid">
             <div class="comparison-item">
               <div class="item-label">
-                <el-tag type="info">仅文本生成</el-tag>
+                <el-tag type="info">
+                  仅文本生成
+                </el-tag>
               </div>
               <canvas
                 ref="textOnlyCanvas"
@@ -117,12 +146,16 @@
                 height="180"
                 class="comparison-canvas"
               />
-              <div class="item-desc">姿态随机，不可控</div>
+              <div class="item-desc">
+                姿态随机，不可控
+              </div>
             </div>
 
             <div class="comparison-item">
               <div class="item-label">
-                <el-tag type="success">ControlNet 控制</el-tag>
+                <el-tag type="success">
+                  ControlNet 控制
+                </el-tag>
               </div>
               <canvas
                 ref="controlNetCanvas"
@@ -130,23 +163,33 @@
                 height="180"
                 class="comparison-canvas"
               />
-              <div class="item-desc">姿态精确匹配输入</div>
+              <div class="item-desc">
+                姿态精确匹配输入
+              </div>
             </div>
           </div>
         </div>
 
         <!-- 应用场景 -->
         <div class="use-cases">
-          <div class="use-cases-title">🎯 典型应用场景</div>
+          <div class="use-cases-title">
+            🎯 典型应用场景
+          </div>
           <div class="use-cases-grid">
             <div
               v-for="useCase in useCases"
               :key="useCase.title"
               class="use-case-card"
             >
-              <div class="use-case-icon">{{ useCase.icon }}</div>
-              <div class="use-case-title">{{ useCase.title }}</div>
-              <div class="use-case-desc">{{ useCase.description }}</div>
+              <div class="use-case-icon">
+                {{ useCase.icon }}
+              </div>
+              <div class="use-case-title">
+                {{ useCase.title }}
+              </div>
+              <div class="use-case-desc">
+                {{ useCase.description }}
+              </div>
             </div>
           </div>
         </div>
@@ -495,7 +538,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 <style scoped>
 .controlnet-demo {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .header-title {
@@ -519,7 +562,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 .control-card {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   text-align: center;
   cursor: pointer;
@@ -559,7 +602,7 @@ watch([selectedControl, controlStrength], updateDisplay)
   flex-wrap: wrap;
   padding: 20px;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .workflow-step {
@@ -578,7 +621,7 @@ watch([selectedControl, controlStrength], updateDisplay)
   width: 160px;
   height: 160px;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px solid var(--vp-c-divider);
 }
 
@@ -600,7 +643,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 .strength-control {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -620,7 +663,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 .comparison-section {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -652,7 +695,7 @@ watch([selectedControl, controlStrength], updateDisplay)
   width: 150px;
   height: 150px;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px solid var(--vp-c-divider);
 }
 
@@ -663,7 +706,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 .use-cases {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -681,7 +724,7 @@ watch([selectedControl, controlStrength], updateDisplay)
 
 .use-case-card {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   text-align: center;
 }

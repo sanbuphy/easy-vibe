@@ -1,81 +1,60 @@
+<!--
+  FunctionApiDemo.vue - 紧凑版
+  目标：展示函数就是最基础的 API
+-->
 <template>
-  <div class="function-api-demo">
-    <div class="header">
-      <div class="title">🔧 你早就在用 API 了</div>
-      <div class="subtitle">函数就是最基础的 API</div>
+  <div class="demo-root">
+    <div class="demo-header">
+      <span class="icon">🔧</span>
+      <span class="title">函数就是最基础的 API</span>
     </div>
 
-    <div class="demo-container">
-      <div class="left">
-        <div class="code-panel">
-          <div class="code-title">📝 代码</div>
-          <pre><code><span class="keyword">def</span> <span class="function">greet</span>(name, greeting=<span class="string">"你好"</span>):
-    <span class="keyword">return</span> f<span class="string">"{greeting}，{name}！"</span>
+    <div class="demo-layout">
+      <div class="code-panel">
+        <div class="code-title">📝 Python 代码</div>
+        <pre><code><span class="keyword">def</span> <span class="func">greet</span>(name, greeting=<span class="str">"你好"</span>):
+    <span class="keyword">return</span> <span class="str">f"{greeting}，{name}！"</span>
 
-<span class="comment"># 调用这个函数</span>
-result = <span class="function">greet</span>(<span class="string">"张三"</span>)
-print(result)</code></pre>
-        </div>
+result = <span class="func">greet</span>(<span class="str">"张三"</span>)</code></pre>
       </div>
 
-      <div class="right">
-        <div class="explanation">
-          <p>这个 <code>greet()</code> 函数，就是一个 API：</p>
-          
-          <div class="point">
-            <span class="icon">📦</span>
-            <div>
-              <strong>输入（参数）</strong>
-              <p>你传进去什么？<code>"张三"</code></p>
-            </div>
+      <div class="right-panel">
+        <div class="api-structure">
+          <div class="structure-item">
+            <span class="label">📦 输入（参数）</span>
+            <code class="value">name="张三"</code>
           </div>
-
-          <div class="point">
-            <span class="icon">⚙️</span>
-            <div>
-              <strong>处理</strong>
-              <p>函数内部帮你做了拼接字符串的操作</p>
-            </div>
+          <div class="structure-item">
+            <span class="label">⚙️ 处理</span>
+            <span class="value">函数内部拼接字符串</span>
           </div>
-
-          <div class="point">
-            <span class="icon">📤</span>
-            <div>
-              <strong>输出（返回值）</strong>
-              <p>得到什么？<code>"你好，张三！"</code></p>
-            </div>
+          <div class="structure-item">
+            <span class="label">📤 输出（返回）</span>
+            <code class="value highlight">"你好，张三！"</code>
           </div>
         </div>
 
-        <div class="try-it">
-          <div class="try-title">🎮 试试调用：</div>
-          <div class="interactive">
-            <input
-              v-model="name"
-              placeholder="输入名字"
-              class="name-input"
-            />
-            <select v-model="greeting" class="greeting-select">
+        <div class="try-area">
+          <div class="try-row">
+            <input v-model="name" placeholder="名字" class="input" />
+            <select v-model="greeting" class="select">
               <option value="你好">你好</option>
               <option value="Hello">Hello</option>
               <option value="早上好">早上好</option>
-              <option value="晚安">晚安</option>
             </select>
-            <button @click="callFunction" class="call-btn">调用 greet()</button>
+            <button class="btn" @click="callFunction">调用</button>
           </div>
-          <div class="result" v-if="result">
-            <span class="arrow">→</span>
-            <code>{{ result }}</code>
+          <div v-if="result" class="result">
+            → <code>{{ result }}</code>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="summary">
-      <div class="summary-item">
-        <span class="icon">🔑</span>
-        <p><strong>关键点：</strong> 你不需要知道函数内部是怎么实现的，只需要知道怎么调用它</p>
-      </div>
+    <div class="info-box">
+      <strong>核心思想：</strong>
+      <span>你不需要知道函数内部怎么实现，只需要知道怎么调用它。这就是 API
+        的本质。</span>
     </div>
   </div>
 </template>
@@ -87,192 +66,194 @@ const name = ref('张三')
 const greeting = ref('你好')
 const result = ref('')
 
-function greet(name, greeting) {
-  return `${greeting}，${name}！`
-}
-
 function callFunction() {
-  result.value = greet(name.value, greeting.value)
+  result.value = `${greeting.value}，${name.value}！`
 }
 </script>
 
 <style scoped>
-.function-api-demo {
-  background: var(--vp-c-bg-soft);
+.demo-root {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 24px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--vp-c-bg-soft);
+  margin: 1rem 0;
+  font-size: 0.85rem;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 20px;
+.demo-header {
+  padding: 10px 16px;
+  background: var(--vp-c-bg);
+  border-bottom: 1px solid var(--vp-c-divider);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.title {
+.icon {
   font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 4px;
+}
+.title {
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.subtitle {
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-.demo-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-@media (max-width: 768px) {
-  .demo-container {
-    grid-template-columns: 1fr;
-  }
+.demo-layout {
+  display: flex;
+  gap: 0;
 }
 
 .code-panel {
+  flex: 1;
   background: #1e293b;
-  border-radius: 10px;
-  padding: 16px;
-  font-family: monospace;
-  font-size: 14px;
+  padding: 12px 14px;
+  border-right: 1px solid var(--vp-c-divider);
 }
 
 .code-title {
   color: #94a3b8;
-  margin-bottom: 12px;
-  font-size: 13px;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+}
+
+.code-panel pre {
+  margin: 0;
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
 }
 
 .code-panel code {
   color: #e2e8f0;
-  line-height: 1.8;
 }
-
 .keyword {
   color: #c084fc;
 }
-
-.function {
+.func {
   color: #60a5fa;
 }
-
-.string {
+.str {
   color: #4ade80;
 }
 
-.comment {
-  color: #64748b;
-}
-
-.explanation {
-  margin-bottom: 20px;
-}
-
-.explanation > p {
-  margin-bottom: 16px;
-}
-
-.point {
+.right-panel {
+  width: 260px;
+  padding: 12px;
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin-bottom: 12px;
-  align-items: flex-start;
+  background: var(--vp-c-bg);
 }
 
-.point .icon {
-  font-size: 20px;
+@media (max-width: 640px) {
+  .demo-layout {
+    flex-direction: column;
+  }
+  .code-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--vp-c-divider);
+  }
+  .right-panel {
+    width: 100%;
+  }
 }
 
-.point strong {
-  color: var(--vp-c-text-1);
+.api-structure {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.point p {
-  margin: 4px 0 0;
-  font-size: 13px;
+.structure-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.structure-item .label {
   color: var(--vp-c-text-2);
 }
 
-.try-it {
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 10px;
-  padding: 16px;
+.structure-item .value {
+  font-family: monospace;
+  font-size: 0.72rem;
 }
 
-.try-title {
-  font-weight: 600;
-  margin-bottom: 12px;
+.structure-item .highlight {
+  background: #dcfce7;
+  color: #166534;
+  padding: 2px 6px;
+  border-radius: 3px;
 }
 
-.interactive {
+.try-area {
+  padding: 10px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 6px;
+}
+
+.try-row {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.name-input {
+.input {
   flex: 1;
-  min-width: 120px;
-  padding: 8px 12px;
+  padding: 6px 8px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.greeting-select {
-  padding: 8px 12px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 4px;
+  font-size: 0.8rem;
   background: var(--vp-c-bg);
 }
 
-.call-btn {
-  padding: 8px 16px;
+.select {
+  padding: 6px 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background: var(--vp-c-bg);
+}
+
+.btn {
+  padding: 6px 12px;
   background: var(--vp-c-brand);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
 }
 
 .result {
-  margin-top: 16px;
-  padding: 12px;
+  margin-top: 8px;
+  padding: 6px 8px;
   background: #dcfce7;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.result .arrow {
-  margin-right: 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
 .result code {
   color: #166534;
+  font-weight: 600;
 }
 
-.summary {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--vp-c-divider);
-}
-
-.summary-item {
+.info-box {
   display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 14px;
+  gap: 0.25rem;
+  padding: 10px 14px;
+  background: var(--vp-c-bg-alt);
+  border-top: 1px solid var(--vp-c-divider);
+  font-size: 0.8rem;
   color: var(--vp-c-text-2);
 }
 
-.summary-item .icon {
-  font-size: 20px;
+.info-box strong {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 </style>

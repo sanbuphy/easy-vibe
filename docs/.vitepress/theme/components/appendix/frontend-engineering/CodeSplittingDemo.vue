@@ -15,7 +15,9 @@
     <div class="demo-content">
       <!-- 左侧：路由配置 -->
       <div class="routes-panel">
-        <div class="panel-title">🚦 路由配置</div>
+        <div class="panel-title">
+          🚦 路由配置
+        </div>
         <div class="routes-list">
           <div
             v-for="route in routes"
@@ -25,14 +27,27 @@
             @click="navigateTo(route)"
           >
             <div class="route-info">
-              <div class="route-path">{{ route.path }}</div>
-              <div class="route-name">{{ route.name }}</div>
+              <div class="route-path">
+                {{ route.path }}
+              </div>
+              <div class="route-name">
+                {{ route.name }}
+              </div>
             </div>
 
             <div class="route-load-info">
-              <span v-if="route.loading" class="loading-badge">加载中...</span>
-              <span v-else-if="route.loaded" class="loaded-badge">已缓存</span>
-              <span v-else class="lazy-badge">按需加载</span>
+              <span
+                v-if="route.loading"
+                class="loading-badge"
+              >加载中...</span>
+              <span
+                v-else-if="route.loaded"
+                class="loaded-badge"
+              >已缓存</span>
+              <span
+                v-else
+                class="lazy-badge"
+              >按需加载</span>
             </div>
 
             <div class="route-size">
@@ -44,7 +59,9 @@
 
       <!-- 右侧：加载可视化 -->
       <div class="load-panel">
-        <div class="panel-title">📊 加载分析</div>
+        <div class="panel-title">
+          📊 加载分析
+        </div>
 
         <div class="load-visualization">
           <!-- 初始加载 -->
@@ -91,7 +108,9 @@
               </div>
             </div>
 
-            <p class="lazy-tip">💡 点击上方模块可模拟按需加载</p>
+            <p class="lazy-tip">
+              💡 点击上方模块可模拟按需加载
+            </p>
           </div>
 
           <!-- 优化效果 -->
@@ -101,7 +120,9 @@
               <span class="summary-value original">{{ formatSize(totalSize) }}</span>
             </div>
 
-            <div class="summary-arrow">→</div>
+            <div class="summary-arrow">
+              →
+            </div>
 
             <div class="summary-item">
               <span class="summary-label">首屏加载</span>
@@ -214,10 +235,10 @@ const selectFile = (file) => {
 <style scoped>
 .code-splitting-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
@@ -236,7 +257,7 @@ const selectFile = (file) => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 @media (max-width: 768px) {
@@ -248,7 +269,7 @@ const selectFile = (file) => {
 .routes-panel,
 .load-panel {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   overflow: hidden;
 }
@@ -263,7 +284,7 @@ const selectFile = (file) => {
 
 .routes-list {
   max-height: 280px;
-  overflow-y: auto;
+  
 }
 
 .route-item {
@@ -355,7 +376,7 @@ const selectFile = (file) => {
 }
 
 .load-visualization {
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .load-section {

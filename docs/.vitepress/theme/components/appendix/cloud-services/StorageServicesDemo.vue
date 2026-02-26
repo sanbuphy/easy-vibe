@@ -2,11 +2,15 @@
   <div class="storage-services-demo">
     <div class="demo-header">
       <h4>存储服务选型助手</h4>
-      <p class="demo-desc">根据您的使用场景，推荐最适合的存储方案</p>
+      <p class="demo-desc">
+        根据您的使用场景，推荐最适合的存储方案
+      </p>
     </div>
 
     <div class="scenario-selector">
-      <div class="selector-title">选择您的主要使用场景：</div>
+      <div class="selector-title">
+        选择您的主要使用场景：
+      </div>
       <div class="scenario-grid">
         <button
           v-for="scenario in scenarios"
@@ -15,14 +19,23 @@
           :class="{ active: selectedScenario === scenario.id }"
           @click="selectScenario(scenario.id)"
         >
-          <div class="scenario-icon">{{ scenario.icon }}</div>
-          <div class="scenario-name">{{ scenario.name }}</div>
-          <div class="scenario-desc">{{ scenario.shortDesc }}</div>
+          <div class="scenario-icon">
+            {{ scenario.icon }}
+          </div>
+          <div class="scenario-name">
+            {{ scenario.name }}
+          </div>
+          <div class="scenario-desc">
+            {{ scenario.shortDesc }}
+          </div>
         </button>
       </div>
     </div>
 
-    <div v-if="selectedScenario" class="recommendation-result">
+    <div
+      v-if="selectedScenario"
+      class="recommendation-result"
+    >
       <div class="result-header">
         <span class="result-icon">🎯</span>
         <span class="result-title">推荐方案</span>
@@ -31,55 +44,91 @@
       <div class="storage-comparison">
         <div class="provider-card aws">
           <div class="provider-header">
-            <div class="provider-logo">AWS</div>
-            <div class="provider-service">{{ currentScenario.awsService }}</div>
+            <div class="provider-logo">
+              AWS
+            </div>
+            <div class="provider-service">
+              {{ currentScenario.awsService }}
+            </div>
           </div>
           <div class="provider-features">
-            <div v-for="(feature, idx) in currentScenario.awsFeatures" :key="idx" class="feature-item">
+            <div
+              v-for="(feature, idx) in currentScenario.awsFeatures"
+              :key="idx"
+              class="feature-item"
+            >
               <span class="check">✓</span>
               <span>{{ feature }}</span>
             </div>
           </div>
           <div class="provider-pricing">
-            <div class="price-label">定价模式</div>
-            <div class="price-value">{{ currentScenario.awsPricing }}</div>
+            <div class="price-label">
+              定价模式
+            </div>
+            <div class="price-value">
+              {{ currentScenario.awsPricing }}
+            </div>
           </div>
         </div>
 
         <div class="vs-divider">
-          <div class="vs-line"></div>
-          <div class="vs-badge">VS</div>
-          <div class="vs-line"></div>
+          <div class="vs-line" />
+          <div class="vs-badge">
+            VS
+          </div>
+          <div class="vs-line" />
         </div>
 
         <div class="provider-card aliyun">
           <div class="provider-header">
-            <div class="provider-logo aliyun-logo">阿里云</div>
-            <div class="provider-service">{{ currentScenario.aliyunService }}</div>
+            <div class="provider-logo aliyun-logo">
+              阿里云
+            </div>
+            <div class="provider-service">
+              {{ currentScenario.aliyunService }}
+            </div>
           </div>
           <div class="provider-features">
-            <div v-for="(feature, idx) in currentScenario.aliyunFeatures" :key="idx" class="feature-item">
+            <div
+              v-for="(feature, idx) in currentScenario.aliyunFeatures"
+              :key="idx"
+              class="feature-item"
+            >
               <span class="check aliyun-check">✓</span>
               <span>{{ feature }}</span>
             </div>
           </div>
           <div class="provider-pricing">
-            <div class="price-label">定价模式</div>
-            <div class="price-value">{{ currentScenario.aliyunPricing }}</div>
+            <div class="price-label">
+              定价模式
+            </div>
+            <div class="price-value">
+              {{ currentScenario.aliyunPricing }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="decision-guide">
-        <div class="guide-title">🤔 如何选择？</div>
+        <div class="guide-title">
+          🤔 如何选择？
+        </div>
         <div class="guide-content">
           <div class="guide-item">
-            <div class="guide-condition">选择 AWS 如果：</div>
-            <div class="guide-reason">{{ currentScenario.chooseAwsWhen }}</div>
+            <div class="guide-condition">
+              选择 AWS 如果：
+            </div>
+            <div class="guide-reason">
+              {{ currentScenario.chooseAwsWhen }}
+            </div>
           </div>
           <div class="guide-item">
-            <div class="guide-condition">选择阿里云如果：</div>
-            <div class="guide-reason">{{ currentScenario.chooseAliyunWhen }}</div>
+            <div class="guide-condition">
+              选择阿里云如果：
+            </div>
+            <div class="guide-reason">
+              {{ currentScenario.chooseAliyunWhen }}
+            </div>
           </div>
         </div>
       </div>
@@ -390,7 +439,7 @@ const currentScenario = computed(() => {
 
 .provider-pricing {
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px;
 }
 
@@ -455,7 +504,7 @@ const currentScenario = computed(() => {
 .guide-item {
   padding: 12px;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 3px solid #00d4ff;
 }
 

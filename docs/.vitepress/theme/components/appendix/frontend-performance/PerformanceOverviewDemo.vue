@@ -9,8 +9,12 @@
 <template>
   <div class="performance-overview">
     <div class="header">
-      <div class="title">前端性能优化全景图</div>
-      <div class="subtitle">点击下方维度，探索性能瓶颈与优化方案的对应关系</div>
+      <div class="title">
+        前端性能优化全景图
+      </div>
+      <div class="subtitle">
+        点击下方维度，探索性能瓶颈与优化方案的对应关系
+      </div>
     </div>
 
     <!-- 维度切换 -->
@@ -28,23 +32,35 @@
     </div>
 
     <!-- 内容展示区 -->
-    <div class="content-area" :class="currentDim.id">
+    <div
+      class="content-area"
+      :class="currentDim.id"
+    >
       <div class="panel bottlenecks">
         <h3>
           <span class="icon">⚠️</span>
           常见瓶颈 (Bottlenecks)
         </h3>
         <ul class="list">
-          <li v-for="(item, index) in currentDim.bottlenecks" :key="index">
-            <div class="item-title">{{ item.title }}</div>
-            <div class="item-desc">{{ item.desc }}</div>
+          <li
+            v-for="(item, index) in currentDim.bottlenecks"
+            :key="index"
+          >
+            <div class="item-title">
+              {{ item.title }}
+            </div>
+            <div class="item-desc">
+              {{ item.desc }}
+            </div>
           </li>
         </ul>
       </div>
 
       <div class="arrow">
-        <div class="arrow-line"></div>
-        <div class="arrow-text">如何解决？</div>
+        <div class="arrow-line" />
+        <div class="arrow-text">
+          如何解决？
+        </div>
       </div>
 
       <div class="panel solutions">
@@ -53,11 +69,22 @@
           优化方案 (Solutions)
         </h3>
         <ul class="list">
-          <li v-for="(item, index) in currentDim.solutions" :key="index">
-            <div class="item-title">{{ item.title }}</div>
-            <div class="item-desc">{{ item.desc }}</div>
+          <li
+            v-for="(item, index) in currentDim.solutions"
+            :key="index"
+          >
+            <div class="item-title">
+              {{ item.title }}
+            </div>
+            <div class="item-desc">
+              {{ item.desc }}
+            </div>
             <div class="tags">
-              <span v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</span>
+              <span
+                v-for="tag in item.tags"
+                :key="tag"
+                class="tag"
+              >{{ tag }}</span>
             </div>
           </li>
         </ul>
@@ -140,7 +167,7 @@ const currentDim = ref(dimensions[0])
   border-radius: 12px;
   background-color: var(--vp-c-bg-soft);
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-sans);
 }
 
@@ -200,7 +227,7 @@ const currentDim = ref(dimensions[0])
   align-items: stretch;
   background-color: var(--vp-c-bg);
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
 }
 
@@ -310,7 +337,7 @@ const currentDim = ref(dimensions[0])
 
 .summary-bar {
   margin-top: 1.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: var(--vp-c-brand-dimm);
   border-radius: 6px;
   text-align: center;

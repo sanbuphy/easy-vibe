@@ -1,44 +1,96 @@
 <!--
-  ApiQuickStartDemo.vue - 演示版
-  目标：展示最简单的 API 调用流程
+  ApiQuickStartDemo.vue - 紧凑版
+  目标：展示最简单的 API 调用流程，一眼看懂
 -->
 <template>
-  <div class="demo">
-    <div class="header">
+  <div class="demo-root">
+    <div class="demo-header">
       <span class="icon">🌐</span>
       <span class="title">试试看：获取当前时间</span>
     </div>
 
-    <div class="content">
-      <div class="action-area">
+    <div class="demo-layout">
+      <div class="left-panel">
+        <div class="terminal">
+          <div class="term-bar">
+            <span class="dot r" /><span class="dot y" /><span class="dot g" />
+            <span class="term-title">API 请求</span>
+          </div>
+          <div class="term-body">
+            <div class="t-line">
+              <span class="t-ps">&gt; </span>
+              <span class="t-cmd">GET /api/time</span>
+            </div>
+            <div v-if="calling" class="t-line">
+              <span class="t-dim">请求中...</span>
+              <span class="t-loading">▋</span>
+            </div>
+            <div v-if="result" class="t-line">
+              <span class="t-grn">HTTP/1.1 200 OK</span>
+            </div>
+            <div v-if="result" class="t-line">
+              <span class="t-dim">{ "time": "{{ result.timeString }}" }</span>
+            </div>
+          </div>
+        </div>
         <button class="call-btn" :disabled="calling" @click="callApi">
-          <span v-if="!calling">📡 发起 API 请求</span>
-          <span v-else>🔄 请求处理中...</span>
+          {{ calling ? '请求中...' : '📡 发起请求' }}
         </button>
       </div>
 
-      <div class="result-area" v-if="result || calling">
-        <div class="loading-dots" v-if="calling">
-          <span>.</span><span>.</span><span>.</span>
-        </div>
-        <div class="response-card" v-else-if="result">
-          <div class="response-header">
-            <span class="status-badge success">200 OK</span>
-            <span class="time">耗时: {{ result.time }}ms</span>
+      <div class="right-panel">
+        <div class="flow-col" :class="{ 'flow-highlight': stage === 'client' }">
+          <div class="flow-header">
+            <span class="flow-icon">💻</span>
+            <span class="flow-title">客户端</span>
           </div>
-          <div class="response-body">
-            <div class="time-display">{{ result.timeString }}</div>
-            <div class="timezone">{{ result.timezone }}</div>
+          <div class="flow-body">
+            {{ stage === 'client' ? '准备请求...' : '等待中' }}
+          </div>
+        </div>
+
+        <div class="flow-arrow" :class="{ 'arrow-lit': stage === 'request' }">
+          <span class="arrow-symbol">→</span>
+          <code class="arrow-label">Request</code>
+        </div>
+
+        <div class="flow-col" :class="{ 'flow-highlight': stage === 'server' }">
+          <div class="flow-header">
+            <span class="flow-icon">🖥️</span>
+            <span class="flow-title">服务器</span>
+          </div>
+          <div class="flow-body">
+            {{ stage === 'server' ? '处理中...' : '等待中' }}
+          </div>
+        </div>
+
+        <div class="flow-arrow" :class="{ 'arrow-lit': stage === 'response' }">
+          <code class="arrow-label">Response</code>
+          <span class="arrow-symbol">←</span>
+        </div>
+
+        <div
+          class="flow-col"
+          :class="{ 'flow-highlight': stage === 'response' }"
+        >
+          <div class="flow-header">
+            <span class="flow-icon">📦</span>
+            <span class="flow-title">响应</span>
+          </div>
+          <div class="flow-body">
+            <span v-if="result" class="result-time">{{
+              result.timeString
+            }}</span>
+            <span v-else>等待响应</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="footer">
-      <p>
-        👆 <strong>流程演示：</strong> 点击按钮 -> 发送请求 -> 服务器处理 ->
-        返回数据。
-      </p>
+    <div class="info-box">
+      <strong>核心思想：</strong>
+      <span>点击按钮 → 发送请求 → 服务器处理 → 返回数据。这就是 API
+        调用的完整流程。</span>
     </div>
   </div>
 </template>
@@ -48,180 +100,257 @@ import { ref } from 'vue'
 
 const calling = ref(false)
 const result = ref(null)
+const stage = ref(null)
 
 function callApi() {
   calling.value = true
   result.value = null
-
-  const startTime = Date.now()
+  stage.value = 'client'
 
   setTimeout(() => {
+    stage.value = 'request'
+  }, 150)
+  setTimeout(() => {
+    stage.value = 'server'
+  }, 300)
+  setTimeout(() => {
+    stage.value = 'response'
+  }, 450)
+  setTimeout(() => {
     const now = new Date()
-    const timeString = now.toLocaleString('zh-CN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-
     result.value = {
-      time: Date.now() - startTime,
-      timeString: `🕐 ${timeString}`,
-      timezone: '亚洲/上海 (UTC+8)'
+      timeString: now.toLocaleString('zh-CN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })
     }
     calling.value = false
-  }, 300 + Math.random() * 200)
+  }, 500)
 }
 </script>
 
 <style scoped>
-.demo {
+.demo-root {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  background: var(--vp-c-bg-soft);
-  margin: 24px 0;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: var(--vp-c-bg-soft);
+  margin: 1rem 0;
+  font-size: 0.85rem;
 }
 
-.header {
-  padding: 16px 20px;
+.demo-header {
+  padding: 10px 16px;
   background: var(--vp-c-bg);
   border-bottom: 1px solid var(--vp-c-divider);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .icon {
-  font-size: 24px;
+  font-size: 18px;
 }
-
 .title {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 0.9rem;
 }
 
-.content {
-  padding: 24px;
+.demo-layout {
+  display: flex;
+  align-items: stretch;
+}
+
+.left-panel {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid var(--vp-c-divider);
+}
+
+.right-panel {
+  width: 200px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--vp-c-bg);
+}
+
+@media (max-width: 640px) {
+  .demo-layout {
+    flex-direction: column;
+  }
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--vp-c-divider);
+  }
+  .right-panel {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .flow-arrow {
+    display: none;
+  }
+}
+
+.terminal {
+  background: #141420;
+}
+.term-bar {
+  display: flex;
   align-items: center;
-  gap: 20px;
-  min-height: 160px;
-  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  background: #1e1e2e;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot.r {
+  background: #ff5f57;
+}
+.dot.y {
+  background: #febc2e;
+}
+.dot.g {
+  background: #28c840;
+}
+.term-title {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  color: #666;
+  font-family: monospace;
+}
+
+.term-body {
+  min-height: 80px;
+  padding: 10px 12px;
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #cdd6f4;
+}
+.t-line {
+  margin-bottom: 4px;
+}
+.t-ps {
+  color: #89b4fa;
+}
+.t-cmd {
+  color: #cdd6f4;
+}
+.t-dim {
+  color: #585b70;
+}
+.t-grn {
+  color: #a6e3a1;
+}
+.t-loading {
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .call-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  margin: 10px;
+  padding: 8px 16px;
+  background: var(--vp-c-brand);
   color: white;
   border: none;
-  padding: 12px 32px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 600;
-  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
 }
-
-.call-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.6);
-}
-
 .call-btn:disabled {
-  opacity: 0.7;
-  cursor: wait;
-  transform: scale(0.98);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.result-area {
-  width: 100%;
-  max-width: 400px;
+.flow-col {
+  border: 1.5px solid var(--vp-c-divider);
+  border-radius: 6px;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.flow-col.flow-highlight {
+  border-color: var(--vp-c-brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vp-c-brand) 12%, transparent);
 }
 
-.response-card {
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 16px;
-  animation: slideUp 0.3s ease-out;
-}
-
-.response-header {
+.flow-header {
+  padding: 4px 8px;
+  background: var(--vp-c-bg-alt);
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 12px;
-  color: var(--vp-c-text-3);
+  align-items: center;
+  gap: 4px;
 }
-
-.status-badge {
-  background: #dcfce7;
-  color: #166534;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+.flow-icon {
+  font-size: 0.8rem;
 }
-
-.response-body {
-  text-align: center;
-}
-
-.time-display {
-  font-size: 24px;
+.flow-title {
   font-weight: 600;
-  color: var(--vp-c-text-1);
-  margin-bottom: 4px;
+  font-size: 0.75rem;
 }
 
-.timezone {
-  font-size: 13px;
+.flow-body {
+  padding: 6px 8px;
+  font-size: 0.72rem;
   color: var(--vp-c-text-2);
 }
-
-.loading-dots span {
-  animation: blink 1.4s infinite both;
-  font-size: 24px;
-  margin: 0 2px;
+.result-time {
+  color: var(--vp-c-brand);
+  font-weight: 600;
 }
 
-.loading-dots span:nth-child(2) {
-  animation-delay: 0.2s;
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 0;
+  opacity: 0.3;
+  transition: opacity 0.2s;
 }
-.loading-dots span:nth-child(3) {
-  animation-delay: 0.4s;
+.flow-arrow.arrow-lit {
+  opacity: 1;
+}
+.arrow-symbol {
+  font-size: 0.8rem;
+  color: var(--vp-c-brand);
+}
+.arrow-label {
+  font-size: 0.6rem;
+  font-family: monospace;
+  color: var(--vp-c-brand);
 }
 
-.footer {
-  padding: 12px 20px;
-  background: rgba(0, 0, 0, 0.02);
+.info-box {
+  display: flex;
+  gap: 0.25rem;
+  padding: 10px 14px;
+  background: var(--vp-c-bg-alt);
   border-top: 1px solid var(--vp-c-divider);
-  font-size: 13px;
+  font-size: 0.8rem;
   color: var(--vp-c-text-2);
-  text-align: center;
 }
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes blink {
-  0% {
-    opacity: 0.2;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.2;
-  }
+.info-box strong {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 </style>

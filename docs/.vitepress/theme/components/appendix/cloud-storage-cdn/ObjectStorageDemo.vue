@@ -1,23 +1,28 @@
-<!--
-  ObjectStorageDemo.vue
-  对象存储架构演示 - 展示桶、对象、元数据的核心概念
--->
 <template>
   <div class="object-storage-demo">
-    <div class="header">
-      <div class="title">对象存储架构</div>
-      <div class="subtitle">理解 Bucket、Object 和 Metadata 的关系</div>
+    <div class="demo-header">
+      <span class="icon">🗄️</span>
+      <span class="title">对象存储架构</span>
+      <span class="subtitle">理解 Bucket、Object 和 Metadata 的关系</span>
     </div>
 
     <div class="storage-architecture">
       <!-- 账户层 -->
       <div class="account-layer">
-        <div class="account-icon">👤</div>
-        <div class="account-name">云账户 (Account)</div>
-        <div class="account-desc">管理权限、计费、全局配置</div>
+        <div class="account-icon">
+          👤
+        </div>
+        <div class="account-name">
+          云账户 (Account)
+        </div>
+        <div class="account-desc">
+          管理权限、计费、全局配置
+        </div>
       </div>
 
-      <div class="connector">▼</div>
+      <div class="connector">
+        ▼
+      </div>
 
       <!-- 桶层 -->
       <div class="buckets-container">
@@ -35,15 +40,25 @@
             :class="{ active: selectedBucket === bucket.name }"
             @click="selectBucket(bucket.name)"
           >
-            <div class="bucket-icon">{{ bucket.icon }}</div>
-            <div class="bucket-name">{{ bucket.name }}</div>
-            <div class="bucket-meta">{{ bucket.objects }} 对象</div>
-            <div class="bucket-size">{{ bucket.size }}</div>
+            <div class="bucket-icon">
+              {{ bucket.icon }}
+            </div>
+            <div class="bucket-name">
+              {{ bucket.name }}
+            </div>
+            <div class="bucket-meta">
+              {{ bucket.objects }} 对象
+            </div>
+            <div class="bucket-size">
+              {{ bucket.size }}
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="connector">▼</div>
+      <div class="connector">
+        ▼
+      </div>
 
       <!-- 对象层 -->
       <div class="objects-container">
@@ -53,7 +68,10 @@
           <span class="section-desc">文件数据 + 元数据</span>
         </div>
 
-        <div v-if="selectedBucket" class="objects-list">
+        <div
+          v-if="selectedBucket"
+          class="objects-list"
+        >
           <div
             v-for="obj in currentObjects"
             :key="obj.key"
@@ -61,21 +79,34 @@
             :class="{ selected: selectedObject === obj.key }"
             @click="selectObject(obj)"
           >
-            <div class="object-icon">{{ getFileIcon(obj.type) }}</div>
-            <div class="object-info">
-              <div class="object-key">{{ obj.key }}</div>
-              <div class="object-meta">{{ obj.size }} · {{ obj.lastModified }}</div>
+            <div class="object-icon">
+              {{ getFileIcon(obj.type) }}
             </div>
-            <div class="object-arrow">▶</div>
+            <div class="object-info">
+              <div class="object-key">
+                {{ obj.key }}
+              </div>
+              <div class="object-meta">
+                {{ obj.size }} · {{ obj.lastModified }}
+              </div>
+            </div>
+            <div class="object-arrow">
+              ▶
+            </div>
           </div>
         </div>
 
-        <div v-else class="objects-placeholder">
+        <div
+          v-else
+          class="objects-placeholder"
+        >
           点击上方存储桶查看对象列表
         </div>
       </div>
 
-      <div class="connector">▼</div>
+      <div class="connector">
+        ▼
+      </div>
 
       <!-- 元数据层 -->
       <div class="metadata-container">
@@ -85,11 +116,20 @@
           <span class="section-desc">系统元数据 + 自定义元数据</span>
         </div>
 
-        <div v-if="selectedObject && currentMetadata" class="metadata-content">
+        <div
+          v-if="selectedObject && currentMetadata"
+          class="metadata-content"
+        >
           <div class="metadata-section">
-            <div class="metadata-section-title">系统元数据 (System)</div>
+            <div class="metadata-section-title">
+              系统元数据 (System)
+            </div>
             <div class="metadata-list">
-              <div v-for="(value, key) in currentMetadata.system" :key="key" class="metadata-item">
+              <div
+                v-for="(value, key) in currentMetadata.system"
+                :key="key"
+                class="metadata-item"
+              >
                 <span class="metadata-key">{{ key }}:</span>
                 <span class="metadata-value">{{ value }}</span>
               </div>
@@ -97,9 +137,15 @@
           </div>
 
           <div class="metadata-section">
-            <div class="metadata-section-title">自定义元数据 (Custom)</div>
+            <div class="metadata-section-title">
+              自定义元数据 (Custom)
+            </div>
             <div class="metadata-list">
-              <div v-for="(value, key) in currentMetadata.custom" :key="key" class="metadata-item">
+              <div
+                v-for="(value, key) in currentMetadata.custom"
+                :key="key"
+                class="metadata-item"
+              >
                 <span class="metadata-key">{{ key }}:</span>
                 <span class="metadata-value">{{ value }}</span>
               </div>
@@ -107,44 +153,18 @@
           </div>
         </div>
 
-        <div v-else class="metadata-placeholder">
+        <div
+          v-else
+          class="metadata-placeholder"
+        >
           点击左侧对象查看详细元数据
         </div>
       </div>
     </div>
 
-    <div class="architecture-summary">
-      <div class="summary-title">架构要点总结</div>
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-icon">📦</div>
-          <div class="summary-text">
-            <strong>Bucket（桶）</strong>
-            <span>全局命名空间，用于组织和隔离数据</span>
-          </div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-icon">📄</div>
-          <div class="summary-text">
-            <strong>Object（对象）</strong>
-            <span>键值对存储，包含数据、元数据和唯一 Key</span>
-          </div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-icon">🏷️</div>
-          <div class="summary-text">
-            <strong>Metadata（元数据）</strong>
-            <span>系统元数据 + 自定义标签，支持检索和管理</span>
-          </div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-icon">🔐</div>
-          <div class="summary-text">
-            <strong>Access Control（访问控制）</strong>
-            <span>Bucket Policy、ACL、STS 临时凭证多层权限</span>
-          </div>
-        </div>
-      </div>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>对象存储采用三层架构：Account（账户）→ Bucket（桶）→ Object（对象），每个对象都附带丰富的元数据用于检索和管理。理解这个层次结构是掌握对象存储的第一步。
     </div>
   </div>
 </template>
@@ -262,83 +282,79 @@ const getFileIcon = (type) => {
 .object-storage-demo {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  font-family: var(--vp-font-family-base);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
-.header {
-  margin-bottom: 1.5rem;
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
-.title {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin-bottom: 0.25rem;
-}
-
-.subtitle {
-  color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-}
+.demo-header .icon { font-size: 1rem; }
+.demo-header .title { font-weight: bold; font-size: 0.9rem; }
+.demo-header .subtitle { color: var(--vp-c-text-2); font-size: 0.75rem; margin-left: 0.4rem; }
 
 .storage-architecture {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.4rem;
 }
 
 .account-layer {
-  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-  padding: 1rem;
-  border-radius: 10px;
+  background: var(--vp-c-brand-soft);
+  padding: 0.5rem;
+  border-radius: 6px;
   text-align: center;
-  border: 2px solid #6366f1;
+  border: 2px solid var(--vp-c-brand);
+  grid-column: 1 / -1;
 }
 
 .account-icon {
-  font-size: 2rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.15rem;
 }
 
 .account-name {
   font-weight: 600;
-  font-size: 0.95rem;
-  color: #4338ca;
+  font-size: 0.8rem;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 0.1rem;
 }
 
 .account-desc {
-  font-size: 0.75rem;
-  color: #6366f1;
-  margin-top: 0.25rem;
+  font-size: 0.65rem;
+  color: var(--vp-c-text-2);
+  margin-top: 0.1rem;
 }
 
 .connector {
-  text-align: center;
-  color: var(--vp-c-text-3);
-  font-size: 1.25rem;
+  display: none;
 }
 
 .buckets-container {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 10px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.5rem;
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
   font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.4rem;
   color: var(--vp-c-text-1);
 }
 
 .section-desc {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: normal;
   color: var(--vp-c-text-2);
   margin-left: auto;
@@ -346,17 +362,16 @@ const getFileIcon = (type) => {
 
 .buckets-row {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .bucket-card {
   flex: 1;
-  min-width: 140px;
+  min-width: 80px;
   background: var(--vp-c-bg-soft);
-  border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 0.75rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  padding: 0.35rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -364,67 +379,64 @@ const getFileIcon = (type) => {
 
 .bucket-card:hover {
   border-color: var(--vp-c-brand);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .bucket-card.active {
   border-color: var(--vp-c-brand);
   background: var(--vp-c-brand-soft);
-  box-shadow: 0 0 0 3px var(--vp-c-brand-dimm);
+  box-shadow: 0 0 2px var(--vp-c-brand-dimm);
 }
 
-.bucket-icon {
-  font-size: 1.75rem;
-  margin-bottom: 0.25rem;
-}
+.bucket-icon { font-size: 1.1rem; margin-bottom: 0.1rem; }
 
 .bucket-name {
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: var(--vp-c-text-1);
   word-break: break-all;
 }
 
 .bucket-meta {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--vp-c-text-2);
-  margin-top: 0.25rem;
+  margin-top: 0.1rem;
 }
 
 .bucket-size {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   color: var(--vp-c-brand);
   font-weight: 600;
-  margin-top: 0.25rem;
+  margin-top: 0.1rem;
 }
 
 .objects-container {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 10px;
-  padding: 1rem;
-  min-height: 150px;
+  border-radius: 6px;
+  padding: 0.5rem;
+  min-height: 80px;
 }
 
 .objects-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .object-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.3rem;
+  padding: 0.3rem 0.4rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
+  border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .object-item:hover {
-  background: var(--vp-c-bg-mute);
+  background: var(--vp-c-bg-alt);
 }
 
 .object-item.selected {
@@ -432,9 +444,7 @@ const getFileIcon = (type) => {
   border: 1px solid var(--vp-c-brand);
 }
 
-.object-icon {
-  font-size: 1.25rem;
-}
+.object-icon { font-size: 0.85rem; }
 
 .object-info {
   flex: 1;
@@ -442,7 +452,7 @@ const getFileIcon = (type) => {
 }
 
 .object-key {
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: var(--vp-c-text-1);
   white-space: nowrap;
@@ -451,67 +461,63 @@ const getFileIcon = (type) => {
 }
 
 .object-meta {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--vp-c-text-2);
 }
 
 .object-arrow {
   color: var(--vp-c-text-3);
+  font-size: 0.7rem;
 }
 
-.objects-placeholder {
+.objects-placeholder,
+.metadata-placeholder {
   text-align: center;
-  padding: 2rem;
+  padding: 0.75rem;
   color: var(--vp-c-text-2);
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 }
 
 .metadata-container {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 10px;
-  padding: 1rem;
-  min-height: 150px;
+  border-radius: 6px;
+  padding: 0.5rem;
+  min-height: 80px;
 }
 
 .metadata-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 768px) {
-  .metadata-content {
-    grid-template-columns: 1fr;
-  }
+  gap: 0.4rem;
 }
 
 .metadata-section {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  padding: 0.75rem;
+  border-radius: 4px;
+  padding: 0.35rem;
 }
 
 .metadata-section-title {
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.65rem;
   color: var(--vp-c-brand);
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .metadata-list {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.15rem;
 }
 
 .metadata-item {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  font-size: 0.75rem;
+  gap: 0;
+  font-size: 0.6rem;
 }
 
 .metadata-key {
@@ -525,66 +531,17 @@ const getFileIcon = (type) => {
   word-break: break-all;
 }
 
-.metadata-placeholder {
-  text-align: center;
-  padding: 2rem;
-  color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-}
-
-.architecture-summary {
-  background: var(--vp-c-bg);
-  border-radius: 10px;
-  padding: 1.25rem;
-  margin-top: 1.5rem;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.summary-title {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  color: var(--vp-c-text-1);
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-@media (max-width: 640px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.summary-item {
-  display: flex;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-}
-
-.summary-icon {
-  font-size: 1.5rem;
-}
-
-.summary-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.summary-text strong {
-  font-size: 0.9rem;
-  color: var(--vp-c-text-1);
-}
-
-.summary-text span {
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.5rem;
+  border-radius: 4px;
   font-size: 0.75rem;
   color: var(--vp-c-text-2);
-  line-height: 1.4;
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.2rem;
+  grid-column: 1 / -1;
 }
+
+.info-box .icon { flex-shrink: 0; }
 </style>

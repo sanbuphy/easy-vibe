@@ -21,7 +21,11 @@
             <span class="title">传统刷新</span>
           </div>
           <div class="card-body">
-            <div class="step" v-for="(step, i) in noHmrSteps" :key="i">
+            <div
+              v-for="(step, i) in noHmrSteps"
+              :key="i"
+              class="step"
+            >
               <span class="step-num">{{ i + 1 }}</span>
               <span class="step-text">{{ step }}</span>
             </div>
@@ -32,7 +36,9 @@
           </div>
         </div>
 
-        <div class="vs-divider">VS</div>
+        <div class="vs-divider">
+          VS
+        </div>
 
         <div class="method-card hmr">
           <div class="card-header">
@@ -40,7 +46,11 @@
             <span class="title">HMR 热更新</span>
           </div>
           <div class="card-body">
-            <div class="step" v-for="(step, i) in hmrSteps" :key="i">
+            <div
+              v-for="(step, i) in hmrSteps"
+              :key="i"
+              class="step"
+            >
               <span class="step-num">{{ i + 1 }}</span>
               <span class="step-text">{{ step }}</span>
             </div>
@@ -56,12 +66,21 @@
       <div class="flow-diagram">
         <h4>HMR 工作流程</h4>
         <div class="flow-steps">
-          <div class="flow-step" v-for="(step, i) in flowSteps" :key="i">
+          <div
+            v-for="(step, i) in flowSteps"
+            :key="i"
+            class="flow-step"
+          >
             <div class="step-box">
               <span class="step-icon">{{ step.icon }}</span>
               <span class="step-label">{{ step.label }}</span>
             </div>
-            <div v-if="i < flowSteps.length - 1" class="step-arrow">→</div>
+            <div
+              v-if="i < flowSteps.length - 1"
+              class="step-arrow"
+            >
+              →
+            </div>
           </div>
         </div>
       </div>
@@ -79,10 +98,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="tool in hmrTools" :key="tool.name">
+            <tr
+              v-for="tool in hmrTools"
+              :key="tool.name"
+            >
               <td><strong>{{ tool.name }}</strong></td>
               <td>
-                <span class="badge" :class="tool.supportClass">{{ tool.support }}</span>
+                <span
+                  class="badge"
+                  :class="tool.supportClass"
+                >{{ tool.support }}</span>
               </td>
               <td>{{ tool.speed }}</td>
               <td>{{ tool.feature }}</td>
@@ -164,10 +189,10 @@ const hmrTools = [
 <style scoped>
 .hot-reload-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
@@ -185,7 +210,7 @@ const hmrTools = [
 .comparison {
   display: flex;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   align-items: stretch;
 }
 
@@ -198,7 +223,7 @@ const hmrTools = [
 .method-card {
   flex: 1;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px solid var(--vp-c-divider);
   overflow: hidden;
 }
@@ -290,7 +315,7 @@ const hmrTools = [
 
 .flow-diagram {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   padding: 0.75rem;
   margin-bottom: 1rem;
@@ -345,7 +370,7 @@ const hmrTools = [
 
 .support-table {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   padding: 0.75rem;
   overflow-x: auto;

@@ -32,31 +32,49 @@
         <div class="param-row">
           <label>Object Count / 对象数量: {{ objectCount }}</label>
           <input
-            type="range"
             v-model.number="objectCount"
+            type="range"
             min="100"
             max="5000"
             step="100"
             @input="resetTest"
-          />
+          >
         </div>
       </div>
 
       <div class="optimization-toggles">
         <label>Optimizations / 优化技术</label>
         <div class="toggle-grid">
-          <label class="toggle-option" v-if="currentTest === 'redraw'">
-            <input type="checkbox" v-model="useDirtyRect" />
+          <label
+            v-if="currentTest === 'redraw'"
+            class="toggle-option"
+          >
+            <input
+              v-model="useDirtyRect"
+              type="checkbox"
+            >
             <span>Dirty Rect / 脏矩形</span>
           </label>
 
-          <label class="toggle-option" v-if="currentTest === 'layer'">
-            <input type="checkbox" v-model="useOffscreenCanvas" />
+          <label
+            v-if="currentTest === 'layer'"
+            class="toggle-option"
+          >
+            <input
+              v-model="useOffscreenCanvas"
+              type="checkbox"
+            >
             <span>Offscreen Canvas / 离屏画布</span>
           </label>
 
-          <label class="toggle-option" v-if="currentTest === 'batch'">
-            <input type="checkbox" v-model="useBatching" />
+          <label
+            v-if="currentTest === 'batch'"
+            class="toggle-option"
+          >
+            <input
+              v-model="useBatching"
+              type="checkbox"
+            >
             <span>Batch Rendering / 批量渲染</span>
           </label>
         </div>
@@ -86,24 +104,34 @@
         </div>
       </div>
 
-      <button class="reset-btn" @click="resetTest">
+      <button
+        class="reset-btn"
+        @click="resetTest"
+      >
         <span class="icon">🔄</span>
         Restart Test / 重新测试
       </button>
     </div>
 
     <div class="canvas-container">
-      <canvas ref="canvasRef" width="600" height="400"></canvas>
+      <canvas
+        ref="canvasRef"
+        width="600"
+        height="400"
+      />
       <canvas
         v-if="useOffscreenCanvas"
         ref="offscreenCanvasRef"
         width="600"
         height="400"
         style="display: none"
-      ></canvas>
+      />
     </div>
 
-    <div class="comparison" v-if="showComparison">
+    <div
+      v-if="showComparison"
+      class="comparison"
+    >
       <h4>Performance Comparison / 性能对比</h4>
       <div class="comparison-table">
         <table>
@@ -146,36 +174,9 @@
       </div>
     </div>
 
-    <div class="code-display">
-      <h4>Optimization Code / 优化代码</h4>
-      <pre><code>{{ optimizationCode }}</code></pre>
-    </div>
+    
 
-    <div class="explanation">
-      <h4>Performance Tips / 性能优化要点</h4>
-      <ul>
-        <li>
-          <strong>减少重绘：</strong>
-          只重绘变化的部分（脏矩形技术），避免不必要的 clearRect
-        </li>
-        <li>
-          <strong>离屏 Canvas：</strong>
-          预渲染静态内容到离屏 Canvas，减少每帧的绘制操作
-        </li>
-        <li>
-          <strong>批量渲染：</strong>
-          减少状态切换（fillStyle、strokeStyle 等），批量处理相同类型的绘制
-        </li>
-        <li>
-          <strong>对象池：</strong>
-          复用对象，减少垃圾回收压力
-        </li>
-        <li>
-          <strong>requestAnimationFrame：</strong>
-          使用浏览器提供的动画 API，优化渲染时机
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </template>
 
@@ -553,14 +554,15 @@ onUnmounted(() => {
 
 <style scoped>
 .performance-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .test-selector {
@@ -576,29 +578,33 @@ onUnmounted(() => {
 
 .button-group {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .button-group button {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  background: white;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .button-group button:hover {
-  border-color: #3498db;
-  background: #f0f8ff;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .button-group button.active {
-  border-color: #3498db;
-  background: #3498db;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .parameters {
@@ -721,28 +727,36 @@ onUnmounted(() => {
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
 }
 
 canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
+  border: 3px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .comparison {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--vp-c-bg);
   border-radius: 6px;
+  border: 1px solid var(--vp-c-divider);
 }
 
 .comparison h4 {
-  margin: 0 0 15px 0;
-  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .comparison-table {
@@ -756,62 +770,21 @@ canvas {
 
 .comparison-table th,
 .comparison-table td {
-  padding: 10px;
+  padding: 0.625rem;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .comparison-table th {
-  background: #f8f9fa;
+  background: var(--vp-c-bg-soft);
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--vp-c-text-1);
+  font-size: 0.813rem;
 }
 
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
-  overflow-x: auto;
+.comparison-table td {
+  font-size: 0.813rem;
+  color: var(--vp-c-text-2);
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.explanation {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
-  border-radius: 6px;
-}
-
-.explanation h4 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.explanation ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.explanation li {
-  margin-bottom: 8px;
-  color: #555;
-  font-size: 14px;
-}
 </style>

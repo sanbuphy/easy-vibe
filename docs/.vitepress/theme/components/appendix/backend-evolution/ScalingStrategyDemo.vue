@@ -6,25 +6,58 @@
     </div>
 
     <div class="strategies">
-      <div class="strategy-card" :class="{ active: activeStrategy === 'vertical' }" @click="activeStrategy = 'vertical'">
-        <div class="strategy-icon">📦</div>
-        <div class="strategy-name">垂直扩展</div>
-        <div class="strategy-desc">买更强的机器</div>
+      <div
+        class="strategy-card"
+        :class="{ active: activeStrategy === 'vertical' }"
+        @click="activeStrategy = 'vertical'"
+      >
+        <div class="strategy-icon">
+          📦
+        </div>
+        <div class="strategy-name">
+          垂直扩展
+        </div>
+        <div class="strategy-desc">
+          买更强的机器
+        </div>
         <div class="visual-vertical">
-          <div class="server" :class="{ scale: activeStrategy === 'vertical' }">
-            <div class="cpu">CPU</div>
-            <div class="memory">内存</div>
+          <div
+            class="server"
+            :class="{ scale: activeStrategy === 'vertical' }"
+          >
+            <div class="cpu">
+              CPU
+            </div>
+            <div class="memory">
+              内存
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="strategy-card" :class="{ active: activeStrategy === 'horizontal' }" @click="activeStrategy = 'horizontal'">
-        <div class="strategy-icon">🔄</div>
-        <div class="strategy-name">水平扩展</div>
-        <div class="strategy-desc">加更多机器</div>
+      <div
+        class="strategy-card"
+        :class="{ active: activeStrategy === 'horizontal' }"
+        @click="activeStrategy = 'horizontal'"
+      >
+        <div class="strategy-icon">
+          🔄
+        </div>
+        <div class="strategy-name">
+          水平扩展
+        </div>
+        <div class="strategy-desc">
+          加更多机器
+        </div>
         <div class="visual-horizontal">
           <div class="servers">
-            <div class="server-mini" v-for="n in 4" :key="n" :class="{ active: activeStrategy === 'horizontal' && n <= serverCount }" :style="{ animationDelay: (n * 0.1) + 's' }"></div>
+            <div
+              v-for="n in 4"
+              :key="n"
+              class="server-mini"
+              :class="{ active: activeStrategy === 'horizontal' && n <= serverCount }"
+              :style="{ animationDelay: (n * 0.1) + 's' }"
+            />
           </div>
         </div>
       </div>
@@ -36,7 +69,11 @@
         <span>垂直扩展</span>
         <span>水平扩展</span>
       </div>
-      <div class="table-row" v-for="item in comparisonData" :key="item.dim">
+      <div
+        v-for="item in comparisonData"
+        :key="item.dim"
+        class="table-row"
+      >
         <span>{{ item.dim }}</span>
         <span :class="{ better: item.verticalBetter }">{{ item.vertical }}</span>
         <span :class="{ better: item.horizontalBetter }">{{ item.horizontal }}</span>
@@ -62,10 +99,10 @@ const comparisonData = [
 <style scoped>
 .scaling-strategy-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
 .demo-header {

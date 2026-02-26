@@ -1,80 +1,80 @@
 <template>
   <div class="iam-ram-comparison-demo">
     <div class="demo-header">
-      <h4>AWS IAM vs 阿里云 RAM 对比</h4>
-      <p class="demo-desc">点击各个模块查看详细对比</p>
+      <span class="icon">🔐</span>
+      <span class="title">IAM vs RAM 对比</span>
+      <span class="subtitle">不同云厂商权限管理服务</span>
     </div>
 
-    <div class="comparison-container">
-      <!-- AWS IAM Column -->
-      <div class="platform-column aws-column">
-        <div class="platform-header aws">
-          <div class="logo">AWS</div>
-          <h5>IAM</h5>
-          <span class="subtitle">Identity and Access Management</span>
+    <div class="main-area">
+      <div class="platform-col aws">
+        <div class="platform-header">
+          AWS IAM
         </div>
+        <div
+          v-for="(feature, index) in features"
+          :key="index"
+          class="feature-item"
+          :class="{ active: selectedFeature === index }"
+          @click="selectedFeature = index"
+        >
+          <span class="icon">{{ feature.icon }}</span>
+          <span class="name">{{ feature.name }}</span>
+        </div>
+      </div>
 
-        <div class="features-list">
-          <div
-            v-for="(feature, index) in awsFeatures"
-            :key="index"
-            class="feature-item"
-            :class="{ active: selectedFeature === `aws-${index}` }"
-            @click="selectFeature('aws', index)"
-          >
-            <div class="feature-icon">{{ feature.icon }}</div>
-            <div class="feature-content">
-              <span class="feature-name">{{ feature.name }}</span>
-              <span class="feature-desc">{{ feature.desc }}</span>
+      <div class="comparison-col">
+        <div
+          v-if="selectedFeatureData"
+          class="comparison-card"
+        >
+          <div class="comp-title">
+            {{ selectedFeatureData.name }}
+          </div>
+          <div class="comp-row">
+            <div class="comp-item aws">
+              <div class="comp-label">
+                AWS IAM
+              </div>
+              <div class="comp-desc">
+                {{ selectedFeatureData.awsDetail }}
+              </div>
+            </div>
+            <div class="comp-vs">
+              VS
+            </div>
+            <div class="comp-item ram">
+              <div class="comp-label">
+                阿里云 RAM
+              </div>
+              <div class="comp-desc">
+                {{ selectedFeatureData.ramDetail }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Comparison Details -->
-      <div class="comparison-details" v-if="selectedFeatureData">
-        <div class="detail-card">
-          <h6>{{ selectedFeatureData.name }}</h6>
-          <div class="comparison-row">
-            <div class="aws-detail">
-              <span class="label">AWS IAM</span>
-              <p>{{ selectedFeatureData.awsDetail }}</p>
-              <code v-if="selectedFeatureData.awsExample">{{ selectedFeatureData.awsExample }}</code>
-            </div>
-            <div class="vs-divider">VS</div>
-            <div class="ram-detail">
-              <span class="label">阿里云 RAM</span>
-              <p>{{ selectedFeatureData.ramDetail }}</p>
-              <code v-if="selectedFeatureData.ramExample">{{ selectedFeatureData.ramExample }}</code>
-            </div>
-          </div>
+      <div class="platform-col ram">
+        <div class="platform-header">
+          阿里云 RAM
+        </div>
+        <div
+          v-for="(feature, index) in features"
+          :key="index"
+          class="feature-item"
+          :class="{ active: selectedFeature === index }"
+          @click="selectedFeature = index"
+        >
+          <span class="icon">{{ feature.icon }}</span>
+          <span class="name">{{ feature.name }}</span>
         </div>
       </div>
+    </div>
 
-      <!-- Alibaba Cloud RAM Column -->
-      <div class="platform-column ram-column">
-        <div class="platform-header ram">
-          <div class="logo">阿里云</div>
-          <h5>RAM</h5>
-          <span class="subtitle">Resource Access Management</span>
-        </div>
-
-        <div class="features-list">
-          <div
-            v-for="(feature, index) in ramFeatures"
-            :key="index"
-            class="feature-item"
-            :class="{ active: selectedFeature === `ram-${index}` }"
-            @click="selectFeature('ram', index)"
-          >
-            <div class="feature-icon">{{ feature.icon }}</div>
-            <div class="feature-content">
-              <span class="feature-name">{{ feature.name }}</span>
-              <span class="feature-desc">{{ feature.desc }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>IAM 和 RAM 核心概念基本一致，只是术语和实现细节略有不同。
     </div>
   </div>
 </template>
@@ -82,287 +82,153 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-const selectedFeature = ref(null)
+const selectedFeature = ref(0)
 
-const featureDetails = [
-  {
-    name: '用户管理',
-    awsDetail: '使用 IAM User，支持编程访问和控制台访问，可分配独立 AK/SK',
-    ramDetail: '使用 RAM 用户，功能与 IAM User 类似，支持子账号登录控制台',
-    awsExample: 'arn:aws:iam::123456789012:user/alice',
-    ramExample: 'acs:ram::123456789012:user/alice'
-  },
-  {
-    name: '用户组管理',
-    awsDetail: 'IAM Group 用于批量管理用户权限，一个用户可属于多个组',
-    ramDetail: 'RAM 用户组功能类似，支持按部门或项目分组管理',
-    awsExample: 'arn:aws:iam::123456789012:group/Developers',
-    ramExample: 'acs:ram::123456789012:group/Developers'
-  },
-  {
-    name: '角色与扮演',
-    awsDetail: 'IAM Role 支持跨账号访问和服务角色，使用 STS AssumeRole',
-    ramDetail: 'RAM 角色支持跨云账号访问和临时授权，使用 STS AssumeRole',
-    awsExample: 'arn:aws:iam::123456789012:role/CrossAccountRole',
-    ramExample: 'acs:ram::123456789012:role/CrossAccountRole'
-  },
-  {
-    name: '权限策略',
-    awsDetail: 'IAM Policy 使用 JSON 格式，支持 Action/Resource/Condition',
-    ramDetail: 'RAM Policy 语法类似，支持阿里云服务特定的 Action',
-    awsExample: '"Action": "s3:GetObject"',
-    ramExample: '"Action": "oss:GetObject"'
-  },
-  {
-    name: '身份联合',
-    awsDetail: '支持 SAML 2.0 和 OIDC，可与 AD、Okta 等 IdP 集成',
-    ramDetail: '支持 SAML 2.0 和企业 AD/LDAP，支持钉钉等国内 IdP',
-    awsExample: 'SAML Provider: arn:aws:iam::123:saml-provider/Okta',
-    ramExample: 'SAML Provider: acs:ram::123:saml-provider/DingTalk'
-  },
-  {
-    name: '访问密钥',
-    awsDetail: 'IAM User 可创建 AK/SK，支持定期轮换和访问分析',
-    ramDetail: 'RAM 用户支持 AccessKey，提供密钥使用分析和安全建议',
-    awsExample: 'AKIAIOSFODNN7EXAMPLE',
-    ramExample: 'LTAI...'
-  }
+const features = [
+  { icon: '👤', name: '用户管理' },
+  { icon: '👥', name: '用户组' },
+  { icon: '🎭', name: '角色扮演' },
+  { icon: '📋', name: '权限策略' },
+  { icon: '🔗', name: '身份联合' },
+  { icon: '🔑', name: '访问密钥' }
 ]
 
-const awsFeatures = featureDetails.map((f, i) => ({
-  icon: ['👤', '👥', '🎭', '📋', '🔗', '🔑'][i],
-  name: f.name,
-  desc: f.awsDetail.slice(0, 30) + '...'
-}))
+const featureDetails = [
+  { name: '用户管理', awsDetail: 'IAM User，支持编程访问和控制台访问', ramDetail: 'RAM 用户，功能类似，支持子账号登录' },
+  { name: '用户组管理', awsDetail: 'IAM Group 批量管理用户权限', ramDetail: 'RAM 用户组，按部门分组管理' },
+  { name: '角色与扮演', awsDetail: 'IAM Role + STS AssumeRole', ramDetail: 'RAM 角色 + STS AssumeRole' },
+  { name: '权限策略', awsDetail: 'JSON 格式 Policy', ramDetail: '语法类似的权限策略' },
+  { name: '身份联合', awsDetail: 'SAML 2.0 / OIDC，支持 AD/Okta', ramDetail: 'SAML 2.0，支持钉钉等' },
+  { name: '访问密钥', awsDetail: 'AK/SK，支持轮换和分析', ramDetail: 'AccessKey，提供安全建议' }
+]
 
-const ramFeatures = featureDetails.map((f, i) => ({
-  icon: ['👤', '👥', '🎭', '📋', '🔗', '🔑'][i],
-  name: f.name,
-  desc: f.ramDetail.slice(0, 30) + '...'
-}))
-
-const selectedFeatureData = computed(() => {
-  if (!selectedFeature.value) return null
-  const [platform, index] = selectedFeature.value.split('-')
-  return featureDetails[parseInt(index)]
-})
-
-function selectFeature(platform, index) {
-  selectedFeature.value = `${platform}-${index}`
-}
+const selectedFeatureData = computed(() => featureDetails[selectedFeature.value])
 </script>
 
 <style scoped>
 .iam-ram-comparison-demo {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  padding: 24px;
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
 .demo-header {
-  text-align: center;
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.demo-header h4 {
-  margin: 0 0 8px 0;
-  font-size: 1.5rem;
-}
+.demo-header .icon { font-size: 1.25rem; }
+.demo-header .title { font-weight: bold; font-size: 1rem; }
+.demo-header .subtitle { color: var(--vp-c-text-2); font-size: 0.85rem; margin-left: 0.5rem; }
 
-.demo-desc {
-  margin: 0;
-  opacity: 0.9;
-  font-size: 0.9rem;
-}
-
-.comparison-container {
+.main-area {
   display: grid;
   grid-template-columns: 1fr 1.5fr 1fr;
-  gap: 16px;
-  align-items: start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
-.platform-column {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+@media (max-width: 768px) {
+  .main-area { grid-template-columns: 1fr; }
+}
+
+.platform-col {
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
   overflow: hidden;
 }
 
 .platform-header {
-  padding: 16px;
+  padding: 0.5rem;
   text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.platform-header.aws {
-  background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
-}
-
-.platform-header.ram {
-  background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
-}
-
-.platform-header .logo {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.platform-header h5 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.platform-header .subtitle {
-  font-size: 0.7rem;
-  opacity: 0.9;
-}
-
-.features-list {
-  padding: 12px;
-}
+.platform-col.aws .platform-header { background: var(--vp-c-brand-soft); color: var(--vp-c-brand-1); }
+.platform-col.ram .platform-header { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
 
 .feature-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
-  margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.feature-item:hover,
-.feature-item.active {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(4px);
+.feature-item:last-child { border-bottom: none; }
+.feature-item:hover { background: var(--vp-c-bg-alt); }
+.feature-item.active { background: var(--vp-c-brand-soft); }
+
+.feature-item .icon { font-size: 1rem; }
+.feature-item .name { font-size: 0.8rem; color: var(--vp-c-text-1); }
+
+.comparison-col { min-width: 0; }
+
+.comparison-card {
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.75rem;
+  height: 100%;
 }
 
-.feature-icon {
-  font-size: 1.2rem;
+.comp-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--vp-c-brand-1);
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-.feature-content {
+.comp-row {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  gap: 0.5rem;
 }
 
-.feature-name {
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.feature-desc {
-  font-size: 0.7rem;
-  opacity: 0.8;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.comparison-details {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  padding: 20px;
-  color: #333;
-}
-
-.detail-card {
-  text-align: center;
-}
-
-.detail-card h6 {
-  margin: 0 0 16px 0;
-  font-size: 1.1rem;
-  color: #667eea;
-}
-
-.comparison-row {
-  display: flex;
-  align-items: stretch;
-  gap: 16px;
-}
-
-.aws-detail,
-.ram-detail {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: left;
-}
-
-.aws-detail {
-  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-}
-
-.ram-detail {
-  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
-}
-
-.aws-detail .label,
-.ram-detail .label {
-  display: block;
-  font-weight: 700;
-  font-size: 0.8rem;
-  margin-bottom: 6px;
-}
-
-.aws-detail .label {
-  color: #ff6f00;
-}
-
-.ram-detail .label {
-  color: #c2185b;
-}
-
-.aws-detail p,
-.ram-detail p {
-  margin: 0 0 8px 0;
-  font-size: 0.8rem;
-  line-height: 1.4;
-}
-
-.aws-detail code,
-.ram-detail code {
-  display: block;
-  padding: 6px;
-  background: rgba(0, 0, 0, 0.05);
+.comp-item {
+  padding: 0.5rem;
   border-radius: 4px;
-  font-size: 0.65rem;
-  word-break: break-all;
+  background: var(--vp-c-bg-alt);
 }
 
-.vs-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.comp-label {
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.comp-item.aws .comp-label { color: var(--vp-c-brand-1); }
+.comp-item.ram .comp-label { color: #dc2626; }
+
+.comp-desc { font-size: 0.75rem; color: var(--vp-c-text-2); line-height: 1.4; }
+
+.comp-vs {
+  text-align: center;
   font-weight: 700;
-  font-size: 0.9rem;
-  color: #999;
-  padding: 0 8px;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-3);
 }
 
-@media (max-width: 1024px) {
-  .comparison-container {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .comparison-details {
-    order: -1;
-  }
-
-  .comparison-row {
-    flex-direction: column;
-  }
-
-  .vs-divider {
-    padding: 8px 0;
-  }
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  display: flex;
+  gap: 0.25rem;
 }
+
+.info-box .icon { flex-shrink: 0; }
+.info-box strong { color: var(--vp-c-text-1); }
 </style>

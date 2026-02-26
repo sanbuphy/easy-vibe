@@ -4,133 +4,203 @@
 -->
 <template>
   <div class="dlq-demo">
-    <div class="header">
-      <div class="title">死信队列：消息的"急救站"</div>
-      <div class="subtitle">处理无法消费的消息，避免阻塞队列</div>
+    <div class="demo-header">
+      <span class="icon">🚑</span>
+      <span class="title">死信队列</span>
+      <span class="subtitle">消息的"急救站" - 处理失败消息</span>
     </div>
 
     <div class="controls">
       <div class="control">
         <label>失败率：</label>
-        <input v-model="failureRate" type="range" min="0" max="100" step="10" />
+        <input
+          v-model.number="failureRate"
+          type="range"
+          min="0"
+          max="100"
+          step="10"
+        >
         <span class="value">{{ failureRate }}%</span>
       </div>
       <div class="control">
-        <label>最大重试次数：</label>
-        <input v-model="maxRetries" type="range" min="1" max="5" step="1" />
+        <label>最大重试：</label>
+        <input
+          v-model.number="maxRetries"
+          type="range"
+          min="1"
+          max="5"
+          step="1"
+        >
         <span class="value">{{ maxRetries }}</span>
       </div>
     </div>
 
-    <div class="flow-container">
-      <div class="main-queue-section">
-        <div class="section-title">📦 主队列</div>
-        <div class="queue-box main-queue">
-          <div class="queue-header">
-            <span>正常消息队列</span>
-            <span class="count">{{ mainQueue.length }} 条</span>
+    <div class="demo-content">
+      <div class="flow-container">
+        <div class="main-queue-section">
+          <div class="section-title">
+            📦 主队列
           </div>
-          <div class="message-list">
-            <div
-              v-for="msg in mainQueue"
-              :key="msg.id"
-              class="message-item"
-              :class="{ processing: msg.processing }"
-            >
-              <div class="msg-id">#{{ msg.id }}</div>
-              <div class="msg-retries" v-if="msg.retries > 0">
-                重试: {{ msg.retries }}/{{ maxRetries }}
+          <div class="queue-box main-queue">
+            <div class="queue-header">
+              <span>正常消息队列</span>
+              <span class="count">{{ mainQueue.length }} 条</span>
+            </div>
+            <div class="message-list">
+              <div
+                v-for="msg in mainQueue.slice(0, 3)"
+                :key="msg.id"
+                class="message-item"
+                :class="{ processing: msg.processing }"
+              >
+                <div class="msg-id">
+                  #{{ msg.id }}
+                </div>
+                <div
+                  v-if="msg.retries > 0"
+                  class="msg-retries"
+                >
+                  重试: {{ msg.retries }}/{{ maxRetries }}
+                </div>
+              </div>
+              <div
+                v-if="mainQueue.length === 0"
+                class="empty"
+              >
+                队列为空
+              </div>
+              <div
+                v-else-if="mainQueue.length > 3"
+                class="more"
+              >
+                还有 {{ mainQueue.length - 3 }} 条...
               </div>
             </div>
-            <div v-if="mainQueue.length === 0" class="empty">队列为空</div>
           </div>
+          <button
+            class="add-btn"
+            :disabled="processing"
+            @click="addMessage"
+          >
+            + 添加消息
+          </button>
         </div>
-        <button class="add-btn" @click="addMessage" :disabled="processing">
-          + 添加消息
-        </button>
-      </div>
 
-      <div class="processing-section">
-        <div class="section-title">⚙️ 消费处理</div>
-        <div class="processor-box">
-          <div class="processor-icon" :class="{ active: processing }">
-            {{ processing ? '⚙️' : '💤' }}
+        <div class="processing-section">
+          <div class="section-title">
+            ⚙️ 消费处理
           </div>
-          <div class="processor-status">
-            {{ processing ? '处理中...' : '空闲' }}
-          </div>
-          <div v-if="currentMessage" class="current-msg">
-            处理: #{{ currentMessage.id }}
-          </div>
-          <div v-if="lastResult" class="last-result" :class="lastResult.type">
-            {{ lastResult.message }}
-          </div>
-        </div>
-      </div>
-
-      <div class="dlq-section">
-        <div class="section-title">⚠️ 死信队列</div>
-        <div class="queue-box dead-letter">
-          <div class="queue-header">
-            <span>失败消息</span>
-            <span class="count">{{ deadLetterQueue.length }} 条</span>
-          </div>
-          <div class="message-list">
+          <div class="processor-box">
             <div
-              v-for="msg in deadLetterQueue"
-              :key="msg.id"
-              class="message-item failed"
+              class="processor-icon"
+              :class="{ active: processing }"
             >
-              <div class="msg-id">#{{ msg.id }}</div>
-              <div class="msg-error">{{ msg.error }}</div>
+              {{ processing ? '⚙️' : '💤' }}
             </div>
-            <div v-if="deadLetterQueue.length === 0" class="empty">
-              无失败消息
+            <div class="processor-status">
+              {{ processing ? '处理中...' : '空闲' }}
+            </div>
+            <div
+              v-if="currentMessage"
+              class="current-msg"
+            >
+              处理: #{{ currentMessage.id }}
+            </div>
+            <div
+              v-if="lastResult"
+              class="last-result"
+              :class="lastResult.type"
+            >
+              {{ lastResult.message }}
             </div>
           </div>
         </div>
-        <button
-          class="retry-btn"
-          @click="retryDeadLetters"
-          :disabled="deadLetterQueue.length === 0"
-        >
-          🔄 重试死信
-        </button>
+
+        <div class="dlq-section">
+          <div class="section-title">
+            ⚠️ 死信队列
+          </div>
+          <div class="queue-box dead-letter">
+            <div class="queue-header">
+              <span>失败消息</span>
+              <span class="count">{{ deadLetterQueue.length }} 条</span>
+            </div>
+            <div class="message-list">
+              <div
+                v-for="msg in deadLetterQueue.slice(0, 2)"
+                :key="msg.id"
+                class="message-item failed"
+              >
+                <div class="msg-id">
+                  #{{ msg.id }}
+                </div>
+                <div class="msg-error">
+                  {{ msg.error }}
+                </div>
+              </div>
+              <div
+                v-if="deadLetterQueue.length === 0"
+                class="empty"
+              >
+                无失败消息
+              </div>
+              <div
+                v-else-if="deadLetterQueue.length > 2"
+                class="more"
+              >
+                还有 {{ deadLetterQueue.length - 2 }} 条...
+              </div>
+            </div>
+          </div>
+          <button
+            class="retry-btn"
+            :disabled="deadLetterQueue.length === 0"
+            @click="retryDeadLetters"
+          >
+            🔄 重试死信
+          </button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">
+            总消息数
+          </div>
+          <div class="stat-value">
+            {{ totalMessages }}
+          </div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-label">
+            成功处理
+          </div>
+          <div class="stat-value">
+            {{ successCount }}
+          </div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-label">
+            进入死信
+          </div>
+          <div class="stat-value">
+            {{ deadLetterCount }}
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            成功率
+          </div>
+          <div class="stat-value">
+            {{ successRate }}%
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-label">总消息数</div>
-        <div class="stat-value">{{ totalMessages }}</div>
-      </div>
-      <div class="stat-card success">
-        <div class="stat-label">成功处理</div>
-        <div class="stat-value">{{ successCount }}</div>
-      </div>
-      <div class="stat-card warning">
-        <div class="stat-label">进入死信</div>
-        <div class="stat-value">{{ deadLetterCount }}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">成功率</div>
-        <div class="stat-value">{{ successRate }}%</div>
-      </div>
-    </div>
-
-    <div class="explanation">
-      <div class="exp-title">💡 死信队列的作用</div>
-      <div class="exp-content">
-        <div class="exp-item">
-          <strong>1. 隔离异常消息：</strong>失败消息不会阻塞正常消息的处理
-        </div>
-        <div class="exp-item">
-          <strong>2. 保留失败记录：</strong>可以后续人工介入或自动重试
-        </div>
-        <div class="exp-item">
-          <strong>3. 系统保护：</strong>避免因持续失败导致消费者崩溃
-        </div>
-      </div>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想:</strong>失败消息进入死信队列,避免阻塞正常消息,可后续人工介入或自动重试
     </div>
   </div>
 </template>
@@ -174,7 +244,7 @@ const processNext = () => {
     return
   }
 
-  let msg = mainQueue[0]
+  let msg = mainQueue.value[0]
   msg.processing = true
   processing.value = true
   currentMessage.value = msg
@@ -188,7 +258,7 @@ const processNext = () => {
       msg.processing = false
 
       if (msg.retries >= maxRetries.value) {
-        // 超过最大重试次数，进入死信队列
+        // 超过最大重试次数,进入死信队列
         mainQueue.value.shift()
         deadLetterQueue.value.push({
           id: msg.id,
@@ -202,7 +272,7 @@ const processNext = () => {
         // 重新入队
         lastResult.value = {
           type: 'warning',
-          message: `⚠️ 消息 #${msg.id} 处理失败，重试 ${msg.retries}/${maxRetries.value}`
+          message: `⚠️ 消息 #${msg.id} 处理失败,重试 ${msg.retries}/${maxRetries.value}`
         }
       }
 
@@ -262,39 +332,48 @@ addMessage = addMessageWithAutoProcess
 .dlq-demo {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  font-family: var(--vp-font-family-base);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
-.header {
-  margin-bottom: 1rem;
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.title {
-  font-weight: 700;
-  font-size: 1.05rem;
+.demo-header .icon {
+  font-size: 1.25rem;
 }
 
-.subtitle {
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vp-c-text-1);
+}
+
+.demo-header .subtitle {
   color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
 }
 
 .controls {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .control {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .control input[type='range'] {
@@ -307,25 +386,29 @@ addMessage = addMessageWithAutoProcess
   text-align: right;
 }
 
+.demo-content {
+  margin-bottom: 0.75rem;
+}
+
 .flow-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .section-title {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--vp-c-text-2);
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .queue-box {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -334,7 +417,7 @@ addMessage = addMessageWithAutoProcess
 }
 
 .queue-box.dead-letter {
-  border-color: #ef4444;
+  border-color: var(--vp-c-danger);
 }
 
 .queue-header {
@@ -343,13 +426,13 @@ addMessage = addMessageWithAutoProcess
   align-items: center;
   padding: 0.5rem 0.75rem;
   background: var(--vp-c-bg-soft);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .message-list {
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: 150px;
+  
   padding: 0.5rem;
 }
 
@@ -361,17 +444,17 @@ addMessage = addMessageWithAutoProcess
   background: var(--vp-c-bg-soft);
   border-radius: 6px;
   margin-bottom: 0.4rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .message-item.processing {
-  border: 1px solid #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--vp-c-warning);
+  background: var(--vp-c-warning-soft);
 }
 
 .message-item.failed {
-  border: 1px solid #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--vp-c-danger);
+  background: var(--vp-c-danger-soft);
 }
 
 .msg-id {
@@ -379,32 +462,32 @@ addMessage = addMessageWithAutoProcess
 }
 
 .msg-retries {
-  font-size: 0.7rem;
-  color: #f59e0b;
+  font-size: 0.65rem;
+  color: var(--vp-c-warning);
 }
 
 .msg-error {
-  font-size: 0.7rem;
-  color: #ef4444;
+  font-size: 0.65rem;
+  color: var(--vp-c-danger);
 }
 
-.empty {
+.empty, .more {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1rem 0.5rem;
   color: var(--vp-c-text-3);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .add-btn,
 .retry-btn {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.85rem;
-  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
   transition: all 0.2s;
 }
 
@@ -414,8 +497,7 @@ addMessage = addMessageWithAutoProcess
 }
 
 .add-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  opacity: 0.9;
 }
 
 .add-btn:disabled {
@@ -424,21 +506,21 @@ addMessage = addMessageWithAutoProcess
 }
 
 .retry-btn {
-  background: #f59e0b;
+  background: var(--vp-c-warning);
   color: white;
 }
 
 .retry-btn:hover:not(:disabled) {
-  background: #d97706;
+  opacity: 0.8;
 }
 
 .processor-box {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 10px;
-  padding: 1.5rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   text-align: center;
-  min-height: 200px;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -446,8 +528,8 @@ addMessage = addMessageWithAutoProcess
 }
 
 .processor-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .processor-icon.active {
@@ -455,97 +537,87 @@ addMessage = addMessageWithAutoProcess
 }
 
 .processor-status {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .current-msg {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-2);
   margin-bottom: 0.5rem;
 }
 
 .last-result {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   margin-top: 0.5rem;
 }
 
 .last-result.success {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--vp-c-success);
+  color: white;
 }
 
 .last-result.warning {
-  background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  background: var(--vp-c-warning-soft);
+  color: var(--vp-c-warning-dark);
 }
 
 .last-result.error {
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  background: var(--vp-c-danger-soft);
+  color: var(--vp-c-danger-dark);
 }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .stat-card {
   background: var(--vp-c-bg);
-  border-radius: 10px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   text-align: center;
   border: 1px solid var(--vp-c-divider);
 }
 
 .stat-card.success {
-  border-color: #22c55e;
-  background: rgba(34, 197, 94, 0.05);
+  border-color: var(--vp-c-success);
+  background: var(--vp-c-success-soft);
 }
 
 .stat-card.warning {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.05);
+  border-color: var(--vp-c-danger);
+  background: var(--vp-c-danger-soft);
 }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--vp-c-text-2);
   margin-bottom: 0.35rem;
 }
 
 .stat-value {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
-.explanation {
-  background: var(--vp-c-bg);
-  border-radius: 10px;
-  padding: 1rem;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.exp-title {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.exp-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.exp-item {
-  font-size: 0.9rem;
-  line-height: 1.5;
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
   color: var(--vp-c-text-2);
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.info-box .icon {
+  flex-shrink: 0;
 }
 
 @keyframes spin {

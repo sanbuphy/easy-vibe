@@ -5,7 +5,9 @@
 <template>
   <div class="spa-state-demo">
     <div class="header">
-      <div class="title">页面切换时，输入会不会丢？</div>
+      <div class="title">
+        页面切换时，输入会不会丢？
+      </div>
       <div class="subtitle">
         同样点击“切换页面”，MPA 会像刷新一样清空；SPA 会保留状态
       </div>
@@ -26,7 +28,12 @@
       >
         SPA（局部切换）
       </button>
-      <button class="reset" @click="resetAll">重置</button>
+      <button
+        class="reset"
+        @click="resetAll"
+      >
+        重置
+      </button>
     </div>
 
     <div class="app">
@@ -43,8 +50,16 @@
       </div>
 
       <div class="screen">
-        <div v-if="loading" class="loading">加载中...</div>
-        <div v-else class="content">
+        <div
+          v-if="loading"
+          class="loading"
+        >
+          加载中...
+        </div>
+        <div
+          v-else
+          class="content"
+        >
           <div class="row">
             当前页面：<strong>{{ page }}</strong>
           </div>
@@ -52,7 +67,11 @@
           <div class="form">
             <label>
               备注（模拟表单输入）：
-              <input v-model="note" type="text" placeholder="输入点东西试试" />
+              <input
+                v-model="note"
+                type="text"
+                placeholder="输入点东西试试"
+              >
             </label>
             <div class="help">
               提示：切到别的页面再回来，看看这段文字还在不在。
@@ -61,23 +80,39 @@
 
           <div class="row">
             购物车数量（模拟状态）：
-            <button class="small" @click="cart = Math.max(0, cart - 1)">
+            <button
+              class="small"
+              @click="cart = Math.max(0, cart - 1)"
+            >
               -
             </button>
             <strong class="num">{{ cart }}</strong>
-            <button class="small" @click="cart = cart + 1">+</button>
+            <button
+              class="small"
+              @click="cart = cart + 1"
+            >
+              +
+            </button>
           </div>
         </div>
       </div>
 
       <div class="explain">
         <div class="card">
-          <div class="label">你现在看到的现象</div>
-          <div class="value">{{ explainText }}</div>
+          <div class="label">
+            你现在看到的现象
+          </div>
+          <div class="value">
+            {{ explainText }}
+          </div>
         </div>
         <div class="card">
-          <div class="label">背后的原因（一句话）</div>
-          <div class="value">{{ reasonText }}</div>
+          <div class="label">
+            背后的原因（一句话）
+          </div>
+          <div class="value">
+            {{ reasonText }}
+          </div>
         </div>
       </div>
     </div>
@@ -199,7 +234,7 @@ const reasonText = computed(() =>
   border: 1px dashed var(--vp-c-divider);
   border-radius: 12px;
   background: var(--vp-c-bg);
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .nav {
@@ -213,7 +248,7 @@ const reasonText = computed(() =>
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
   padding: 0.35rem 0.7rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -254,7 +289,7 @@ const reasonText = computed(() =>
 .form input {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.45rem 0.6rem;
   font-size: 0.9rem;
 }
@@ -270,7 +305,7 @@ const reasonText = computed(() =>
   background: rgba(99, 102, 241, 0.15);
   color: #4338ca;
   padding: 0.2rem 0.55rem;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   margin: 0 0.35rem;
 }

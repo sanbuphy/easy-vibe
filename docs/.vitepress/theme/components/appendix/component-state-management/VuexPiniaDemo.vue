@@ -1,254 +1,127 @@
 <template>
   <div class="vuex-pinia-demo">
     <div class="demo-header">
-      <h4>Vuex vs Pinia 深度对比</h4>
-      <p class="hint">体验 Vue 生态两种主流状态管理方案在语法、类型支持和开发体验上的差异</p>
+      <span class="icon">🍍</span>
+      <span class="title">Vuex vs Pinia</span>
+      <span class="subtitle">Vue 状态管理的新老方案</span>
     </div>
 
-    <div class="comparison-container">
-      <!-- Vuex 面板 -->
-      <div class="panel vuex-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span class="panel-icon">🌿</span>
-            <span>Vuex</span>
+    <div class="intro-text">
+      想象你在<span class="highlight">餐厅</span>点餐：Vuex 就像传统餐厅，需要分部门（state/mutations/actions）填写单据；Pinia 就像快餐店，直接在一个柜台（组合式 API）搞定所有流程。
+    </div>
+
+    <div class="demo-content">
+      <div class="comparison-cards">
+        <div
+          class="card vuex-card"
+          :class="{ active: activeTab === 'vuex' }"
+          @click="activeTab = 'vuex'"
+        >
+          <div class="card-header">
+            <span class="card-icon">🌿</span>
+            <span class="card-title">Vuex</span>
+            <span class="card-badge">经典</span>
           </div>
-          <span class="panel-badge legacy">经典</span>
+          <div class="card-body">
+            <div class="feature-list">
+              <div class="feature-item">
+                ✅ 选项式 API
+              </div>
+              <div class="feature-item">
+                ✅ State / Mutations / Actions 分离
+              </div>
+              <div class="feature-item">
+                ❌ 样板代码较多
+              </div>
+              <div class="feature-item">
+                ❌ TypeScript 支持较弱
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="panel-content">
-          <!-- Store 定义 -->
-          <div class="code-section">
-            <div class="code-header">
-              <span class="file-icon">📄</span>
-              <span class="file-name">store/index.js</span>
+        <div
+          class="card pinia-card"
+          :class="{ active: activeTab === 'pinia' }"
+          @click="activeTab = 'pinia'"
+        >
+          <div class="card-header">
+            <span class="card-icon">🍍</span>
+            <span class="card-title">Pinia</span>
+            <span class="card-badge recommended">推荐</span>
+          </div>
+          <div class="card-body">
+            <div class="feature-list">
+              <div class="feature-item">
+                ✅ 组合式 API
+              </div>
+              <div class="feature-item">
+                ✅ 去除 Mutations，简化代码
+              </div>
+              <div class="feature-item">
+                ✅ 完美 TypeScript 支持
+              </div>
+              <div class="feature-item">
+                ✅ 自动代码分割
+              </div>
             </div>
-            <div class="code-block" v-pre>
-              <pre><code>import { createStore } from 'vuex'
+          </div>
+        </div>
+      </div>
 
+      <Transition
+        name="fade"
+        mode="out-in"
+      >
+        <div
+          v-if="activeTab === 'vuex'"
+          key="vuex"
+          class="code-example"
+        >
+          <div class="code-title">
+            Vuex 代码示例
+          </div>
+          <pre class="code-block"><code>// store/index.js
 export default createStore({
-  // State
-  state: {
-    count: 0,
-    user: null
-  },
-
-  // Getters
-  getters: {
-    doubleCount: state => {
-      return (state?.count ?? 0) * 2
-    },
-    isLoggedIn: state => !!(state?.user)
-  },
-
-  // Mutations (同步)
+  state: { count: 0 },
   mutations: {
     INCREMENT(state) {
-      state.count = (state?.count ?? 0) + 1
-    },
-    SET_USER(state, user) {
-      state.user = user
+      state.count++
     }
   },
-
-  // Actions (可异步)
   actions: {
-    incrementAsync({ commit }) {
-      setTimeout(() => {
-        commit('INCREMENT')
-      }, 1000)
-    },
-    async fetchUser({ commit }, userId) {
-      const response =
-        await fetch(\`/api/users/\${userId}\`)
-      const user = await response.json()
-      commit('SET_USER', user)
+    increment({ commit }) {
+      commit('INCREMENT')
     }
   }
 })</code></pre>
-            </div>
-          </div>
-
-          <!-- 组件中使用 -->
-          <div class="code-section">
-            <div class="code-header">
-              <span class="file-icon">📄</span>
-              <span class="file-name">Counter.vue</span>
-            </div>
-            <div class="code-block" v-pre>
-              <pre><code>&lt;template&gt;
-  &lt;div&gt;
-    &lt;p&gt;Count: {{ count }}&lt;/p&gt;
-    &lt;p&gt;Double: {{ doubleCount }}&lt;/p&gt;
-    &lt;button @click="increment"&gt;+&lt;/button&gt;
-    &lt;button @click="incrementAsync"&gt;+ (async)&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
-export default {
-  computed: {
-    ...mapState(['count']),
-    ...mapGetters(['doubleCount'])
-  },
-  methods: {
-    ...mapMutations(['INCREMENT']),
-    ...mapActions(['incrementAsync']),
-
-    increment() {
-      this.INCREMENT()
-    }
-  }
-}
-&lt;/script&gt;</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 中间对比区 -->
-      <div class="comparison-divider">
-        <div class="vs-badge">VS</div>
-        <div class="comparison-points">
-          <div class="point">
-            <span class="point-icon">📝</span>
-            <span class="point-text">Vuex 样板代码较多</span>
-          </div>
-          <div class="point">
-            <span class="point-icon">🔷</span>
-            <span class="point-text">TS 类型需额外定义</span>
-          </div>
-          <div class="point">
-            <span class="point-icon">⚙️</span>
-            <span class="point-text">选项式 API 风格</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pinia 面板 -->
-      <div class="panel pinia-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span class="panel-icon">🍍</span>
-            <span>Pinia</span>
-          </div>
-          <span class="panel-badge modern">推荐</span>
         </div>
 
-        <div class="panel-content">
-          <!-- Store 定义 -->
-          <div class="code-section">
-            <div class="code-header">
-              <span class="file-icon">📄</span>
-              <span class="file-name">stores/counter.js</span>
-            </div>
-            <div class="code-block" v-pre>
-              <pre><code>import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-
-// 方式1: 组合式 API (推荐)
+        <div
+          v-else-if="activeTab === 'pinia'"
+          key="pinia"
+          class="code-example"
+        >
+          <div class="code-title">
+            Pinia 代码示例
+          </div>
+          <pre class="code-block"><code>// stores/counter.js
 export const useCounterStore = defineStore('counter', () => {
-  // State
   const count = ref(0)
-  const user = ref(null)
 
-  // Getters
-  const doubleCount = computed(() => (count.value ?? 0) * 2)
-  const isLoggedIn = computed(() => !!user.value)
-
-  // Actions
   function increment() {
-    count.value = (count.value ?? 0) + 1
+    count.value++
   }
 
-  async function incrementAsync() {
-    await new Promise(r => setTimeout(r, 1000))
-    increment()
-  }
-
-  async function fetchUser(userId) {
-    const response = await fetch(\`/api/users/\${userId}\`)
-    user.value = await response.json()
-  }
-
-  return {
-    count, user,
-    doubleCount, isLoggedIn,
-    increment, incrementAsync, fetchUser
-  }
-})
-
-// 方式2: 选项式 API
-export const useCounterStoreOld = defineStore('counter', {
-  state: () => ({
-    count: 0,
-    user: null
-  }),
-  getters: {
-    doubleCount: (state) => (state?.count ?? 0) * 2
-  },
-  actions: {
-    increment() {
-      this.count = (this?.count ?? 0) + 1
-    }
-  }
+  return { count, increment }
 })</code></pre>
-            </div>
-          </div>
-
-          <!-- 组件中使用 -->
-          <div class="code-section">
-            <div class="code-header">
-              <span class="file-icon">📄</span>
-              <span class="file-name">Counter.vue</span>
-            </div>
-            <div class="code-block" v-pre>
-              <pre><code>&lt;template&gt;
-  &lt;div&gt;
-    &lt;p&gt;Count: {{ counter.count }}&lt;/p&gt;
-    &lt;p&gt;Double: {{ counter.doubleCount }}&lt;/p&gt;
-    &lt;button @click="counter.increment()"&gt;+&lt;/button&gt;
-    &lt;button @click="counter.incrementAsync()"&gt;+ (async)&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script setup&gt;
-import { useCounterStore } from '@/stores/counter'
-
-// 直接获取 store 实例
-const counter = useCounterStore()
-
-// 或者直接解构（但会失去响应式！）
-// const { count, increment } = useCounterStore() // ❌ 错误
-
-// 正确解构方式：使用 storeToRefs
-// import { storeToRefs } from 'pinia'
-// const { count, doubleCount } = storeToRefs(counter)
-// const { increment } = counter
-&lt;/script&gt;</code></pre>
-            </div>
-          </div>
         </div>
-      </div>
+      </Transition>
     </div>
 
-    <!-- 特性对比表格 -->
-    <div class="features-comparison">
-      <h5>🔄 核心特性对比</h5>
-      <div class="features-table">
-        <div class="feature-row header">
-          <div class="feature-name">特性</div>
-          <div class="feature-vuex">Vuex</div>
-          <div class="feature-pinia">Pinia</div>
-        </div>
-        <div v-for="feature in comparisonFeatures" :key="feature.name" class="feature-row">
-          <div class="feature-name">{{ feature.name }}</div>
-          <div class="feature-vuex" :class="{ check: feature.vuex === '✓', cross: feature.vuex === '✗' }">{{ feature.vuex }}</div>
-          <div class="feature-pinia" :class="{ check: feature.pinia === '✓', cross: feature.pinia === '✗' }">{{ feature.pinia }}</div>
-        </div>
-      </div>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>选择建议：</strong>Vue 3 新项目直接用 Pinia，语法更简洁、TypeScript 支持更好。老项目用 Vuex 也没问题，但推荐逐步迁移到 Pinia。
     </div>
   </div>
 </template>
@@ -256,291 +129,185 @@ const counter = useCounterStore()
 <script setup>
 import { ref } from 'vue'
 
-const comparisonFeatures = [
-  { name: '组合式 API 支持', vuex: '✗', pinia: '✓' },
-  { name: 'TypeScript 支持', vuex: '△', pinia: '✓' },
-  { name: '无需 mutations', vuex: '✗', pinia: '✓' },
-  { name: '自动模块化', vuex: '✗', pinia: '✓' },
-  { name: '更轻量的体积', vuex: '✗', pinia: '✓' },
-  { name: 'Vue 2 支持', vuex: '✓', pinia: '△' },
-  { name: '开发工具支持', vuex: '✓', pinia: '✓' },
-  { name: 'SSR 支持', vuex: '✓', pinia: '✓' }
-]
+const activeTab = ref('pinia')
 </script>
 
 <style scoped>
 .vuex-pinia-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
 .demo-header {
-  margin-bottom: 20px;
-}
-
-.demo-header h4 {
-  margin: 0 0 8px 0;
-  color: var(--vp-c-text-1);
-}
-
-.hint {
-  margin: 0;
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-.comparison-container {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-@media (max-width: 968px) {
-  .comparison-container {
-    grid-template-columns: 1fr;
-  }
-
-  .comparison-divider {
-    flex-direction: row !important;
-    padding: 12px !important;
-  }
-
-  .comparison-points {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-  }
-}
-
-.panel {
-  background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.vuex-panel {
-  border-color: #42b883;
-}
-
-.pinia-panel {
-  border-color: #ffd859;
-}
-
-.panel-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--vp-c-bg-soft);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.demo-header .icon {
+  font-size: 1.25rem;
+}
+
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.demo-header .subtitle {
+  color: var(--vp-c-text-2);
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.intro-text {
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+}
+
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.demo-content {
+  margin-bottom: 1rem;
+}
+
+.comparison-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background: var(--vp-c-bg);
+  border: 2px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card.active {
+  border-color: var(--vp-c-brand);
+  box-shadow: 0 0 0 3px var(--vp-c-brand-delta);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.panel-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.card-icon {
+  font-size: 1.5rem;
+}
+
+.card-title {
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  font-size: 1rem;
+  flex: 1;
 }
 
-.panel-icon {
-  font-size: 24px;
-}
-
-.panel-badge {
-  padding: 4px 10px;
+.card-badge {
+  padding: 0.2rem 0.6rem;
   border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
 }
 
-.panel-badge.legacy {
-  background: #e0f2fe;
-  color: #0369a1;
+.card-badge.recommended {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand);
 }
 
-.panel-badge.modern {
-  background: #fef3c7;
-  color: #92400e;
+.card-body {
+  padding: 0.5rem 0;
 }
 
-.panel-content {
-  padding: 16px;
-}
-
-.code-section {
-  margin-bottom: 16px;
-}
-
-.code-section:last-child {
-  margin-bottom: 0;
-}
-
-.code-header {
+.feature-list {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-  padding: 6px 10px;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-item {
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  padding: 0.4rem 0.6rem;
   background: var(--vp-c-bg-soft);
   border-radius: 4px;
 }
 
-.file-icon {
-  font-size: 14px;
+.code-example {
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
-.file-name {
-  font-size: 12px;
-  color: var(--vp-c-text-2);
-  font-family: monospace;
+.code-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: var(--vp-c-text-1);
 }
 
 .code-block {
+  margin: 0;
+  padding: 0.75rem;
   background: #1e1e1e;
   border-radius: 6px;
-  overflow: hidden;
-}
-
-.code-block pre {
-  margin: 0;
-  padding: 12px;
   overflow-x: auto;
 }
 
 .code-block code {
-  font-family: 'Fira Code', 'Monaco', monospace;
-  font-size: 11px;
-  line-height: 1.5;
+  font-family: monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
   color: #d4d4d4;
 }
 
-.comparison-divider {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
 }
 
-.vs-badge {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #42b883, #ffd859);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-  color: white;
-  margin-bottom: 16px;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
-.comparison-points {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.point {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
   border-radius: 6px;
-  font-size: 12px;
-}
-
-.point-icon {
-  font-size: 14px;
-}
-
-.point-text {
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
 }
 
-.features-comparison {
-  margin-top: 24px;
-  padding: 20px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-}
-
-.features-comparison h5 {
-  margin: 0 0 16px 0;
-  color: var(--vp-c-text-1);
-  font-size: 16px;
-}
-
-.features-table {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.feature-row {
-  display: grid;
-  grid-template-columns: 1fr 100px 100px;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.feature-row:last-child {
-  border-bottom: none;
-}
-
-.feature-row.header {
-  background: var(--vp-c-bg-soft);
-  font-weight: 600;
-}
-
-.feature-name,
-.feature-vuex,
-.feature-pinia {
-  padding: 10px 12px;
-  font-size: 13px;
-}
-
-.feature-vuex,
-.feature-pinia {
-  text-align: center;
-  border-left: 1px solid var(--vp-c-divider);
-}
-
-.feature-vuex.check,
-.feature-pinia.check {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-.feature-vuex.cross,
-.feature-pinia.cross {
-  color: #ef4444;
-}
-
-.feature-vuex:not(.check):not(.cross),
-.feature-pinia:not(.check):not(.cross) {
-  color: #f59e0b;
-}
-
-@media (max-width: 640px) {
-  .feature-row {
-    grid-template-columns: 1fr 60px 60px;
-  }
-
-  .feature-name,
-  .feature-vuex,
-  .feature-pinia {
-    padding: 8px;
-    font-size: 11px;
-  }
+.info-box .icon {
+  margin-right: 0.25rem;
 }
 </style>

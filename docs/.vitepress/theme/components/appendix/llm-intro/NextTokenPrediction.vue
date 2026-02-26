@@ -17,13 +17,26 @@
     <div class="header">
       <div class="scene-selector">
         <label>Scenario / 场景:</label>
-        <select v-model="currentSceneKey" @change="resetScene">
-          <option value="en-fox">English: The quick brown...</option>
-          <option value="zh-ai">中文: 人工智能...</option>
-          <option value="code">Code: if (x > 0)...</option>
+        <select
+          v-model="currentSceneKey"
+          @change="resetScene"
+        >
+          <option value="en-fox">
+            English: The quick brown...
+          </option>
+          <option value="zh-ai">
+            中文: 人工智能...
+          </option>
+          <option value="code">
+            Code: if (x > 0)...
+          </option>
         </select>
       </div>
-      <button class="reset-btn" @click="resetScene" title="Reset">
+      <button
+        class="reset-btn"
+        title="Reset"
+        @click="resetScene"
+      >
         <span class="icon">↺</span>
       </button>
     </div>
@@ -34,9 +47,8 @@
           v-for="(token, index) in tokenizedContext"
           :key="index"
           class="context-token"
-          >{{ token }}</span
-        >
-        <span class="cursor"></span>
+        >{{ token }}</span>
+        <span class="cursor" />
       </div>
     </div>
 
@@ -55,16 +67,14 @@
         >
           <div class="candidate-info">
             <span class="candidate-text">"{{ candidate.text }}"</span>
-            <span class="candidate-prob"
-              >{{ (candidate.prob * 100).toFixed(1) }}%</span
-            >
+            <span class="candidate-prob">{{ (candidate.prob * 100).toFixed(1) }}%</span>
           </div>
           <div class="prob-bar-bg">
             <div
               class="prob-bar-fill"
               :style="{ width: `${candidate.prob * 100}%` }"
               :class="`rank-${index}`"
-            ></div>
+            />
           </div>
         </div>
       </div>
@@ -224,10 +234,10 @@ onMounted(() => {
 <style scoped>
 .prediction-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
   overflow: hidden;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
@@ -309,7 +319,7 @@ select {
 }
 
 .prediction-panel {
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .panel-title {

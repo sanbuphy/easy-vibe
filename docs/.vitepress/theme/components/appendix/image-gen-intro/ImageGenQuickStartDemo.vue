@@ -15,12 +15,22 @@
 
     <div class="preview-area">
       <div class="canvas-wrapper">
-        <canvas ref="canvasRef" width="400" height="300"></canvas>
-        <div v-if="!isGenerating && !hasGenerated" class="placeholder-text">
+        <canvas
+          ref="canvasRef"
+          width="400"
+          height="300"
+        />
+        <div
+          v-if="!isGenerating && !hasGenerated"
+          class="placeholder-text"
+        >
           👈 点击上方风格，开始创作
         </div>
-        <div v-if="isGenerating" class="loading-overlay">
-          <div class="spinner"></div>
+        <div
+          v-if="isGenerating"
+          class="loading-overlay"
+        >
+          <div class="spinner" />
           <div>AI 正在绘制 {{ presets[selectedPreset].name }}...</div>
         </div>
       </div>
@@ -190,7 +200,7 @@ canvas {
   align-items: center;
   gap: 12px;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .spinner {

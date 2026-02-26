@@ -2,11 +2,15 @@
   <div class="security-services-demo">
     <div class="demo-header">
       <h4>安全服务架构配置器</h4>
-      <p class="demo-desc">选择您的业务场景，一键生成安全防护方案</p>
+      <p class="demo-desc">
+        选择您的业务场景，一键生成安全防护方案
+      </p>
     </div>
 
     <div class="scenario-selector">
-      <div class="selector-title">选择业务场景</div>
+      <div class="selector-title">
+        选择业务场景
+      </div>
       <div class="scenario-cards">
         <button
           v-for="scenario in scenarios"
@@ -21,7 +25,10 @@
       </div>
     </div>
 
-    <div v-if="selectedScenarioData" class="security-architecture">
+    <div
+      v-if="selectedScenarioData"
+      class="security-architecture"
+    >
       <div class="architecture-header">
         <span class="header-icon">🏗️</span>
         <span class="header-title">推荐安全架构</span>
@@ -39,18 +46,28 @@
                 <span class="service-name">{{ selectedScenarioData.edge.aws }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.edge.awsFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.edge.awsFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
             </div>
-            <div class="vs-mini">VS</div>
+            <div class="vs-mini">
+              VS
+            </div>
             <div class="service-card">
               <div class="service-header aliyun">
                 <span class="service-name">{{ selectedScenarioData.edge.aliyun }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.edge.aliyunFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.edge.aliyunFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
@@ -69,18 +86,28 @@
                 <span class="service-name">{{ selectedScenarioData.app.aws }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.app.awsFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.app.awsFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
             </div>
-            <div class="vs-mini">VS</div>
+            <div class="vs-mini">
+              VS
+            </div>
             <div class="service-card">
               <div class="service-header aliyun">
                 <span class="service-name">{{ selectedScenarioData.app.aliyun }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.app.aliyunFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.app.aliyunFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
@@ -99,18 +126,28 @@
                 <span class="service-name">{{ selectedScenarioData.data.aws }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.data.awsFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.data.awsFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
             </div>
-            <div class="vs-mini">VS</div>
+            <div class="vs-mini">
+              VS
+            </div>
             <div class="service-card">
               <div class="service-header aliyun">
                 <span class="service-name">{{ selectedScenarioData.data.aliyun }}</span>
               </div>
               <div class="service-features">
-                <div v-for="(feat, idx) in selectedScenarioData.data.aliyunFeatures" :key="idx" class="feature">
+                <div
+                  v-for="(feat, idx) in selectedScenarioData.data.aliyunFeatures"
+                  :key="idx"
+                  class="feature"
+                >
                   ✓ {{ feat }}
                 </div>
               </div>
@@ -120,9 +157,15 @@
       </div>
 
       <div class="security-recommendations">
-        <div class="rec-title">💡 安全建议</div>
+        <div class="rec-title">
+          💡 安全建议
+        </div>
         <div class="rec-list">
-          <div v-for="(rec, idx) in selectedScenarioData.recommendations" :key="idx" class="rec-item">
+          <div
+            v-for="(rec, idx) in selectedScenarioData.recommendations"
+            :key="idx"
+            class="rec-item"
+          >
             <span class="rec-num">{{ idx + 1 }}</span>
             <span class="rec-text">{{ rec }}</span>
           </div>
@@ -392,7 +435,7 @@ const currentScenario = computed(() => scenarioData[selectedScenario.value])
 
 .service-card {
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -467,7 +510,7 @@ const currentScenario = computed(() => scenarioData[selectedScenario.value])
   gap: 10px;
   background: rgba(255, 255, 255, 0.03);
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 3px solid #00d4ff;
 }
 

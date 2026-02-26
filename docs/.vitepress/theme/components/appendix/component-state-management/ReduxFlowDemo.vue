@@ -1,165 +1,88 @@
 <template>
   <div class="redux-flow-demo">
     <div class="demo-header">
-      <h4>Redux 数据流演示</h4>
-      <p class="hint">理解 Redux 的单向数据流：Action → Reducer → Store → View</p>
+      <span class="icon">🔄</span>
+      <span class="title">Redux 数据流</span>
+      <span class="subtitle">单向循环的数据管道</span>
     </div>
 
-    <div class="flow-diagram">
-      <!-- 视图层 -->
-      <div class="flow-layer view-layer">
-        <div class="layer-header">
-          <span class="layer-icon">👁️</span>
-          <span class="layer-title">View (视图层)</span>
-        </div>
-        <div class="view-content">
-          <div class="counter-display">
-            <span class="counter-label">当前计数:</span>
-            <span class="counter-value" :class="{ changed: countChanged }">{{ count }}</span>
-          </div>
-          <div class="action-buttons">
-            <button class="action-btn" @click="dispatchAction('INCREMENT')">
-              <span class="btn-icon">➕</span>
-              增加
-            </button>
-            <button class="action-btn" @click="dispatchAction('DECREMENT')">
-              <span class="btn-icon">➖</span>
-              减少
-            </button>
-            <button class="action-btn" @click="dispatchAction('RESET')">
-              <span class="btn-icon">🔄</span>
-              重置
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 箭头：View -> Action -->
-      <div class="flow-arrow-container">
-        <div class="flow-arrow" :class="{ active: flowStage === 'action' }">
-          <div class="arrow-line"></div>
-          <div class="arrow-head">▼</div>
-        </div>
-        <div class="arrow-label" :class="{ active: flowStage === 'action' }">
-          dispatch(action)
-        </div>
-      </div>
-
-      <!-- Action 层 -->
-      <div class="flow-layer action-layer" :class="{ active: flowStage === 'action' }">
-        <div class="layer-header">
-          <span class="layer-icon">📨</span>
-          <span class="layer-title">Action (动作)</span>
-        </div>
-        <div class="action-content">
-          <div class="action-object">
-            <div class="code-block">
-              <pre><code>{
-  type: "{{ currentAction.type }}",
-  payload: {{ currentAction.payload || 'undefined' }}
-}</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 箭头：Action -> Reducer -->
-      <div class="flow-arrow-container">
-        <div class="flow-arrow" :class="{ active: flowStage === 'reducer' }">
-          <div class="arrow-line"></div>
-          <div class="arrow-head">▼</div>
-        </div>
-        <div class="arrow-label" :class="{ active: flowStage === 'reducer' }">
-          reduce(state, action)
-        </div>
-      </div>
-
-      <!-- Reducer 层 -->
-      <div class="flow-layer reducer-layer" :class="{ active: flowStage === 'reducer' }">
-        <div class="layer-header">
-          <span class="layer-icon">⚙️</span>
-          <span class="layer-title">Reducer (纯函数)</span>
-        </div>
-        <div class="reducer-content">
-          <div class="reducer-function">
-            <div class="code-block">
-              <pre><code>function reducer(state, action) {
-  switch (action.type) {
-    case "{{ currentAction.type }}":
-      return {
-        ...state,
-        count: (state?.count ?? 0) {{ currentAction.operator }} {{ currentAction.step || 1 }}
-      };
-    default:
-      return state;
-  }
-}</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 箭头：Reducer -> Store -->
-      <div class="flow-arrow-container">
-        <div class="flow-arrow" :class="{ active: flowStage === 'store' }">
-          <div class="arrow-line"></div>
-          <div class="arrow-head">▼</div>
-        </div>
-        <div class="arrow-label" :class="{ active: flowStage === 'store' }">
-          update store
-        </div>
-      </div>
-
-      <!-- Store 层 -->
-      <div class="flow-layer store-layer" :class="{ active: flowStage === 'store' }">
-        <div class="layer-header">
-          <span class="layer-icon">🏪</span>
-          <span class="layer-title">Store (单一数据源)</span>
-        </div>
-        <div class="store-content">
-          <div class="store-state">
-            <div class="state-label">Current State:</div>
-            <div class="code-block">
-              <pre><code>{
-  count: {{ count }}
-}</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 箭头：Store -> View -->
-      <div class="flow-arrow-container">
-        <div class="flow-arrow" :class="{ active: flowStage === 'view' }">
-          <div class="arrow-line"></div>
-          <div class="arrow-head">▲</div>
-        </div>
-        <div class="arrow-label" :class="{ active: flowStage === 'view' }">
-          notify subscribers
-        </div>
-      </div>
+    <div class="intro-text">
+      想象你在<span class="highlight">图书馆</span>工作：读者（View）填写借书单（Action），管理员（Reducer）审核后更新库存记录（Store），新通知（View更新）就会显示在公告栏。
     </div>
 
-    <!-- 底部说明 -->
-    <div class="redux-principles">
-      <h5>📋 Redux 三大原则</h5>
-      <div class="principles-grid">
-        <div class="principle-card">
-          <div class="principle-number">1</div>
-          <h6>单一数据源</h6>
-          <p>整个应用的 state 储存在唯一的 store 中</p>
-        </div>
-        <div class="principle-card">
-          <div class="principle-number">2</div>
-          <h6>State 只读</h6>
-          <p>唯一改变 state 的方法是触发 action</p>
-        </div>
-        <div class="principle-card">
-          <div class="principle-number">3</div>
-          <h6>纯函数修改</h6>
-          <p>Reducer 必须是纯函数，接收旧 state 返回新 state</p>
-        </div>
+    <div class="demo-content">
+      <div class="counter-display">
+        <span class="counter-label">当前库存：</span>
+        <span
+          class="counter-value"
+          :class="{ changed: countChanged }"
+        >{{ count }}</span>
+        <span class="counter-unit">本书</span>
       </div>
+
+      <div class="action-buttons">
+        <button
+          class="action-btn"
+          @click="dispatchAction('INCREMENT')"
+        >
+          <span class="btn-icon">➕</span>
+          进货 (+1)
+        </button>
+        <button
+          class="action-btn"
+          @click="dispatchAction('DECREMENT')"
+        >
+          <span class="btn-icon">➖</span>
+          出货 (-1)
+        </button>
+        <button
+          class="action-btn reset"
+          @click="dispatchAction('RESET')"
+        >
+          <span class="btn-icon">🔄</span>
+          重置库存
+        </button>
+      </div>
+
+      <Transition name="fade">
+        <div
+          v-if="flowStage"
+          class="flow-stages"
+        >
+          <div
+            class="flow-stage"
+            :class="{ active: flowStage === 'action' }"
+          >
+            <span class="stage-icon">📝</span>
+            <span class="stage-text">Action: {{ currentAction.type }}</span>
+          </div>
+          <div class="flow-arrow">
+            →
+          </div>
+          <div
+            class="flow-stage"
+            :class="{ active: flowStage === 'reducer' }"
+          >
+            <span class="stage-icon">⚙️</span>
+            <span class="stage-text">Reducer 处理中...</span>
+          </div>
+          <div class="flow-arrow">
+            →
+          </div>
+          <div
+            class="flow-stage"
+            :class="{ active: flowStage === 'store' }"
+          >
+            <span class="stage-icon">📦</span>
+            <span class="stage-text">Store 已更新</span>
+          </div>
+        </div>
+      </Transition>
+    </div>
+
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>Redux 是单向数据流循环：View 触发 Action → Reducer 纯函数处理 → 更新 Store → 通知 View 重新渲染。状态可预测，易于调试。
     </div>
   </div>
 </template>
@@ -167,53 +90,23 @@
 <script setup>
 import { ref, reactive } from 'vue'
 
-// 状态
 const count = ref(0)
 const countChanged = ref(false)
 const flowStage = ref('')
 
-// 当前 action
 const currentAction = reactive({
-  type: '',
-  payload: null,
-  operator: '+',
-  step: 1
+  type: ''
 })
 
-// 调度 action
 const dispatchAction = async (actionType) => {
   flowStage.value = 'action'
-
-  // 设置当前 action
   currentAction.type = actionType
 
-  switch (actionType) {
-    case 'INCREMENT':
-      currentAction.payload = undefined
-      currentAction.operator = '+'
-      currentAction.step = 1
-      break
-    case 'DECREMENT':
-      currentAction.payload = undefined
-      currentAction.operator = '-'
-      currentAction.step = 1
-      break
-    case 'RESET':
-      currentAction.payload = undefined
-      currentAction.operator = '='
-      currentAction.step = 0
-      break
-  }
-
-  // 模拟流程
-  await wait(600)
+  await wait(500)
   flowStage.value = 'reducer'
-  await wait(800)
+  await wait(500)
   flowStage.value = 'store'
-  await wait(600)
-  flowStage.value = 'view'
 
-  // 更新状态
   switch (actionType) {
     case 'INCREMENT':
       count.value++
@@ -231,7 +124,7 @@ const dispatchAction = async (actionType) => {
     countChanged.value = false
   }, 300)
 
-  await wait(400)
+  await wait(300)
   flowStage.value = ''
 }
 
@@ -241,87 +134,76 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 <style scoped>
 .redux-flow-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
 .demo-header {
-  margin-bottom: 20px;
-}
-
-.demo-header h4 {
-  margin: 0 0 8px 0;
-  color: var(--vp-c-text-1);
-}
-
-.hint {
-  margin: 0;
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-.flow-diagram {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.flow-layer {
-  background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 16px;
-  transition: all 0.3s ease;
-}
-
-.flow-layer.active {
-  border-color: var(--vp-c-brand);
-  box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
-  transform: scale(1.02);
-}
-
-.layer-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.layer-icon {
-  font-size: 20px;
+.demo-header .icon {
+  font-size: 1.25rem;
 }
 
-.layer-title {
-  font-weight: 600;
-  color: var(--vp-c-text-1);
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-.view-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.demo-header .subtitle {
+  color: var(--vp-c-text-2);
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.intro-text {
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+}
+
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.demo-content {
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .counter-display {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 20px;
+  gap: 0.75rem;
+  padding: 2rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
+  margin-bottom: 1rem;
 }
 
 .counter-label {
-  font-size: 14px;
+  font-size: 1rem;
   color: var(--vp-c-text-2);
 }
 
 .counter-value {
-  font-size: 36px;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--vp-c-brand);
   transition: all 0.3s ease;
@@ -332,209 +214,117 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
   color: #22c55e;
 }
 
+.counter-unit {
+  font-size: 1rem;
+  color: var(--vp-c-text-2);
+}
+
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 .action-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
   background: var(--vp-c-brand);
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-  background: var(--vp-c-brand-dark);
-  transform: translateY(-1px);
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.action-btn.reset {
+  background: var(--vp-c-text-2);
 }
 
 .btn-icon {
-  font-size: 14px;
+  font-size: 1rem;
 }
 
-.flow-arrow-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.flow-arrow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-
-.flow-arrow.active {
-  opacity: 1;
-}
-
-.arrow-line {
-  width: 2px;
-  height: 20px;
-  background: var(--vp-c-divider);
-  transition: all 0.3s ease;
-}
-
-.flow-arrow.active .arrow-line {
-  background: var(--vp-c-brand);
-  box-shadow: 0 0 8px var(--vp-c-brand);
-}
-
-.arrow-head {
-  color: var(--vp-c-divider);
-  font-size: 12px;
-  line-height: 1;
-  transition: all 0.3s ease;
-}
-
-.flow-arrow.active .arrow-head {
-  color: var(--vp-c-brand);
-  animation: bounce 0.5s ease infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(2px); }
-}
-
-.arrow-label {
-  margin-top: 4px;
-  font-size: 11px;
-  color: var(--vp-c-text-3);
-  font-family: monospace;
-  transition: all 0.3s ease;
-}
-
-.arrow-label.active {
-  color: var(--vp-c-brand);
-  font-weight: 600;
-}
-
-.action-content,
-.reducer-content,
-.store-content {
-  padding: 12px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-}
-
-.action-object {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.code-block {
-  background: #1e1e1e;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.code-block pre {
-  margin: 0;
-  padding: 12px;
-  overflow-x: auto;
-}
-
-.code-block code {
-  font-family: 'Fira Code', 'Monaco', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #d4d4d4;
-}
-
-.reducer-function {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.store-state {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.state-label {
-  font-size: 12px;
-  color: var(--vp-c-text-2);
-}
-
-.redux-principles {
-  margin-top: 24px;
-  padding: 20px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-}
-
-.redux-principles h5 {
-  margin: 0 0 16px 0;
-  color: var(--vp-c-text-1);
-  font-size: 16px;
-}
-
-.principles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-}
-
-.principle-card {
-  padding: 16px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  border-left: 4px solid var(--vp-c-brand);
-}
-
-.principle-number {
-  width: 28px;
-  height: 28px;
-  background: var(--vp-c-brand);
-  color: white;
-  border-radius: 50%;
+.flow-stages {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 8px;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg-soft);
+  border-radius: 6px;
 }
 
-.principle-card h6 {
-  margin: 0 0 6px 0;
-  color: var(--vp-c-text-1);
-  font-size: 14px;
+.flow-stage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--vp-c-bg);
+  border: 2px solid var(--vp-c-divider);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
 }
 
-.principle-card p {
-  margin: 0;
+.flow-stage.active {
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand-soft);
+  box-shadow: 0 0 0 3px var(--vp-c-brand-delta);
+}
+
+.stage-icon {
+  font-size: 1.25rem;
+}
+
+.stage-text {
+  font-weight: 500;
+}
+
+.flow-arrow {
+  font-size: 1.5rem;
+  color: var(--vp-c-text-3);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
-  font-size: 12px;
-  line-height: 1.5;
+}
+
+.info-box .icon {
+  margin-right: 0.25rem;
 }
 
 @media (max-width: 768px) {
-  .action-buttons {
+  .flow-stages {
     flex-direction: column;
   }
 
-  .principles-grid {
-    grid-template-columns: 1fr;
+  .flow-arrow {
+    transform: rotate(90deg);
   }
 }
 </style>

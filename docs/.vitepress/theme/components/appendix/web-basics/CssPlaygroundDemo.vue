@@ -19,49 +19,80 @@
     <div class="controls">
       <div class="control-group">
         <label>背景颜色 (background-color)</label>
-        <input type="color" v-model="bgColor" />
+        <input
+          v-model="bgColor"
+          type="color"
+        >
         <span class="value">{{ bgColor }}</span>
       </div>
 
       <div class="control-group">
         <label>文字颜色 (color)</label>
-        <input type="color" v-model="textColor" />
+        <input
+          v-model="textColor"
+          type="color"
+        >
         <span class="value">{{ textColor }}</span>
       </div>
 
       <div class="control-group">
         <label>字体大小 (font-size)</label>
-        <input type="range" v-model="fontSize" min="12" max="48" />
+        <input
+          v-model="fontSize"
+          type="range"
+          min="12"
+          max="48"
+        >
         <span class="value">{{ fontSize }}px</span>
       </div>
 
       <div class="control-group">
         <label>内边距 (padding)</label>
-        <input type="range" v-model="padding" min="0" max="50" />
+        <input
+          v-model="padding"
+          type="range"
+          min="0"
+          max="50"
+        >
         <span class="value">{{ padding }}px</span>
       </div>
 
       <div class="control-group">
         <label>圆角 (border-radius)</label>
-        <input type="range" v-model="borderRadius" min="0" max="50" />
+        <input
+          v-model="borderRadius"
+          type="range"
+          min="0"
+          max="50"
+        >
         <span class="value">{{ borderRadius }}px</span>
       </div>
 
       <div class="control-group">
         <label>边框宽度 (border-width)</label>
-        <input type="range" v-model="borderWidth" min="0" max="10" />
+        <input
+          v-model="borderWidth"
+          type="range"
+          min="0"
+          max="10"
+        >
         <span class="value">{{ borderWidth }}px</span>
       </div>
 
       <div class="control-group">
         <label>边框颜色 (border-color)</label>
-        <input type="color" v-model="borderColor" />
+        <input
+          v-model="borderColor"
+          type="color"
+        >
         <span class="value">{{ borderColor }}</span>
       </div>
     </div>
 
     <div class="code-preview">
-      <div class="code-title">生成的 CSS 代码：</div>
+      <div class="code-title">
+        生成的 CSS 代码：
+      </div>
       <pre><code>.element {
   background-color: <span class="highlight">{{ bgColor }}</span>;
   color: <span class="highlight">{{ textColor }}</span>;
@@ -89,7 +120,7 @@ const borderColor = ref('#000000')
 <style scoped>
 .css-playground {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
   padding: 20px;
   margin: 20px 0;
@@ -101,7 +132,7 @@ const borderColor = ref('#000000')
 .demo-box {
   background: var(--vp-c-bg);
   border: 1px dashed var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   height: 150px;
   display: flex;
   align-items: center;
@@ -168,7 +199,7 @@ input[type='color'] {
 
 .code-preview {
   background: #1e1e1e;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   color: #d4d4d4;
   font-family: var(--vp-font-family-mono);

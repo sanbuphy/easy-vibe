@@ -8,88 +8,158 @@
           type="text"
           placeholder="例如: 192.168.1.0"
           class="ip-input"
-        />
+        >
       </div>
 
       <div class="input-group">
         <label class="input-label">子网掩码</label>
-        <select v-model="cidr" class="cidr-select">
-          <option v-for="n in 32" :key="n" :value="n">/{{ n }}</option>
+        <select
+          v-model="cidr"
+          class="cidr-select"
+        >
+          <option
+            v-for="n in 32"
+            :key="n"
+            :value="n"
+          >
+            /{{ n }}
+          </option>
         </select>
       </div>
 
-      <button class="calculate-btn" @click="calculate">计算</button>
+      <button
+        class="calculate-btn"
+        @click="calculate"
+      >
+        计算
+      </button>
     </div>
 
-    <div class="results" v-if="results">
+    <div
+      v-if="results"
+      class="results"
+    >
       <div class="result-section">
-        <div class="section-title">基本信息</div>
+        <div class="section-title">
+          基本信息
+        </div>
         <div class="result-grid">
           <div class="result-item">
-            <div class="result-label">网络地址</div>
-            <div class="result-value">{{ results.network }}</div>
+            <div class="result-label">
+              网络地址
+            </div>
+            <div class="result-value">
+              {{ results.network }}
+            </div>
           </div>
           <div class="result-item">
-            <div class="result-label">广播地址</div>
-            <div class="result-value">{{ results.broadcast }}</div>
+            <div class="result-label">
+              广播地址
+            </div>
+            <div class="result-value">
+              {{ results.broadcast }}
+            </div>
           </div>
           <div class="result-item">
-            <div class="result-label">子网掩码</div>
-            <div class="result-value">{{ results.mask }}</div>
+            <div class="result-label">
+              子网掩码
+            </div>
+            <div class="result-value">
+              {{ results.mask }}
+            </div>
           </div>
           <div class="result-item">
-            <div class="result-label">可用主机数</div>
-            <div class="result-value">{{ results.hosts }}</div>
+            <div class="result-label">
+              可用主机数
+            </div>
+            <div class="result-value">
+              {{ results.hosts }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="result-section">
-        <div class="section-title">IP 范围</div>
+        <div class="section-title">
+          IP 范围
+        </div>
         <div class="range-display">
           <div class="range-item">
-            <div class="range-label">起始 IP</div>
-            <div class="range-value">{{ results.firstHost }}</div>
+            <div class="range-label">
+              起始 IP
+            </div>
+            <div class="range-value">
+              {{ results.firstHost }}
+            </div>
           </div>
-          <div class="range-arrow">→</div>
+          <div class="range-arrow">
+            →
+          </div>
           <div class="range-item">
-            <div class="range-label">结束 IP</div>
-            <div class="range-value">{{ results.lastHost }}</div>
+            <div class="range-label">
+              结束 IP
+            </div>
+            <div class="range-value">
+              {{ results.lastHost }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="result-section">
-        <div class="section-title">二进制表示</div>
+        <div class="section-title">
+          二进制表示
+        </div>
         <div class="binary-display">
           <div class="binary-row">
-            <div class="binary-label">IP 地址</div>
-            <div class="binary-value">{{ results.binaryIp }}</div>
+            <div class="binary-label">
+              IP 地址
+            </div>
+            <div class="binary-value">
+              {{ results.binaryIp }}
+            </div>
           </div>
           <div class="binary-row">
-            <div class="binary-label">子网掩码</div>
-            <div class="binary-value">{{ results.binaryMask }}</div>
+            <div class="binary-label">
+              子网掩码
+            </div>
+            <div class="binary-value">
+              {{ results.binaryMask }}
+            </div>
           </div>
           <div class="binary-row">
-            <div class="binary-label">网络地址</div>
-            <div class="binary-value">{{ results.binaryNetwork }}</div>
+            <div class="binary-label">
+              网络地址
+            </div>
+            <div class="binary-value">
+              {{ results.binaryNetwork }}
+            </div>
           </div>
         </div>
       </div>
 
       <div class="result-section">
-        <div class="section-title">子网类型</div>
+        <div class="section-title">
+          子网类型
+        </div>
         <div class="subnet-info">
-          <div class="info-tag" :class="getSubnetClass(cidr)">
+          <div
+            class="info-tag"
+            :class="getSubnetClass(cidr)"
+          >
             {{ getSubnetType(cidr) }}
           </div>
-          <div class="info-desc">{{ getSubnetDescription(cidr) }}</div>
+          <div class="info-desc">
+            {{ getSubnetDescription(cidr) }}
+          </div>
         </div>
       </div>
     </div>
 
     <div class="example-presets">
-      <div class="presets-title">常见子网示例</div>
+      <div class="presets-title">
+        常见子网示例
+      </div>
       <div class="presets-grid">
         <button
           v-for="(preset, index) in presets"
@@ -103,7 +173,9 @@
     </div>
 
     <div class="info-box">
-      <div class="info-title">💡 子网划分知识点</div>
+      <div class="info-title">
+        💡 子网划分知识点
+      </div>
       <div class="info-content">
         <div class="info-item">
           <strong>什么是子网？</strong>
@@ -115,11 +187,11 @@
         </div>
         <div class="info-item">
           <strong>常用子网掩码</strong>
-          <br />
+          <br>
           /8 = 255.0.0.0 (A 类网络)
-          <br />
+          <br>
           /16 = 255.255.0.0 (B 类网络)
-          <br />
+          <br>
           /24 = 255.255.255.0 (C 类网络)
         </div>
       </div>
@@ -239,7 +311,7 @@ calculate()
 <style scoped>
 .subnet-calculator {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   background: var(--vp-c-bg-soft);
   margin: 20px 0;
@@ -247,7 +319,7 @@ calculate()
 
 .calculator-input {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   margin-bottom: 25px;
   display: flex;
@@ -311,7 +383,7 @@ calculate()
 
 .result-section {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -460,7 +532,7 @@ calculate()
 
 .example-presets {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   margin-bottom: 25px;
 }
@@ -503,7 +575,7 @@ calculate()
 
 .info-box {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   border-left: 4px solid var(--vp-c-brand);
 }

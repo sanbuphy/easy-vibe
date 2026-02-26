@@ -14,8 +14,14 @@
     </div>
 
     <div class="be-stage-content">
-      <Transition name="be-fade" mode="out-in">
-        <div :key="currentStage" class="be-stage-panel">
+      <Transition
+        name="be-fade"
+        mode="out-in"
+      >
+        <div
+          :key="currentStage"
+          class="be-stage-panel"
+        >
           <div class="be-visual-section">
             <div class="be-arch-diagram">
               <div
@@ -24,10 +30,17 @@
                 :class="['be-arch-node', node.type]"
                 :style="node.style"
               >
-                <div class="be-node-icon">{{ node.icon }}</div>
-                <div class="be-node-label">{{ node.label }}</div>
+                <div class="be-node-icon">
+                  {{ node.icon }}
+                </div>
+                <div class="be-node-label">
+                  {{ node.label }}
+                </div>
               </div>
-              <svg class="be-connections" viewBox="0 0 600 300">
+              <svg
+                class="be-connections"
+                viewBox="0 0 600 300"
+              >
                 <path
                   v-for="(conn, idx) in currentStageData.connections"
                   :key="idx"
@@ -39,7 +52,9 @@
           </div>
 
           <div class="be-info-section">
-            <h3 class="be-section-title">💡 核心特点</h3>
+            <h3 class="be-section-title">
+              💡 核心特点
+            </h3>
             <ul class="be-feature-list">
               <li
                 v-for="(feature, idx) in currentStageData.features"
@@ -367,7 +382,7 @@ const currentStageData = computed(() => stageData[currentStage.value])
   gap: 10px;
   padding: 10px 12px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 13px;
 }
 

@@ -1,23 +1,43 @@
 <template>
   <div class="monolith-microservice-demo">
     <div class="controls">
-      <button class="action-btn crash-btn" @click="triggerCrash">
+      <button
+        class="action-btn crash-btn"
+        @click="triggerCrash"
+      >
         💥 Simulate Order Service Crash
       </button>
-      <button class="action-btn reset-btn" @click="reset">🔄 Reset</button>
+      <button
+        class="action-btn reset-btn"
+        @click="reset"
+      >
+        🔄 Reset
+      </button>
     </div>
 
     <div class="comparison-view">
       <!-- Monolith -->
       <div class="architecture-block monolith">
-        <div class="arch-header">Monolith Architecture</div>
-        <div class="server-container" :class="{ crashed: monolithCrashed }">
+        <div class="arch-header">
+          Monolith Architecture
+        </div>
+        <div
+          class="server-container"
+          :class="{ crashed: monolithCrashed }"
+        >
           <div class="process-box">
-            <div class="module user">User</div>
-            <div class="module order" :class="{ error: monolithCrashed }">
+            <div class="module user">
+              User
+            </div>
+            <div
+              class="module order"
+              :class="{ error: monolithCrashed }"
+            >
               Order
             </div>
-            <div class="module pay">Payment</div>
+            <div class="module pay">
+              Payment
+            </div>
           </div>
           <div class="status-indicator">
             Status:
@@ -32,19 +52,27 @@
 
       <!-- Microservices -->
       <div class="architecture-block microservices">
-        <div class="arch-header">Microservices Architecture</div>
+        <div class="arch-header">
+          Microservices Architecture
+        </div>
         <div class="services-container">
           <div class="service-box user">
             <span>User Svc</span>
-            <div class="dot green"></div>
+            <div class="dot green" />
           </div>
-          <div class="service-box order" :class="{ crashed: microCrashed }">
+          <div
+            class="service-box order"
+            :class="{ crashed: microCrashed }"
+          >
             <span>Order Svc</span>
-            <div class="dot" :class="microCrashed ? 'red' : 'green'"></div>
+            <div
+              class="dot"
+              :class="microCrashed ? 'red' : 'green'"
+            />
           </div>
           <div class="service-box pay">
             <span>Payment Svc</span>
-            <div class="dot green"></div>
+            <div class="dot green" />
           </div>
         </div>
         <div class="status-indicator">
@@ -79,10 +107,10 @@ const reset = () => {
 <style scoped>
 .monolith-microservice-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .controls {
@@ -129,8 +157,8 @@ const reset = () => {
 .architecture-block {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -146,8 +174,8 @@ const reset = () => {
 .server-container {
   border: 2px solid #3b82f6;
   background: #eff6ff;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 0.75rem;
+  border-radius: 6px;
   width: 100%;
   text-align: center;
   transition: all 0.3s;

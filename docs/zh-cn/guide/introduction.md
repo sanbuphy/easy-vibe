@@ -18,7 +18,7 @@
 
 ### 总附录
 
-[AI 能力词典：常见 AI 核心概念与名词、场景解释](/zh-cn/appendix/ai-capability-dictionary)
+[AI 能力词典：常见 AI 核心概念与名词、场景解释](/zh-cn/appendix/8-artificial-intelligence/ai-capability-dictionary)
 
 ### 零、幼儿园
 
@@ -53,14 +53,14 @@
 | 前端一：Figma 与 MasterGo 入门                                                                                      | 用设计工具梳理信息架构和页面结构，为前端实现打基础                           | 🚧   |
 | 前端二：构建第一个现代应用程序-UI 设计                                                                              | 基于设计稿完成组件化界面，实现从设计到代码的第一条链路                       | 🚧   |
 | 前端三：参考 UI 设计规范与多产品 UI 设计                                                                            | 围绕统一主视觉扩展多产品界面，练习系统化设计能力                             | 🚧   |
-| [前端四：一起做霍格沃茨画像](/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/chapter4-lets-build-hogwarts-portraits) | 从 0 到 1 做出接入 AI 能力的前端应用，串联设计与开发                         | 🚧   |
+| [前端四：一起做霍格沃茨画像](/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/) | 从 0 到 1 做出接入 AI 能力的前端应用，串联设计与开发                         | 🚧   |
 
 #### 后端与全栈部分
 
 | 章节                                                                                                                    | 关键内容                                                      | 状态 |
 | :---------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------ | :--- |
 | 后端一：什么是 API                                                                                                      | 理解 HTTP 接口与请求响应模型，为后端集成与联调做准备          | 🚧   |
-| [后端二：从数据库到 Supabase](/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/chapter5-from-database-to-supabase) | 在 Supabase 上落地数据库和 API，打通数据模型与前端页面        | 🚧   |
+| [后端二：从数据库到 Supabase](/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/) | 在 Supabase 上落地数据库和 API，打通数据模型与前端页面        | 🚧   |
 | 后端三：大模型辅助编写接口代码与接口文档                                                                                | 用大模型协助生成接口与数据库文档及代码，实现可读可测的后端    | 🚧   |
 | 后端四：Git 工作流与 Zeabur 部署                                                                                        | 在 Git 工作流中管理代码，并将应用部署到 Zeabur 上线           | 🚧   |
 | 后端五：现代 CLI 开发工具                                                                                               | 使用 CLI 类 AI 编程工具加速开发与调试，形成个人工程化工作流   | 🚧   |
@@ -72,7 +72,7 @@
 
 | 章节                                                                                                                                                                  | 关键内容                                                       | 状态 |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------- | :--- |
-| [AI 一：Dify 入门与知识库集成](/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/chapter3-getting-started-with-dify-and-its-knowledge-base-integration) | 用 Dify Workflow 与基础 RAG 搭建工具类产品，为后续应用升级打样 | 🚧   |
+| [AI 一：Dify 入门与知识库集成](/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/) | 用 Dify Workflow 与基础 RAG 搭建工具类产品，为后续应用升级打样 | 🚧   |
 | AI 二：学会查询 AI 词典与集成多模态 API                                                                                                                               | 学会查找合适的模型与 API，并把文本、图像等多模态能力接入产品   | 🚧   |
 
 ### 三、高级开发工程师

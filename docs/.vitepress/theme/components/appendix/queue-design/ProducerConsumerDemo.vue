@@ -2,10 +2,15 @@
   <div class="demo-container">
     <div class="demo-header">
       <h4>{{ title }}</h4>
-      <p class="hint">{{ description }}</p>
+      <p class="hint">
+        {{ description }}
+      </p>
     </div>
     <div class="demo-content">
-      <el-alert type="info" :closable="false">
+      <el-alert
+        type="info"
+        :closable="false"
+      >
         生产者消费者模式演示组件占位符 - 待实现具体交互
       </el-alert>
     </div>
@@ -22,7 +27,7 @@ const description = ref('演示生产者如何将消息放入队列，消费者�
 <style scoped>
 .demo-container {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   background: var(--vp-c-bg-soft);
 }

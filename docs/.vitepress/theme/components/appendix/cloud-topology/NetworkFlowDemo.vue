@@ -2,56 +2,110 @@
   <div class="network-flow-demo">
     <!-- 控制面板 -->
     <div class="control-panel">
-      <el-radio-group v-model="flowMode" size="small">
-        <el-radio-button label="inbound">入向流量</el-radio-button>
-        <el-radio-button label="outbound">出向流量</el-radio-button>
-        <el-radio-button label="east-west">东西向流量</el-radio-button>
-        <el-radio-button label="full">完整拓扑</el-radio-button>
+      <el-radio-group
+        v-model="flowMode"
+        size="small"
+      >
+        <el-radio-button label="inbound">
+          入向流量
+        </el-radio-button>
+        <el-radio-button label="outbound">
+          出向流量
+        </el-radio-button>
+        <el-radio-button label="east-west">
+          东西向流量
+        </el-radio-button>
+        <el-radio-button label="full">
+          完整拓扑
+        </el-radio-button>
       </el-radio-group>
 
-      <el-switch v-model="showMetrics" active-text="显示流量数据" style="margin-left: 20px" />
+      <el-switch
+        v-model="showMetrics"
+        active-text="显示流量数据"
+        style="margin-left: 20px"
+      />
     </div>
 
     <!-- 网络拓扑图 -->
     <div class="network-topology">
       <!-- 互联网区域 -->
-      <div class="zone internet-zone" v-if="showInternet">
+      <div
+        v-if="showInternet"
+        class="zone internet-zone"
+      >
         <div class="zone-header">
           <span class="zone-icon">🌐</span>
           <span class="zone-title">互联网 (Internet)</span>
         </div>
         <div class="zone-content">
           <div class="internet-entities">
-            <div class="entity" v-for="entity in internetEntities" :key="entity.name">
-              <div class="entity-icon">{{ entity.icon }}</div>
-              <div class="entity-name">{{ entity.name }}</div>
+            <div
+              v-for="entity in internetEntities"
+              :key="entity.name"
+              class="entity"
+            >
+              <div class="entity-icon">
+                {{ entity.icon }}
+              </div>
+              <div class="entity-name">
+                {{ entity.name }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 流量箭头 -->
-      <div class="flow-arrows" v-if="showFlowArrows">
+      <div
+        v-if="showFlowArrows"
+        class="flow-arrows"
+      >
         <div class="arrow-container">
-          <div class="flow-line" :class="flowMode"></div>
-          <div class="flow-particles" v-if="showMetrics">
-            <div class="particle" v-for="n in 5" :key="n"
-                 :style="{ animationDelay: (n * 0.5) + 's' }"></div>
+          <div
+            class="flow-line"
+            :class="flowMode"
+          />
+          <div
+            v-if="showMetrics"
+            class="flow-particles"
+          >
+            <div
+              v-for="n in 5"
+              :key="n"
+              class="particle"
+              :style="{ animationDelay: (n * 0.5) + 's' }"
+            />
           </div>
         </div>
 
-        <div class="flow-stats" v-if="showMetrics">
+        <div
+          v-if="showMetrics"
+          class="flow-stats"
+        >
           <div class="stat-item">
-            <div class="stat-label">带宽</div>
-            <div class="stat-value">2.5 Gbps</div>
+            <div class="stat-label">
+              带宽
+            </div>
+            <div class="stat-value">
+              2.5 Gbps
+            </div>
           </div>
           <div class="stat-item">
-            <div class="stat-label">流量</div>
-            <div class="stat-value">1.2 TB/天</div>
+            <div class="stat-label">
+              流量
+            </div>
+            <div class="stat-value">
+              1.2 TB/天
+            </div>
           </div>
           <div class="stat-item">
-            <div class="stat-label">延迟</div>
-            <div class="stat-value">15 ms</div>
+            <div class="stat-label">
+              延迟
+            </div>
+            <div class="stat-value">
+              15 ms
+            </div>
           </div>
         </div>
       </div>
@@ -65,12 +119,23 @@
         <div class="zone-content">
           <!-- 网络设备层 -->
           <div class="network-devices">
-            <div class="device" v-for="device in networkDevices" :key="device.name"
-                 :class="device.type">
-              <div class="device-icon">{{ device.icon }}</div>
-              <div class="device-name">{{ device.name }}</div>
+            <div
+              v-for="device in networkDevices"
+              :key="device.name"
+              class="device"
+              :class="device.type"
+            >
+              <div class="device-icon">
+                {{ device.icon }}
+              </div>
+              <div class="device-name">
+                {{ device.name }}
+              </div>
 
-              <div class="device-stats" v-if="showMetrics">
+              <div
+                v-if="showMetrics"
+                class="device-stats"
+              >
                 <div class="stat">
                   <span class="stat-label">吞吐</span>
                   <span class="stat-value">{{ device.throughput }}</span>
@@ -85,8 +150,12 @@
 
           <!-- 子网层 -->
           <div class="subnets-container">
-            <div class="subnet" v-for="subnet in subnets" :key="subnet.name"
-                 :class="subnet.type">
+            <div
+              v-for="subnet in subnets"
+              :key="subnet.name"
+              class="subnet"
+              :class="subnet.type"
+            >
               <div class="subnet-header">
                 <span class="subnet-type-icon">{{ subnet.type === 'public' ? '🌐' : '🔒' }}</span>
                 <span class="subnet-name">{{ subnet.name }}</span>
@@ -94,14 +163,27 @@
               </div>
 
               <div class="subnet-resources">
-                <div class="resource" v-for="resource in subnet.resources" :key="resource.name">
-                  <div class="resource-icon">{{ resource.icon }}</div>
+                <div
+                  v-for="resource in subnet.resources"
+                  :key="resource.name"
+                  class="resource"
+                >
+                  <div class="resource-icon">
+                    {{ resource.icon }}
+                  </div>
                   <div class="resource-info">
-                    <div class="resource-name">{{ resource.name }}</div>
-                    <div class="resource-ip">{{ resource.ip }}</div>
+                    <div class="resource-name">
+                      {{ resource.name }}
+                    </div>
+                    <div class="resource-ip">
+                      {{ resource.ip }}
+                    </div>
                   </div>
 
-                  <div class="resource-traffic" v-if="showMetrics">
+                  <div
+                    v-if="showMetrics"
+                    class="resource-traffic"
+                  >
                     <div class="traffic-in">
                       <span class="traffic-label">↓</span>
                       <span class="traffic-value">{{ resource.inTraffic }}</span>
@@ -121,18 +203,20 @@
 
     <!-- 图例说明 -->
     <div class="network-legend">
-      <div class="legend-title">流量类型说明：</div>
+      <div class="legend-title">
+        流量类型说明：
+      </div>
       <div class="legend-items">
         <div class="legend-item">
-          <span class="legend-color inbound"></span>
+          <span class="legend-color inbound" />
           <span>入向流量：用户 → 服务器</span>
         </div>
         <div class="legend-item">
-          <span class="legend-color outbound"></span>
+          <span class="legend-color outbound" />
           <span>出向流量：服务器 → 外部</span>
         </div>
         <div class="legend-item">
-          <span class="legend-color east-west"></span>
+          <span class="legend-color east-west" />
           <span>东西向流量：服务间通信</span>
         </div>
       </div>
@@ -211,7 +295,7 @@ const subnets = [
 .network-flow-demo {
   padding: 20px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .control-panel {
@@ -221,7 +305,7 @@ const subnets = [
   margin-bottom: 20px;
   padding: 16px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -273,7 +357,7 @@ const subnets = [
   gap: 6px;
   padding: 12px 16px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   min-width: 80px;
 }
 
@@ -401,7 +485,7 @@ const subnets = [
   gap: 6px;
   padding: 12px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   min-width: 100px;
   border: 2px solid transparent;
   transition: all 0.3s;
@@ -475,7 +559,7 @@ const subnets = [
 
 .subnet {
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 12px;
   border-left: 4px solid;
 }
@@ -586,7 +670,7 @@ const subnets = [
   margin-top: 20px;
   padding: 16px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 

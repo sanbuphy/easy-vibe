@@ -1,8 +1,12 @@
 <template>
   <div class="agent-chat-demo">
     <div class="header">
-      <div class="title">🤖 Agent 初体验：从"能说"到"能做"</div>
-      <div class="subtitle">体验 Agent 如何自动调用工具完成任务</div>
+      <div class="title">
+        🤖 Agent 初体验：从"能说"到"能做"
+      </div>
+      <div class="subtitle">
+        体验 Agent 如何自动调用工具完成任务
+      </div>
     </div>
 
     <!-- 场景选择 -->
@@ -22,43 +26,78 @@
     <div class="chat-window">
       <!-- 用户消息 -->
       <div class="message user">
-        <div class="avatar">👤</div>
-        <div class="bubble">{{ currentScenarioData.query }}</div>
+        <div class="avatar">
+          👤
+        </div>
+        <div class="bubble">
+          {{ currentScenarioData.query }}
+        </div>
       </div>
 
       <!-- LLM 回复（对比） -->
       <div class="message llm">
-        <div class="avatar">🤖</div>
+        <div class="avatar">
+          🤖
+        </div>
         <div class="bubble llm-bubble">
-          <div class="llm-label">普通 LLM</div>
-          <div class="llm-content">{{ currentScenarioData.llmResponse }}</div>
+          <div class="llm-label">
+            普通 LLM
+          </div>
+          <div class="llm-content">
+            {{ currentScenarioData.llmResponse }}
+          </div>
         </div>
       </div>
 
       <!-- Agent 回复 -->
       <div class="message agent">
-        <div class="avatar agent-avatar">🦾</div>
+        <div class="avatar agent-avatar">
+          🦾
+        </div>
         <div class="bubble agent-bubble">
-          <div class="agent-label">Agent 智能体</div>
+          <div class="agent-label">
+            Agent 智能体
+          </div>
           
           <!-- 思考过程（可折叠） -->
-          <div v-if="showThinking" class="thinking-section">
-            <div class="thinking-header" @click="toggleThinking">
+          <div
+            v-if="showThinking"
+            class="thinking-section"
+          >
+            <div
+              class="thinking-header"
+              @click="toggleThinking"
+            >
               <span>🧠 思考过程</span>
               <span class="toggle-icon">{{ thinkingExpanded ? '▼' : '▶' }}</span>
             </div>
-            <div v-if="thinkingExpanded" class="thinking-content">
-              <div class="thought-item">{{ currentScenarioData.thinking }}</div>
+            <div
+              v-if="thinkingExpanded"
+              class="thinking-content"
+            >
+              <div class="thought-item">
+                {{ currentScenarioData.thinking }}
+              </div>
             </div>
           </div>
 
           <!-- 工具调用（可折叠） -->
-          <div v-if="showTools" ref="toolsSection" class="tools-section">
-            <div class="tools-header" @click="toggleTools">
+          <div
+            v-if="showTools"
+            ref="toolsSection"
+            class="tools-section"
+          >
+            <div
+              class="tools-header"
+              @click="toggleTools"
+            >
               <span>🔧 工具调用 ({{ currentScenarioData.tools.length }}个)</span>
               <span class="toggle-icon">{{ toolsExpanded ? '▼' : '▶' }}</span>
             </div>
-            <div v-if="toolsExpanded" class="tools-list">
+            <div
+              v-if="toolsExpanded"
+              class="tools-list"
+            >
               <div 
                 v-for="(tool, idx) in currentScenarioData.tools" 
                 :key="idx"
@@ -68,14 +107,27 @@
               >
                 <div class="tool-status">
                   <span v-if="toolExecuted > idx">✅</span>
-                  <span v-else-if="toolExecuting === idx" class="spinner">⏳</span>
+                  <span
+                    v-else-if="toolExecuting === idx"
+                    class="spinner"
+                  >⏳</span>
                   <span v-else>⏸️</span>
                 </div>
                 <div class="tool-info">
-                  <div class="tool-name">{{ tool.name }}</div>
-                  <div v-if="toolExecuted > idx || toolExecuting === idx" class="tool-detail">
+                  <div class="tool-name">
+                    {{ tool.name }}
+                  </div>
+                  <div
+                    v-if="toolExecuted > idx || toolExecuting === idx"
+                    class="tool-detail"
+                  >
                     <code class="tool-params">{{ tool.params }}</code>
-                    <div v-if="toolExecuted > idx" class="tool-result">{{ tool.result }}</div>
+                    <div
+                      v-if="toolExecuted > idx"
+                      class="tool-result"
+                    >
+                      {{ tool.result }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -83,16 +135,31 @@
           </div>
 
           <!-- 最终回复 -->
-          <div v-if="showResponse" class="final-response">
-            <div class="response-header">💬 最终回复</div>
-            <div class="response-content">{{ currentScenarioData.agentResponse }}</div>
+          <div
+            v-if="showResponse"
+            class="final-response"
+          >
+            <div class="response-header">
+              💬 最终回复
+            </div>
+            <div class="response-content">
+              {{ currentScenarioData.agentResponse }}
+            </div>
           </div>
 
           <!-- 执行按钮 -->
-          <button v-if="!isExecuting && !executionComplete" class="execute-btn" @click="startExecution">
+          <button
+            v-if="!isExecuting && !executionComplete"
+            class="execute-btn"
+            @click="startExecution"
+          >
             ▶ 让 Agent 执行
           </button>
-          <button v-else-if="executionComplete" class="execute-btn reset" @click="reset">
+          <button
+            v-else-if="executionComplete"
+            class="execute-btn reset"
+            @click="reset"
+          >
             🔄 重置对话
           </button>
         </div>
@@ -476,7 +543,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
 .thinking-section {
   margin-bottom: 10px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -516,7 +583,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
 .tools-section {
   margin-bottom: 10px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -530,7 +597,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
   gap: 10px;
   padding: 10px;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   margin-bottom: 8px;
   border: 1px solid var(--vp-c-divider);
   transition: all 0.3s;
@@ -603,7 +670,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
   padding: 12px;
   background: #dcfce7;
   border: 1px solid #86efac;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .response-header {
@@ -628,7 +695,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
   background: var(--vp-c-brand);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 13px;
   cursor: pointer;
   transition: background 0.2s;
@@ -651,7 +718,7 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
   margin-top: 16px;
   padding: 12px 16px;
   background: var(--vp-c-brand-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 13px;
 }
 

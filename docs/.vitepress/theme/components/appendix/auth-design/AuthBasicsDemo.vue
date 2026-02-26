@@ -5,7 +5,9 @@
 <template>
   <div class="auth-basics-demo">
     <div class="header">
-      <div class="title">🧰 鉴权的 4 种常见“凭证”</div>
+      <div class="title">
+        🧰 鉴权的 4 种常见“凭证”
+      </div>
       <div class="subtitle">
         选一个方案，看看请求长什么样、优缺点是什么、最常见坑是什么。
       </div>
@@ -26,24 +28,44 @@
 
     <div class="grid">
       <div class="card">
-        <div class="card-title">请求长什么样</div>
+        <div class="card-title">
+          请求长什么样
+        </div>
         <pre class="code"><code>{{ active.example }}</code></pre>
-        <div class="hint">{{ active.note }}</div>
+        <div class="hint">
+          {{ active.note }}
+        </div>
       </div>
 
       <div class="card">
-        <div class="card-title">什么时候用 / 不用</div>
+        <div class="card-title">
+          什么时候用 / 不用
+        </div>
         <div class="two">
           <div class="box">
-            <div class="box-title">✅ 适合</div>
+            <div class="box-title">
+              ✅ 适合
+            </div>
             <ul class="list">
-              <li v-for="(x, i) in active.pros" :key="i">{{ x }}</li>
+              <li
+                v-for="(x, i) in active.pros"
+                :key="i"
+              >
+                {{ x }}
+              </li>
             </ul>
           </div>
           <div class="box">
-            <div class="box-title">⚠️ 不适合 / 风险</div>
+            <div class="box-title">
+              ⚠️ 不适合 / 风险
+            </div>
             <ul class="list">
-              <li v-for="(x, i) in active.cons" :key="i">{{ x }}</li>
+              <li
+                v-for="(x, i) in active.cons"
+                :key="i"
+              >
+                {{ x }}
+              </li>
             </ul>
           </div>
         </div>
@@ -51,10 +73,11 @@
     </div>
 
     <div class="card">
-      <div class="card-title">一句话口诀</div>
+      <div class="card-title">
+        一句话口诀
+      </div>
       <div class="desc">
-        <strong>先认证（你是谁）</strong
-        >，再授权（你能做什么）。凭证只是“证明身份的方式”，授权永远要在服务端执行。
+        <strong>先认证（你是谁）</strong>，再授权（你能做什么）。凭证只是“证明身份的方式”，授权永远要在服务端执行。
       </div>
     </div>
   </div>
@@ -131,9 +154,9 @@ const active = computed(
 .auth-basics-demo {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .header {
@@ -197,8 +220,8 @@ const active = computed(
 .card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
 .card-title {
@@ -233,7 +256,7 @@ const active = computed(
 .box {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-alt);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 

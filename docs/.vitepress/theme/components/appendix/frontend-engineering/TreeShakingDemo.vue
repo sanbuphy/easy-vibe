@@ -20,7 +20,9 @@
     <div class="demo-content">
       <!-- 源代码面板 -->
       <div class="source-panel">
-        <div class="panel-title">📦 utils.js (源代码)</div>
+        <div class="panel-title">
+          📦 utils.js (源代码)
+        </div>
         <div class="code-block">
           <div
             v-for="(func, index) in functions"
@@ -36,7 +38,9 @@
 
       <!-- 控制面板 -->
       <div class="control-panel">
-        <div class="panel-title">🎛️ 选择需要的功能</div>
+        <div class="panel-title">
+          🎛️ 选择需要的功能
+        </div>
         <div class="function-toggles">
           <label
             v-for="(func, index) in functions"
@@ -44,7 +48,10 @@
             class="toggle-item"
             :class="{ active: func.used }"
           >
-            <input type="checkbox" v-model="func.used" />
+            <input
+              v-model="func.used"
+              type="checkbox"
+            >
             <span class="toggle-name">{{ func.name }}</span>
             <span class="toggle-size">{{ func.size }}B</span>
           </label>
@@ -55,7 +62,9 @@
             <span class="stat-label">原始大小</span>
             <span class="stat-value original">{{ originalSize }}B</span>
           </div>
-          <div class="stat-arrow">→</div>
+          <div class="stat-arrow">
+            →
+          </div>
           <div class="stat-item">
             <span class="stat-label">Tree Shaking 后</span>
             <span class="stat-value optimized">{{ optimizedSize }}B</span>
@@ -149,10 +158,10 @@ const cacheMisses = ref(8)
 <style scoped>
 .tree-shaking-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
@@ -171,7 +180,7 @@ const cacheMisses = ref(8)
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 @media (max-width: 768px) {
@@ -183,7 +192,7 @@ const cacheMisses = ref(8)
 .source-panel,
 .control-panel {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   overflow: hidden;
 }

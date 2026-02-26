@@ -5,77 +5,148 @@
 <template>
   <div class="session-demo">
     <div class="header">
-      <div class="title">🍪 Session + Cookie：有状态登录</div>
+      <div class="title">
+        🍪 Session + Cookie：有状态登录
+      </div>
       <div class="subtitle">
         默认手动推进：先看清楚状态再进入下一步（避免“自动下一步”误解）。
       </div>
     </div>
 
     <div class="controls">
-      <button class="btn primary" @click="start" :disabled="step !== 0">
-        开始
-      </button>
-      <button class="btn" @click="prev" :disabled="step <= 1">上一步</button>
       <button
         class="btn primary"
-        @click="next"
+        :disabled="step !== 0"
+        @click="start"
+      >
+        开始
+      </button>
+      <button
+        class="btn"
+        :disabled="step <= 1"
+        @click="prev"
+      >
+        上一步
+      </button>
+      <button
+        class="btn primary"
         :disabled="step === 0 || step >= maxStep"
+        @click="next"
       >
         下一步
       </button>
-      <button class="btn" @click="reset">重置</button>
+      <button
+        class="btn"
+        @click="reset"
+      >
+        重置
+      </button>
     </div>
 
-    <div v-if="step > 0" class="progress">
+    <div
+      v-if="step > 0"
+      class="progress"
+    >
       Step {{ step }} / {{ maxStep }} · {{ steps[step - 1]?.title }}
     </div>
 
     <div class="grid">
       <div class="card">
-        <div class="card-title">浏览器（客户端）</div>
+        <div class="card-title">
+          浏览器（客户端）
+        </div>
         <div class="box">
-          <div class="box-title">Cookie Jar</div>
-          <div v-if="cookie" class="kv">
-            <div class="k">session_id</div>
-            <div class="v mono">{{ cookie }}</div>
+          <div class="box-title">
+            Cookie Jar
           </div>
-          <div v-else class="empty">暂无 Cookie</div>
+          <div
+            v-if="cookie"
+            class="kv"
+          >
+            <div class="k">
+              session_id
+            </div>
+            <div class="v mono">
+              {{ cookie }}
+            </div>
+          </div>
+          <div
+            v-else
+            class="empty"
+          >
+            暂无 Cookie
+          </div>
         </div>
 
         <div class="box">
-          <div class="box-title">本步请求</div>
+          <div class="box-title">
+            本步请求
+          </div>
           <pre class="code"><code>{{ clientRequest }}</code></pre>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">服务器</div>
+        <div class="card-title">
+          服务器
+        </div>
         <div class="box">
-          <div class="box-title">Session Store（Redis/Memory）</div>
-          <div v-if="session" class="kv">
-            <div class="k mono">{{ cookie }}</div>
+          <div class="box-title">
+            Session Store（Redis/Memory）
+          </div>
+          <div
+            v-if="session"
+            class="kv"
+          >
+            <div class="k mono">
+              {{ cookie }}
+            </div>
             <div class="v">
-              <div class="row"><span class="muted">user_id</span> 123</div>
-              <div class="row"><span class="muted">username</span> alice</div>
-              <div class="row"><span class="muted">role</span> admin</div>
+              <div class="row">
+                <span class="muted">user_id</span> 123
+              </div>
+              <div class="row">
+                <span class="muted">username</span> alice
+              </div>
+              <div class="row">
+                <span class="muted">role</span> admin
+              </div>
             </div>
           </div>
-          <div v-else class="empty">暂无 Session</div>
+          <div
+            v-else
+            class="empty"
+          >
+            暂无 Session
+          </div>
         </div>
 
         <div class="box">
-          <div class="box-title">本步响应</div>
+          <div class="box-title">
+            本步响应
+          </div>
           <pre class="code"><code>{{ serverResponse }}</code></pre>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">{{ steps[step - 1]?.title || '流程说明' }}</div>
-      <div class="desc">{{ steps[step - 1]?.desc }}</div>
-      <div v-if="steps[step - 1]?.warn" class="warn">
-        <div class="warn-title">注意</div>
-        <div class="warn-text">{{ steps[step - 1]?.warn }}</div>
+      <div class="card-title">
+        {{ steps[step - 1]?.title || '流程说明' }}
+      </div>
+      <div class="desc">
+        {{ steps[step - 1]?.desc }}
+      </div>
+      <div
+        v-if="steps[step - 1]?.warn"
+        class="warn"
+      >
+        <div class="warn-title">
+          注意
+        </div>
+        <div class="warn-text">
+          {{ steps[step - 1]?.warn }}
+        </div>
       </div>
     </div>
   </div>
@@ -193,9 +264,9 @@ Set-Cookie: session_id=; Max-Age=0`
 .session-demo {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .header {
@@ -258,8 +329,8 @@ Set-Cookie: session_id=; Max-Age=0`
 .card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
 .card-title {
@@ -271,7 +342,7 @@ Set-Cookie: session_id=; Max-Age=0`
 .box {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-alt);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
   margin-bottom: 0.75rem;
 }
@@ -339,7 +410,7 @@ Set-Cookie: session_id=; Max-Age=0`
   margin-top: 0.75rem;
   border: 1px solid rgba(var(--vp-c-brand-rgb), 0.18);
   background: rgba(var(--vp-c-brand-rgb), 0.06);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 

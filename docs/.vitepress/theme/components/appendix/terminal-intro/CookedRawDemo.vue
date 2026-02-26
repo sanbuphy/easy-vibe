@@ -1,15 +1,24 @@
 <template>
   <div class="cooked-raw-demo">
     <div class="mode-switch">
-      <button :class="{ active: mode === 'cooked' }" @click="setMode('cooked')">
+      <button
+        :class="{ active: mode === 'cooked' }"
+        @click="setMode('cooked')"
+      >
         🥘 Cooked Mode (Standard)
       </button>
-      <button :class="{ active: mode === 'raw' }" @click="setMode('raw')">
+      <button
+        :class="{ active: mode === 'raw' }"
+        @click="setMode('raw')"
+      >
         🥩 Raw Mode (Vim/Games)
       </button>
     </div>
 
-    <div class="demo-container" @click="focusInput">
+    <div
+      class="demo-container"
+      @click="focusInput"
+    >
       <!-- Hidden Input for capturing keystrokes -->
       <input
         ref="inputRef"
@@ -18,23 +27,41 @@
         @keydown="handleKey"
         @blur="isFocused = false"
         @focus="isFocused = true"
-      />
+      >
 
       <!-- Visualization -->
       <div class="flow-diagram">
         <!-- 1. User Input -->
-        <div class="stage user-input" :class="{ focused: isFocused }">
-          <div class="stage-title">1. Keyboard Input</div>
+        <div
+          class="stage user-input"
+          :class="{ focused: isFocused }"
+        >
+          <div class="stage-title">
+            1. Keyboard Input
+          </div>
           <div class="key-visual">
-            <span v-if="lastPressedKey" class="key-cap">{{
+            <span
+              v-if="lastPressedKey"
+              class="key-cap"
+            >{{
               lastPressedKey
             }}</span>
-            <span v-else class="placeholder">Type here...</span>
+            <span
+              v-else
+              class="placeholder"
+            >Type here...</span>
           </div>
-          <div class="status-text" v-if="!isFocused">Click to focus</div>
+          <div
+            v-if="!isFocused"
+            class="status-text"
+          >
+            Click to focus
+          </div>
         </div>
 
-        <div class="arrow">⬇</div>
+        <div class="arrow">
+          ⬇
+        </div>
 
         <!-- 2. OS Buffer (Only for Cooked) -->
         <div
@@ -43,12 +70,22 @@
         >
           <div class="stage-title">
             2. Line Buffer (Kernel)
-            <span class="badge" v-if="mode === 'cooked'">Active</span>
-            <span class="badge disabled" v-else>Bypassed</span>
+            <span
+              v-if="mode === 'cooked'"
+              class="badge"
+            >Active</span>
+            <span
+              v-else
+              class="badge disabled"
+            >Bypassed</span>
           </div>
           <div class="buffer-content">
             <template v-if="mode === 'cooked'">
-              <span v-for="(char, i) in buffer" :key="i" class="char">{{
+              <span
+                v-for="(char, i) in buffer"
+                :key="i"
+                class="char"
+              >{{
                 char
               }}</span>
               <span class="cursor">_</span>
@@ -58,20 +95,26 @@
             </template>
           </div>
           <div class="explanation">
-            <span v-if="mode === 'cooked'"
-              >Waiting for Enter... (Backspace works)</span
-            >
+            <span v-if="mode === 'cooked'">Waiting for Enter... (Backspace works)</span>
             <span v-else>No buffering. Every key is sent immediately.</span>
           </div>
         </div>
 
-        <div class="arrow">⬇</div>
+        <div class="arrow">
+          ⬇
+        </div>
 
         <!-- 3. Application -->
         <div class="stage app-input">
-          <div class="stage-title">3. Application Receives</div>
+          <div class="stage-title">
+            3. Application Receives
+          </div>
           <div class="app-content">
-            <div v-for="(line, i) in appLines" :key="i" class="app-line">
+            <div
+              v-for="(line, i) in appLines"
+              :key="i"
+              class="app-line"
+            >
               {{ line }}
             </div>
             <div class="app-line current">
@@ -191,7 +234,7 @@ const handleRawMode = (e) => {
   padding: 10px;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.2s;
@@ -205,7 +248,7 @@ const handleRawMode = (e) => {
 
 .demo-container {
   background: #1e1e1e;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   border: 1px solid #333;
   position: relative;

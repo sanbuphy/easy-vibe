@@ -1,488 +1,249 @@
-<!--
-  BuildPipelineDemo.vue
-  构建流水线可视化演示
-
-  用途：
-  展示前端工程化的完整构建流程，从源代码到生产部署的全过程。
-
-  交互功能：
-  - 步骤播放：逐步展示构建流程的每个阶段
-  - 速度控制：调整演示速度
-  - 阶段详情：点击每个阶段查看详细信息
--->
 <template>
   <div class="build-pipeline-demo">
-    <div class="control-panel">
-      <div class="title-section">
-        <span class="icon">🏭</span>
-        <span class="title">构建流水线</span>
-        <span class="subtitle">从代码到部署的完整旅程</span>
-      </div>
-      <div class="controls">
-        <button
-          class="control-btn"
-          @click="togglePlay"
-          :class="{ active: isPlaying }"
-        >
-          {{ isPlaying ? '⏸ 暂停' : '▶ 播放' }}
-        </button>
-        <button class="control-btn outline" @click="reset">
-          ↺ 重置
-        </button>
-        <div class="speed-control">
-          <label>速度:</label>
-          <select v-model="playbackSpeed">
-            <option :value="0.5">0.5x</option>
-            <option :value="1">1x</option>
-            <option :value="2">2x</option>
-            <option :value="4">4x</option>
-          </select>
-        </div>
-      </div>
+    <div class="demo-header">
+      <span class="icon">🏭</span>
+      <span class="title">构建流水线</span>
+      <span class="subtitle">从源代码到产物的完整旅程</span>
     </div>
 
-    <div class="pipeline-visualization">
-      <div class="pipeline-track">
+    <div class="intro-text">
+      想象你在开一家<span class="highlight">面包店</span>：面粉要过筛、搅拌、发酵、烘烤，最后才能变成香喷喷的面包。代码也一样，需要经过一道道"加工工序"，才能变成浏览器能运行的程序。
+    </div>
+
+    <div class="pipeline">
+      <div
+        v-for="(stage, i) in stages"
+        :key="stage.id"
+        class="stage"
+        :class="{ active: activeStage === stage.id }"
+        @click="activeStage = activeStage === stage.id ? null : stage.id"
+      >
+        <div class="stage-icon">
+          {{ stage.icon }}
+        </div>
+        <div class="stage-name">
+          {{ stage.name }}
+        </div>
+        <div class="stage-simple">
+          {{ stage.simple }}
+        </div>
         <div
-          v-for="(stage, index) in stages"
-          :key="stage.id"
-          class="stage-node"
-          :class="{
-            completed: currentStage > index,
-            active: currentStage === index,
-            pending: currentStage < index
-          }"
-          @click="selectStage(index)"
+          v-if="i < stages.length - 1"
+          class="arrow"
         >
-          <div class="stage-icon">{{ stage.icon }}</div>
-          <div class="stage-info">
-            <div class="stage-name">{{ stage.name }}</div>
-            <div class="stage-duration" v-if="stageDurations[index]">
-              {{ stageDurations[index] }}ms
-            </div>
-          </div>
-          <div class="stage-status">
-            <span v-if="currentStage > index" class="status-icon success">✓</span>
-            <span v-else-if="currentStage === index" class="status-icon loading">
-              <span class="spinner"></span>
-            </span>
-            <span v-else class="status-icon pending">○</span>
-          </div>
-        </div>
-
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            :style="{ width: `${(currentStage / stages.length) * 100}%` }"
-          ></div>
+          →
         </div>
       </div>
     </div>
 
-    <div class="stage-details" v-if="selectedStage !== null">
-      <div class="detail-header">
-        <span class="detail-icon">{{ stages[selectedStage].icon }}</span>
-        <span class="detail-title">{{ stages[selectedStage].name }}</span>
-      </div>
-      <div class="detail-content">
-        <div class="detail-section">
-          <h4>📝 阶段说明</h4>
-          <p>{{ stages[selectedStage].description }}</p>
+    <Transition name="fade">
+      <div
+        v-if="activeStage"
+        class="stage-detail"
+      >
+        <div class="detail-header">
+          <span class="detail-icon">{{ currentStage?.icon }}</span>
+          <span class="detail-title">{{ currentStage?.name }}</span>
         </div>
-        <div class="detail-section">
-          <h4>🔧 执行的工具</h4>
-          <div class="tools-list">
-            <span
-              v-for="tool in stages[selectedStage].tools"
-              :key="tool"
-              class="tool-tag"
-            >
-              {{ tool }}
-            </span>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>📂 输入输出</h4>
-          <div class="io-info">
-            <div class="io-item">
-              <span class="io-label">输入:</span>
-              <span class="io-value">{{ stages[selectedStage].input }}</span>
+        <div class="detail-content">
+          <p class="detail-desc">
+            {{ currentStage?.detailDesc }}
+          </p>
+          <div class="detail-example">
+            <div class="example-label">
+              🌰 举个例子：
             </div>
-            <div class="io-item">
-              <span class="io-label">输出:</span>
-              <span class="io-value">{{ stages[selectedStage].output }}</span>
+            <div class="example-content">
+              {{ currentStage?.example }}
             </div>
           </div>
         </div>
       </div>
+    </Transition>
+
+    <div
+      v-if="!activeStage"
+      class="hint-text"
+    >
+      👆 点击上方任意阶段，查看详细解释
     </div>
 
     <div class="info-box">
-      <p>
-        <span class="icon">💡</span>
-        <strong>构建流水线的作用：</strong>
-        就像工厂的生产线一样，代码也需要经过一系列"加工工序"才能变成用户可以访问的网站。
-        每个阶段都有特定的任务，确保最终产出的代码是优化过、无错误且性能良好的。
-      </p>
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>就像工厂流水线一样，代码经过一道道工序，最终变成可以在浏览器运行的产物。每个阶段各司其职，环环相扣。
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 
-const stages = [
+const activeStage = ref(null)
+
+const stages = ref([
   {
-    id: 'lint',
-    name: '代码检查',
+    id: 1,
     icon: '🔍',
-    description: '使用 ESLint、Prettier 等工具检查代码规范，确保代码风格一致，提前发现潜在问题。',
-    tools: ['ESLint', 'Prettier', 'Stylelint'],
-    input: '源代码 (.js, .vue, .css)',
-    output: '检查报告'
+    name: '代码检查',
+    simple: '找错误',
+    detailDesc: '就像写作文前先检查有没有错别字和语法错误。代码检查工具会自动发现你的代码问题，比如变量名拼写错误、漏写了分号、使用了未定义的变量等。',
+    example: '你写了 const mesage = "hello"，检查工具会提醒："mesage 是不是想写 message？这个变量名看起来有拼写错误。"'
   },
   {
-    id: 'transform',
-    name: '代码转换',
+    id: 2,
     icon: '⚙️',
-    description: '将现代 JavaScript/TypeScript 转换为兼容旧浏览器的代码，处理 JSX、Vue SFC 等。',
-    tools: ['Babel', 'TypeScript', 'SWC'],
-    input: 'ES6+/TS/JSX 源码',
-    output: 'ES5 兼容代码'
+    name: '代码转换',
+    simple: '翻译官',
+    detailDesc: '就像把中文翻译成英文让外国人能看懂。你写的可能是 TypeScript 或新版 JavaScript 语法，但老浏览器"看不懂"，需要转换成它们能理解的旧版本。',
+    example: '你写了 const name = user?.name（新版语法），转换后变成 var name = user && user.name ? user.name : undefined（老浏览器能懂的写法）'
   },
   {
-    id: 'dependency',
-    name: '依赖解析',
+    id: 3,
     icon: '📦',
-    description: '分析模块依赖关系，构建依赖图谱，确定模块加载顺序。',
-    tools: ['Webpack', 'Rollup', 'esbuild'],
-    input: '入口文件 (main.js)',
-    output: '依赖图谱'
+    name: '依赖解析',
+    simple: '理关系',
+    detailDesc: '就像整理食谱，搞清楚做一道菜需要哪些食材。你的代码可能引用了很多其他文件，这个阶段会分析"谁依赖谁"，画出一张完整的关系图。',
+    example: 'main.js 引用了 utils.js，utils.js 又引用了 helper.js，解析后会生成一张"依赖地图"，告诉打包工具按什么顺序处理这些文件。'
   },
   {
-    id: 'bundle',
-    name: '模块打包',
+    id: 4,
     icon: '📚',
-    description: '将所有模块合并成一个或多个 bundle，优化加载性能。',
-    tools: ['Webpack', 'Vite', 'Parcel'],
-    input: '模块文件',
-    output: 'bundle 文件'
+    name: '模块打包',
+    simple: '装箱子',
+    detailDesc: '就像搬家时把零散的东西装进几个大箱子。你的项目可能有上百个文件，浏览器加载太多小文件会很慢，打包就是把它们合并成少数几个文件。',
+    example: '原来有 100 个 .js 文件，打包后变成 2 个文件：app.js（你的代码）和 vendor.js（第三方库）。浏览器只需请求 2 次而不是 100 次。'
   },
   {
-    id: 'optimize',
-    name: '代码优化',
+    id: 5,
     icon: '✨',
-    description: '压缩代码、Tree Shaking 移除无用代码、代码分割、生成 Source Map。',
-    tools: ['Terser', 'esbuild', 'Webpack'],
-    input: '未优化的 bundle',
-    output: '优化后的代码'
-  },
-  {
-    id: 'assets',
-    name: '资源处理',
-    icon: '🖼️',
-    description: '处理图片、字体、CSS 等资源，生成资源指纹(hash)，优化缓存策略。',
-    tools: ['file-loader', 'url-loader', 'ImageMagick'],
-    input: '原始资源文件',
-    output: '带 hash 的资源'
-  },
-  {
-    id: 'deploy',
-    name: '部署发布',
-    icon: '🚀',
-    description: '将构建产物上传到 CDN 或服务器，配置缓存策略，完成发布。',
-    tools: ['AWS S3', 'Vercel', 'Netlify'],
-    input: 'dist 目录',
-    output: '线上网站'
+    name: '代码优化',
+    simple: '瘦身',
+    detailDesc: '就像压缩行李箱，把不必要的东西扔掉。删除代码中的空格和注释、去掉没用到代码（Tree Shaking）、压缩变量名，让文件体积更小。',
+    example: '原来 100KB 的代码，优化后变成 30KB。比如把 function getUserName() { return name } 压缩成 function a(){return n}'
   }
-]
+])
 
-const currentStage = ref(0)
-const selectedStage = ref(null)
-const isPlaying = ref(false)
-const playbackSpeed = ref(1)
-const stageDurations = ref({})
-let playInterval = null
-
-const togglePlay = () => {
-  if (isPlaying.value) {
-    pausePlay()
-  } else {
-    startPlay()
-  }
-}
-
-const startPlay = () => {
-  isPlaying.value = true
-  playInterval = setInterval(() => {
-    if (currentStage.value < stages.length) {
-      const startTime = Date.now()
-      stageDurations.value[currentStage.value] = Math.floor(Math.random() * 500 + 100)
-      currentStage.value++
-    } else {
-      pausePlay()
-    }
-  }, 2000 / playbackSpeed.value)
-}
-
-const pausePlay = () => {
-  isPlaying.value = false
-  if (playInterval) {
-    clearInterval(playInterval)
-    playInterval = null
-  }
-}
-
-const reset = () => {
-  pausePlay()
-  currentStage.value = 0
-  selectedStage.value = null
-  stageDurations.value = {}
-}
-
-const selectStage = (index) => {
-  selectedStage.value = index
-}
-
-onMounted(() => {
-  // Auto-start for demo
-  setTimeout(() => {
-    if (currentStage.value === 0) {
-      startPlay()
-    }
-  }, 1000)
-})
-
-onUnmounted(() => {
-  pausePlay()
+const currentStage = computed(() => {
+  return stages.value.find(s => s.id === activeStage.value)
 })
 </script>
 
 <style scoped>
 .build-pipeline-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
-  font-family: var(--vp-font-family-mono);
-}
-
-.control-panel {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  background: var(--vp-c-bg);
-  padding: 0.75rem;
   border-radius: 6px;
-  border: 1px solid var(--vp-c-divider);
-  gap: 1rem;
+  background: var(--vp-c-bg-soft);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
-.title-section {
+.demo-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.title-section .icon {
-  font-size: 1.5rem;
-}
+.demo-header .icon { font-size: 1.25rem; }
+.demo-header .title { font-weight: bold; font-size: 1rem; }
+.demo-header .subtitle { color: var(--vp-c-text-2); font-size: 0.85rem; margin-left: 0.5rem; }
 
-.title-section .title {
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.title-section .subtitle {
+.intro-text {
+  font-size: 0.9rem;
   color: var(--vp-c-text-2);
-  font-size: 0.85rem;
-  margin-left: 0.5rem;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.control-btn {
-  padding: 0.35rem 0.75rem;
-  border-radius: 4px;
-  background-color: var(--vp-c-brand);
-  color: white;
-  font-size: 0.8rem;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.control-btn.outline {
-  background-color: transparent;
-  border: 1px solid var(--vp-c-divider);
-  color: var(--vp-c-text-1);
-}
-
-.control-btn:hover {
-  opacity: 0.85;
-}
-
-.speed-control {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-}
-
-.speed-control select {
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-  font-size: 0.8rem;
-}
-
-.pipeline-visualization {
-  background: var(--vp-c-bg);
-  border-radius: 8px;
-  padding: 1rem;
-  border: 1px solid var(--vp-c-divider);
+  line-height: 1.6;
   margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
 }
 
-.pipeline-track {
-  position: relative;
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.pipeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.stage {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-}
-
-.progress-bar {
-  position: absolute;
-  left: 24px;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 2px;
-  z-index: 0;
-}
-
-.progress-fill {
-  width: 100%;
-  background: linear-gradient(180deg, var(--vp-c-brand), var(--vp-c-brand-dark));
-  border-radius: 2px;
-  transition: height 0.5s ease;
-}
-
-.stage-node {
-  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  min-width: 85px;
   position: relative;
-  z-index: 1;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
-.stage-node:hover {
-  transform: translateX(4px);
+.stage:hover {
+  background: var(--vp-c-bg-soft);
 }
 
-.stage-node.completed {
-  border-color: var(--vp-c-brand);
-  background: rgba(var(--vp-c-brand-rgb), 0.1);
-}
-
-.stage-node.active {
-  border-color: var(--vp-c-brand);
-  background: var(--vp-c-bg);
-  box-shadow: 0 0 0 3px rgba(var(--vp-c-brand-rgb), 0.2);
-  animation: pulse 2s infinite;
-}
-
-.stage-node.pending {
-  opacity: 0.6;
-}
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(var(--vp-c-brand-rgb), 0.2); }
-  50% { box-shadow: 0 0 0 6px rgba(var(--vp-c-brand-rgb), 0.1); }
+.stage.active {
+  background: var(--vp-c-brand-soft);
 }
 
 .stage-icon {
-  font-size: 1.5rem;
   width: 40px;
   height: 40px;
+  border-radius: 6px;
+  background: var(--vp-c-brand);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--vp-c-bg);
-  border-radius: 8px;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
 }
 
-.stage-info {
-  flex: 1;
+.stage:hover .stage-icon {
+  transform: scale(1.1);
 }
 
 .stage-name {
-  font-weight: bold;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--vp-c-text-1);
 }
 
-.stage-duration {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
-  margin-top: 0.1rem;
+.stage-simple {
+  font-size: 0.7rem;
+  color: var(--vp-c-brand-1);
+  margin-top: 0.2rem;
+  font-weight: 500;
 }
 
-.stage-status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-}
-
-.status-icon {
+.arrow {
+  position: absolute;
+  right: -12px;
+  top: 20px;
+  color: var(--vp-c-text-3);
   font-size: 1rem;
 }
 
-.status-icon.success {
-  color: var(--vp-c-brand);
-  font-weight: bold;
-}
-
-.status-icon.pending {
+.hint-text {
+  text-align: center;
+  font-size: 0.85rem;
   color: var(--vp-c-text-3);
+  margin-top: 0.75rem;
 }
 
-.spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--vp-c-divider);
-  border-top-color: var(--vp-c-brand);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.stage-details {
+.stage-detail {
   background: var(--vp-c-bg);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
   border: 1px solid var(--vp-c-divider);
-  margin-bottom: 1rem;
 }
 
 .detail-header {
@@ -490,99 +251,64 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .detail-icon {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 
 .detail-title {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1rem;
-}
-
-.detail-content {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.detail-section h4 {
-  font-size: 0.85rem;
-  margin-bottom: 0.4rem;
   color: var(--vp-c-text-1);
 }
 
-.detail-section p {
-  font-size: 0.85rem;
+.detail-desc {
+  font-size: 0.9rem;
   color: var(--vp-c-text-2);
-  line-height: 1.5;
-  margin: 0;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
 }
 
-.tools-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+.detail-example {
+  background: var(--vp-c-bg-soft);
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--vp-c-brand);
 }
 
-.tool-tag {
-  background: var(--vp-c-brand);
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
+.example-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.5rem;
 }
 
-.io-info {
-  display: grid;
-  gap: 0.3rem;
-}
-
-.io-item {
-  display: flex;
-  gap: 0.5rem;
+.example-content {
   font-size: 0.85rem;
-}
-
-.io-label {
-  color: var(--vp-c-text-3);
-  min-width: 50px;
-}
-
-.io-value {
   color: var(--vp-c-text-1);
-  font-family: monospace;
+  line-height: 1.5;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 .info-box {
-  background-color: var(--vp-c-bg-alt);
+  background: var(--vp-c-bg-alt);
   padding: 0.75rem;
   border-radius: 6px;
   font-size: 0.85rem;
-  line-height: 1.4;
   color: var(--vp-c-text-2);
+  margin-top: 0.75rem;
 }
 
-.info-box .icon {
-  margin-right: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .control-panel {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .stage-node {
-    padding: 0.5rem;
-  }
-
-  .stage-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 1.25rem;
-  }
-}
+.info-box .icon { margin-right: 0.25rem; }
 </style>

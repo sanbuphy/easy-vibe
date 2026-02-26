@@ -3,13 +3,29 @@
     <h4>协程轻量级对比演示</h4>
 
     <div class="controls">
-      <el-radio-group v-model="comparisonMode" size="small">
-        <el-radio-button label="memory">内存占用对比</el-radio-button>
-        <el-radio-button label="switch">切换开销对比</el-radio-button>
-        <el-radio-button label="creation">创建速度对比</el-radio-button>
+      <el-radio-group
+        v-model="comparisonMode"
+        size="small"
+      >
+        <el-radio-button label="memory">
+          内存占用对比
+        </el-radio-button>
+        <el-radio-button label="switch">
+          切换开销对比
+        </el-radio-button>
+        <el-radio-button label="creation">
+          创建速度对比
+        </el-radio-button>
       </el-radio-group>
 
-      <el-slider v-model="coroutineCount" :min="100" :max="10000" :step="100" show-input style="width: 300px;" />
+      <el-slider
+        v-model="coroutineCount"
+        :min="100"
+        :max="10000"
+        :step="100"
+        show-input
+        style="width: 300px;"
+      />
       <span class="slider-label">{{ coroutineCount }} 个协程</span>
     </div>
 
@@ -18,27 +34,42 @@
         <h5>线程模型</h5>
         <div class="resource-visualization">
           <div class="resource-bar">
-            <div class="bar-label">内存占用</div>
+            <div class="bar-label">
+              内存占用
+            </div>
             <div class="bar-container">
-              <div class="bar-fill thread-bar" :style="{ width: threadMemoryPercent + '%', backgroundColor: '#e6a23c' }">
+              <div
+                class="bar-fill thread-bar"
+                :style="{ width: threadMemoryPercent + '%', backgroundColor: '#e6a23c' }"
+              >
                 {{ threadMemory }} MB
               </div>
             </div>
           </div>
 
           <div class="resource-bar">
-            <div class="bar-label">创建时间</div>
+            <div class="bar-label">
+              创建时间
+            </div>
             <div class="bar-container">
-              <div class="bar-fill thread-bar" :style="{ width: threadCreationPercent + '%', backgroundColor: '#e6a23c' }">
+              <div
+                class="bar-fill thread-bar"
+                :style="{ width: threadCreationPercent + '%', backgroundColor: '#e6a23c' }"
+              >
                 {{ threadCreationTime }} ms
               </div>
             </div>
           </div>
 
           <div class="resource-bar">
-            <div class="bar-label">上下文切换</div>
+            <div class="bar-label">
+              上下文切换
+            </div>
             <div class="bar-container">
-              <div class="bar-fill thread-bar" :style="{ width: 100 + '%', backgroundColor: '#e6a23c' }">
+              <div
+                class="bar-fill thread-bar"
+                :style="{ width: 100 + '%', backgroundColor: '#e6a23c' }"
+              >
                 ~1-10 μs
               </div>
             </div>
@@ -47,10 +78,16 @@
 
         <div class="thread-visualization">
           <div class="memory-blocks">
-            <div v-for="n in Math.min(coroutineCount / 100, 50)" :key="n" class="thread-block"
-              :style="{ backgroundColor: '#e6a23c', opacity: 0.6 + Math.random() * 0.4 }">
-            </div>
-            <div v-if="coroutineCount / 100 > 50" class="more-indicator">
+            <div
+              v-for="n in Math.min(coroutineCount / 100, 50)"
+              :key="n"
+              class="thread-block"
+              :style="{ backgroundColor: '#e6a23c', opacity: 0.6 + Math.random() * 0.4 }"
+            />
+            <div
+              v-if="coroutineCount / 100 > 50"
+              class="more-indicator"
+            >
               +{{ Math.floor(coroutineCount / 100 - 50) }} 更多...
             </div>
           </div>
@@ -58,36 +95,51 @@
       </div>
 
       <div class="vs-divider">
-        <div class="vs-circle">VS</div>
+        <div class="vs-circle">
+          VS
+        </div>
       </div>
 
       <div class="comparison-column">
         <h5>协程模型</h5>
         <div class="resource-visualization">
           <div class="resource-bar">
-            <div class="bar-label">内存占用</div>
+            <div class="bar-label">
+              内存占用
+            </div>
             <div class="bar-container">
-              <div class="bar-fill coroutine-bar"
-                :style="{ width: Math.max(coroutineMemoryPercent, 5) + '%', backgroundColor: '#67c23a' }">
+              <div
+                class="bar-fill coroutine-bar"
+                :style="{ width: Math.max(coroutineMemoryPercent, 5) + '%', backgroundColor: '#67c23a' }"
+              >
                 {{ coroutineMemory }} MB
               </div>
             </div>
           </div>
 
           <div class="resource-bar">
-            <div class="bar-label">创建时间</div>
+            <div class="bar-label">
+              创建时间
+            </div>
             <div class="bar-container">
-              <div class="bar-fill coroutine-bar"
-                :style="{ width: Math.max(coroutineCreationPercent, 5) + '%', backgroundColor: '#67c23a' }">
+              <div
+                class="bar-fill coroutine-bar"
+                :style="{ width: Math.max(coroutineCreationPercent, 5) + '%', backgroundColor: '#67c23a' }"
+              >
                 {{ coroutineCreationTime }} ms
               </div>
             </div>
           </div>
 
           <div class="resource-bar">
-            <div class="bar-label">上下文切换</div>
+            <div class="bar-label">
+              上下文切换
+            </div>
             <div class="bar-container">
-              <div class="bar-fill coroutine-bar" :style="{ width: 15 + '%', backgroundColor: '#67c23a' }">
+              <div
+                class="bar-fill coroutine-bar"
+                :style="{ width: 15 + '%', backgroundColor: '#67c23a' }"
+              >
                 ~100 ns
               </div>
             </div>
@@ -96,17 +148,30 @@
 
         <div class="coroutine-visualization">
           <div class="coroutine-grid">
-            <div v-for="n in Math.min(coroutineCount / 10, 100)" :key="n" class="coroutine-cell"
-              :style="{ backgroundColor: '#67c23a', opacity: 0.5 + Math.random() * 0.5 }">
-            </div>
-            <div v-if="coroutineCount / 10 > 100" class="more-indicator">
+            <div
+              v-for="n in Math.min(coroutineCount / 10, 100)"
+              :key="n"
+              class="coroutine-cell"
+              :style="{ backgroundColor: '#67c23a', opacity: 0.5 + Math.random() * 0.5 }"
+            />
+            <div
+              v-if="coroutineCount / 10 > 100"
+              class="more-indicator"
+            >
               +{{ Math.floor(coroutineCount / 10 - 100) }} 更多...
             </div>
           </div>
         </div>
 
-        <div class="efficiency-badge" v-if="coroutineCount >= 1000">
-          <el-tag type="success" effect="dark" size="large">
+        <div
+          v-if="coroutineCount >= 1000"
+          class="efficiency-badge"
+        >
+          <el-tag
+            type="success"
+            effect="dark"
+            size="large"
+          >
             🚀 节省 {{ savingsPercent }}% 内存
           </el-tag>
         </div>
@@ -114,8 +179,13 @@
     </div>
 
     <div class="insight-panel">
-      <el-alert :title="insightTitle" :type="insightType" :description="insightDescription" show-icon
-        :closable="false" />
+      <el-alert
+        :title="insightTitle"
+        :type="insightType"
+        :description="insightDescription"
+        show-icon
+        :closable="false"
+      />
     </div>
   </div>
 </template>
@@ -206,46 +276,8 @@ const insightDescription = computed(() => {
 })
 
 // 方法
-function addThread() {
-  // 模拟添加线程
-}
-
-function killThread() {
-  // 模拟结束线程
-}
-
-function simulateCrash() {
-  // 模拟崩溃
-}
-
 function reset() {
   coroutineCount.value = 1000
-}
-
-function startSimulation() {
-  // 开始模拟
-}
-
-function toggleSimulation() {
-  // 切换模拟状态
-}
-
-function pauseSimulation() {
-  // 暂停模拟
-}
-
-function runSimulation() {
-  // 运行模拟
-}
-
-function stateText(state) {
-  const texts = {
-    ready: '就绪',
-    running: '运行中',
-    blocked: '阻塞',
-    completed: '已完成'
-  }
-  return texts[state] || state
 }
 </script>
 
@@ -253,7 +285,7 @@ function stateText(state) {
 .demo-container {
   padding: 20px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 h4 {
@@ -284,7 +316,7 @@ h4 {
 
 .comparison-column {
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
 }
 

@@ -16,19 +16,28 @@
     <div class="terminal-container">
       <div class="terminal-header">
         <div class="terminal-buttons">
-          <span class="btn red"></span>
-          <span class="btn yellow"></span>
-          <span class="btn green"></span>
+          <span class="btn red" />
+          <span class="btn yellow" />
+          <span class="btn green" />
         </div>
-        <div class="terminal-title">Terminal - zsh</div>
+        <div class="terminal-title">
+          Terminal - zsh
+        </div>
       </div>
-      <div class="terminal-body" ref="terminalBody" @click="focusInput">
+      <div
+        ref="terminalBody"
+        class="terminal-body"
+        @click="focusInput"
+      >
         <div
           v-for="(line, index) in history"
           :key="index"
           class="terminal-line"
         >
-          <span class="prompt" v-if="line.type === 'input'">
+          <span
+            v-if="line.type === 'input'"
+            class="prompt"
+          >
             <span class="path">{{ currentPath }}</span>
             <span class="arrow">$ </span>
           </span>
@@ -40,16 +49,16 @@
             <span class="arrow">$ </span>
           </span>
           <input
-            type="text"
+            ref="inputField"
             v-model="currentInput"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
             @keyup.enter="executeCommand"
             @keydown.up.prevent="navigateHistory(-1)"
             @keydown.down.prevent="navigateHistory(1)"
             @keydown.tab.prevent="handleTabCompletion"
-            ref="inputField"
-            autocomplete="off"
-            spellcheck="false"
-          />
+          >
         </div>
       </div>
     </div>
@@ -63,22 +72,31 @@
       </div>
       <div class="sheet-content">
         <div
-          class="cmd-group"
           v-for="(group, gIndex) in cheatSheet"
           :key="gIndex"
+          class="cmd-group"
         >
-          <div class="group-title">{{ group.category }}</div>
+          <div class="group-title">
+            {{ group.category }}
+          </div>
           <div
-            class="cmd-item"
             v-for="(cmd, cIndex) in group.commands"
             :key="cIndex"
+            class="cmd-item"
           >
-            <div class="cmd-name" @click="fillCommand(cmd.name)">
+            <div
+              class="cmd-name"
+              @click="fillCommand(cmd.name)"
+            >
               {{ cmd.name }}
             </div>
             <div class="cmd-desc">
-              <div class="en">{{ cmd.descEn }}</div>
-              <div class="zh">{{ cmd.descZh }}</div>
+              <div class="en">
+                {{ cmd.descEn }}
+              </div>
+              <div class="zh">
+                {{ cmd.descZh }}
+              </div>
             </div>
           </div>
         </div>
@@ -572,7 +590,7 @@ onMounted(() => {
 
 .terminal-container {
   background-color: #0a0a0a;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   border: 1px solid #27272a;
@@ -622,7 +640,7 @@ onMounted(() => {
 .terminal-body {
   padding: 15px;
   flex: 1;
-  overflow-y: auto;
+  
   color: #e4e4e7;
   font-size: 14px;
   line-height: 1.6;
@@ -677,7 +695,7 @@ input {
 .cheat-sheet {
   background: #18181b;
   border: 1px solid #27272a;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -702,7 +720,7 @@ input {
 
 .sheet-content {
   padding: 15px;
-  overflow-y: auto;
+  
   flex: 1;
 }
 

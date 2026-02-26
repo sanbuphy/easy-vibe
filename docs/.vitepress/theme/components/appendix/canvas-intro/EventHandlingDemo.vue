@@ -63,7 +63,10 @@
         </div>
       </div>
 
-      <button class="clear-btn" @click="clearAll">
+      <button
+        class="clear-btn"
+        @click="clearAll"
+      >
         <span class="icon">🗑️</span>
         Clear All / 清除全部
       </button>
@@ -74,42 +77,19 @@
         ref="canvasRef"
         width="600"
         height="400"
+        tabindex="0"
         @click="handleClick"
         @mousemove="handleMouseMove"
         @mousedown="handleMouseDown"
         @mouseup="handleMouseUp"
         @mouseleave="handleMouseLeave"
-        tabindex="0"
         @keydown="handleKeyDown"
-      ></canvas>
+      />
     </div>
 
-    <div class="code-display">
-      <h4>Event Handling Code / 事件处理代码</h4>
-      <pre><code>{{ currentCode }}</code></pre>
-    </div>
+    
 
-    <div class="explanation">
-      <h4>Event Handling Tips / 事件处理要点</h4>
-      <ul>
-        <li>
-          <strong>坐标转换：</strong>
-          使用 getBoundingClientRect() 获取 Canvas 在页面中的位置，计算相对坐标
-        </li>
-        <li>
-          <strong>碰撞检测：</strong>
-          对于圆形，计算鼠标位置到圆心的距离；对于矩形，判断点是否在范围内
-        </li>
-        <li>
-          <strong>事件委托：</strong>
-          Canvas 只有一个元素，需要手动判断事件发生在哪个对象上
-        </li>
-        <li>
-          <strong>性能优化：</strong>
-          使用 requestAnimationFrame 优化重绘，避免频繁操作
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </template>
 
@@ -491,14 +471,15 @@ onMounted(() => {
 
 <style scoped>
 .event-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .mode-selector {
@@ -514,53 +495,60 @@ onMounted(() => {
 
 .button-group {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .button-group button {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  background: white;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .button-group button:hover {
-  border-color: #3498db;
-  background: #f0f8ff;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .button-group button.active {
-  border-color: #3498db;
-  background: #3498db;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .instructions {
-  margin-bottom: 15px;
-  padding: 12px;
-  background: white;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
   border-radius: 6px;
+  border: 1px solid var(--vp-c-divider);
 }
 
 .instructions h4 {
-  margin: 0 0 8px 0;
-  color: #2c3e50;
-  font-size: 14px;
+  margin: 0 0 0.5rem 0;
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .instructions ul {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 1.25rem;
 }
 
 .instructions li {
-  margin-bottom: 6px;
-  color: #555;
-  font-size: 13px;
+  margin-bottom: 0.375rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.813rem;
+  line-height: 1.5;
 }
 
 .event-log {
@@ -575,7 +563,7 @@ onMounted(() => {
 
 .log-container {
   max-height: 150px;
-  overflow-y: auto;
+  
   background: white;
   border-radius: 6px;
   padding: 10px;
@@ -635,69 +623,27 @@ onMounted(() => {
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  cursor: crosshair;
-  outline: none;
-}
-
-canvas:focus {
-  border-color: #3498db;
-}
-
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.explanation {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
+canvas {
+  border: 3px solid var(--vp-c-divider);
   border-radius: 6px;
+  cursor: crosshair;
+  outline: none;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
-.explanation h4 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
+canvas:focus {
+  border-color: var(--vp-c-brand);
 }
 
-.explanation ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.explanation li {
-  margin-bottom: 8px;
-  color: #555;
-  font-size: 14px;
-}
 </style>

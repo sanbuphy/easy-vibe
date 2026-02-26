@@ -5,13 +5,19 @@
 <template>
   <div class="release-demo">
     <div class="header">
-      <div class="title">单体发布：牵一发而动全身</div>
-      <div class="subtitle">选择修改范围，看看“爆炸半径”</div>
+      <div class="title">
+        单体发布：牵一发而动全身
+      </div>
+      <div class="subtitle">
+        选择修改范围，看看“爆炸半径”
+      </div>
     </div>
 
     <div class="content">
       <div class="modules">
-        <div class="section-title">本次改动涉及</div>
+        <div class="section-title">
+          本次改动涉及
+        </div>
         <div class="module-grid">
           <button
             v-for="module in modules"
@@ -28,31 +34,59 @@
           <label>
             改动规模：<strong>{{ changeSizeLabel }}</strong>
           </label>
-          <input v-model="changeSize" type="range" min="1" max="5" step="1" />
+          <input
+            v-model="changeSize"
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+          >
         </div>
       </div>
 
       <div class="result">
         <div class="risk-meter">
-          <div class="risk-title">故障概率</div>
-          <div class="risk-value">{{ riskPercent }}%</div>
+          <div class="risk-title">
+            故障概率
+          </div>
+          <div class="risk-value">
+            {{ riskPercent }}%
+          </div>
           <div class="meter">
-            <div class="bar" :style="{ width: riskPercent + '%' }"></div>
+            <div
+              class="bar"
+              :style="{ width: riskPercent + '%' }"
+            />
           </div>
         </div>
 
-        <button class="deploy-btn" @click="deployRelease">模拟发布</button>
-        <div class="status" :class="deployStatusClass">
+        <button
+          class="deploy-btn"
+          @click="deployRelease"
+        >
+          模拟发布
+        </button>
+        <div
+          class="status"
+          :class="deployStatusClass"
+        >
           {{ deployStatus }}
         </div>
 
         <div class="history">
-          <div class="section-title">最近 3 次发布</div>
+          <div class="section-title">
+            最近 3 次发布
+          </div>
           <ul>
-            <li v-for="(item, index) in deployHistory" :key="index">
+            <li
+              v-for="(item, index) in deployHistory"
+              :key="index"
+            >
               {{ item }}
             </li>
-            <li v-if="deployHistory.length === 0">暂无记录</li>
+            <li v-if="deployHistory.length === 0">
+              暂无记录
+            </li>
           </ul>
         </div>
       </div>
@@ -159,7 +193,7 @@ const deployRelease = () => {
 
 .module-btn {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg);
   padding: 0.5rem;
   font-size: 0.9rem;
@@ -186,7 +220,7 @@ const deployRelease = () => {
 .risk-meter {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
 }
 
@@ -217,7 +251,7 @@ const deployRelease = () => {
   margin-top: 1rem;
   width: 100%;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.6rem;
   background: var(--vp-c-brand);
   color: #fff;
@@ -229,7 +263,7 @@ const deployRelease = () => {
   margin-top: 0.75rem;
   font-size: 0.9rem;
   padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg);
   border: 1px dashed var(--vp-c-divider);
 }

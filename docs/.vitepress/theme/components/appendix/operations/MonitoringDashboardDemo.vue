@@ -5,8 +5,12 @@
 <template>
   <div class="monitoring-dashboard">
     <div class="header">
-      <div class="title">实时监控面板 (Monitoring Dashboard)</div>
-      <div class="subtitle">运维的"眼睛" - 让系统状态一目了然</div>
+      <div class="title">
+        实时监控面板 (Monitoring Dashboard)
+      </div>
+      <div class="subtitle">
+        运维的"眼睛" - 让系统状态一目了然
+      </div>
     </div>
 
     <div class="tabs">
@@ -22,7 +26,10 @@
 
     <div class="dashboard-content">
       <!-- 基础设施监控 -->
-      <div v-if="activeTab === 'infra'" class="metrics-grid">
+      <div
+        v-if="activeTab === 'infra'"
+        class="metrics-grid"
+      >
         <div
           v-for="metric in infraMetrics"
           :key="metric.name"
@@ -30,9 +37,7 @@
         >
           <div class="metric-header">
             <span class="metric-name">{{ metric.name }}</span>
-            <span class="metric-value"
-              >{{ metric.value }}{{ metric.unit }}</span
-            >
+            <span class="metric-value">{{ metric.value }}{{ metric.unit }}</span>
           </div>
           <div class="metric-chart">
             <div
@@ -41,7 +46,7 @@
                 width: metric.value + '%',
                 background: getColor(metric.value, metric.threshold)
               }"
-            ></div>
+            />
           </div>
           <div
             class="metric-status"
@@ -53,7 +58,10 @@
       </div>
 
       <!-- 应用监控 -->
-      <div v-if="activeTab === 'app'" class="metrics-grid">
+      <div
+        v-if="activeTab === 'app'"
+        class="metrics-grid"
+      >
         <div class="metric-card large">
           <div class="metric-header">
             <span class="metric-name">QPS (每秒请求数)</span>
@@ -65,7 +73,7 @@
               :key="index"
               class="qps-bar"
               :style="{ height: height + '%' }"
-            ></div>
+            />
           </div>
         </div>
 
@@ -97,7 +105,10 @@
       </div>
 
       <!-- 业务监控 -->
-      <div v-if="activeTab === 'business'" class="metrics-grid">
+      <div
+        v-if="activeTab === 'business'"
+        class="metrics-grid"
+      >
         <div
           v-for="metric in businessMetrics"
           :key="metric.name"
@@ -107,7 +118,10 @@
             <span class="metric-name">{{ metric.name }}</span>
             <span class="metric-value">{{ metric.value }}</span>
           </div>
-          <div class="trend" :class="metric.trend">
+          <div
+            class="trend"
+            :class="metric.trend"
+          >
             {{
               metric.trend === 'up'
                 ? '📈 上升'
@@ -116,22 +130,24 @@
                   : '➡️ 持平'
             }}
           </div>
-          <div class="metric-desc">{{ metric.desc }}</div>
+          <div class="metric-desc">
+            {{ metric.desc }}
+          </div>
         </div>
       </div>
     </div>
 
     <div class="legend">
       <div class="item">
-        <span class="dot normal"></span>
+        <span class="dot normal" />
         <span>正常 (Normal)</span>
       </div>
       <div class="item">
-        <span class="dot warning"></span>
+        <span class="dot warning" />
         <span>警告 (Warning)</span>
       </div>
       <div class="item">
-        <span class="dot critical"></span>
+        <span class="dot critical" />
         <span>严重 (Critical)</span>
       </div>
     </div>
@@ -305,7 +321,7 @@ onUnmounted(() => {
 .metric-card {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
 }
 

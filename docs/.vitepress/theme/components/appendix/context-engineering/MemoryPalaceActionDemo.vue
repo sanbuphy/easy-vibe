@@ -9,7 +9,7 @@
 -->
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed } from 'vue'
 
 const scenarios = {
   coding: {
@@ -142,16 +142,6 @@ const prevStep = () => {
     currentStepIndex.value--
   }
 }
-
-// Visual helpers
-const getLayerStyle = (layerId) => {
-  const isActive = (layer) => {
-    // Logic to highlight active layer based on step action could go here
-    // For now, simple static colors
-    return true
-  }
-  return {}
-}
 </script>
 
 <template>
@@ -172,23 +162,47 @@ const getLayerStyle = (layerId) => {
     <div class="demo-grid">
       <!-- Left: Chat Simulator -->
       <div class="chat-panel">
-        <div class="panel-header">📱 用户视角 (Chat)</div>
+        <div class="panel-header">
+          📱 用户视角 (Chat)
+        </div>
         <div class="chat-window">
-          <div v-for="(msg, idx) in currentStep.layers.chat" :key="idx" class="chat-bubble" :class="msg.startsWith('User') ? 'user' : 'ai'">
+          <div
+            v-for="(msg, idx) in currentStep.layers.chat"
+            :key="idx"
+            class="chat-bubble"
+            :class="msg.startsWith('User') ? 'user' : 'ai'"
+          >
             {{ msg.split(': ')[1] || msg }}
           </div>
-          <div v-if="currentStep.user && !currentStep.layers.chat.some(m => m.includes(currentStep.user))" class="chat-bubble user pending">
+          <div
+            v-if="currentStep.user && !currentStep.layers.chat.some(m => m.includes(currentStep.user))"
+            class="chat-bubble user pending"
+          >
             {{ currentStep.user }}...
           </div>
-           <div v-if="currentStep.ai_thinking" class="chat-bubble thinking">
+          <div
+            v-if="currentStep.ai_thinking"
+            class="chat-bubble thinking"
+          >
             💭 {{ currentStep.ai_thinking }}
           </div>
         </div>
         <div class="controls">
-          <div class="step-info">步骤 {{ currentStepIndex + 1 }} / {{ currentScenario.steps.length }}</div>
+          <div class="step-info">
+            步骤 {{ currentStepIndex + 1 }} / {{ currentScenario.steps.length }}
+          </div>
           <div class="btn-group">
-            <button class="nav-btn" @click="prevStep" :disabled="currentStepIndex === 0">⬅️ 上一步</button>
-            <button class="nav-btn primary" @click="nextStep">
+            <button
+              class="nav-btn"
+              :disabled="currentStepIndex === 0"
+              @click="prevStep"
+            >
+              ⬅️ 上一步
+            </button>
+            <button
+              class="nav-btn primary"
+              @click="nextStep"
+            >
               {{ isLastStep ? '🔄 重新演示' : '下一步 ➡️' }}
             </button>
           </div>
@@ -197,9 +211,10 @@ const getLayerStyle = (layerId) => {
 
       <!-- Right: Memory Palace Internals -->
       <div class="palace-panel">
-        <div class="panel-header">🧠 AI 视角 (Context Construction)</div>
+        <div class="panel-header">
+          🧠 AI 视角 (Context Construction)
+        </div>
         <div class="context-visualizer">
-          
           <!-- Layer 1: Base -->
           <div class="layer-box base">
             <div class="layer-label">
@@ -207,7 +222,9 @@ const getLayerStyle = (layerId) => {
               <span class="title">Layer 1: 地基 (System)</span>
               <span class="badge">KV Cached</span>
             </div>
-            <div class="layer-content">{{ currentStep.layers.base }}</div>
+            <div class="layer-content">
+              {{ currentStep.layers.base }}
+            </div>
           </div>
 
           <!-- Layer 2: Task -->
@@ -217,7 +234,9 @@ const getLayerStyle = (layerId) => {
               <span class="title">Layer 2: 支柱 (Task)</span>
               <span class="badge">Pinned</span>
             </div>
-            <div class="layer-content">{{ currentStep.layers.task }}</div>
+            <div class="layer-content">
+              {{ currentStep.layers.task }}
+            </div>
           </div>
 
           <!-- Layer 3: Chat -->
@@ -228,24 +247,48 @@ const getLayerStyle = (layerId) => {
               <span class="badge">Sliding</span>
             </div>
             <div class="layer-content">
-              <div v-for="(m, i) in currentStep.layers.chat" :key="i" class="mini-line">{{ m }}</div>
-              <div v-if="currentStep.layers.chat.length === 0" class="empty-hint">(暂无对话历史)</div>
+              <div
+                v-for="(m, i) in currentStep.layers.chat"
+                :key="i"
+                class="mini-line"
+              >
+                {{ m }}
+              </div>
+              <div
+                v-if="currentStep.layers.chat.length === 0"
+                class="empty-hint"
+              >
+                (暂无对话历史)
+              </div>
             </div>
           </div>
 
           <!-- Layer 4: RAG -->
-          <div class="layer-box rag" :class="{ active: currentStep.layers.rag.length > 0 }">
+          <div
+            class="layer-box rag"
+            :class="{ active: currentStep.layers.rag.length > 0 }"
+          >
             <div class="layer-label">
               <span class="icon">📚</span> 
               <span class="title">Layer 4: 图书馆 (RAG)</span>
               <span class="badge ephemeral">Temp</span>
             </div>
             <div class="layer-content">
-              <div v-for="(r, i) in currentStep.layers.rag" :key="i" class="rag-item">{{ r }}</div>
-              <div v-if="currentStep.layers.rag.length === 0" class="empty-hint">(当前无需检索)</div>
+              <div
+                v-for="(r, i) in currentStep.layers.rag"
+                :key="i"
+                class="rag-item"
+              >
+                {{ r }}
+              </div>
+              <div
+                v-if="currentStep.layers.rag.length === 0"
+                class="empty-hint"
+              >
+                (当前无需检索)
+              </div>
             </div>
           </div>
-
         </div>
         
         <!-- Explanation Footer -->
@@ -261,7 +304,7 @@ const getLayerStyle = (layerId) => {
 <style scoped>
 .action-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
   margin: 1.5rem 0;
   overflow: hidden;
@@ -328,7 +371,7 @@ const getLayerStyle = (layerId) => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow-y: auto;
+  
   background: #f9f9f9;
 }
 .dark .chat-window {
@@ -426,7 +469,7 @@ const getLayerStyle = (layerId) => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  overflow-y: auto;
+  
 }
 
 .layer-box {
@@ -472,7 +515,7 @@ const getLayerStyle = (layerId) => {
   border-radius: 4px;
   white-space: pre-wrap;
   max-height: 80px;
-  overflow-y: auto;
+  
 }
 
 .mini-line {

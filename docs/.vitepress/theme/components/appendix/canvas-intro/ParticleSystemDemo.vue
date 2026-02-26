@@ -31,39 +31,44 @@
         <div class="param-row">
           <label>Particle Count / 粒子数量: {{ maxParticles }}</label>
           <input
-            type="range"
             v-model.number="maxParticles"
+            type="range"
             min="50"
             max="500"
             step="50"
-          />
+          >
         </div>
 
         <div class="param-row">
           <label>Particle Size / 粒子大小: {{ particleSize }}</label>
-          <input type="range" v-model.number="particleSize" min="1" max="10" />
+          <input
+            v-model.number="particleSize"
+            type="range"
+            min="1"
+            max="10"
+          >
         </div>
 
         <div class="param-row">
           <label>Speed / 速度: {{ speed }}</label>
           <input
-            type="range"
             v-model.number="speed"
+            type="range"
             min="0.5"
             max="3"
             step="0.1"
-          />
+          >
         </div>
 
         <div class="param-row">
           <label>Gravity / 重力: {{ gravity }}</label>
           <input
-            type="range"
             v-model.number="gravity"
+            type="range"
             min="0"
             max="0.5"
             step="0.05"
-          />
+          >
         </div>
       </div>
 
@@ -78,7 +83,10 @@
         </div>
       </div>
 
-      <button class="clear-btn" @click="clearParticles">
+      <button
+        class="clear-btn"
+        @click="clearParticles"
+      >
         <span class="icon">🗑️</span>
         Clear Particles / 清除粒子
       </button>
@@ -91,43 +99,14 @@
         height="400"
         @mousemove="handleMouseMove"
         @click="handleClick"
-      ></canvas>
+      />
     </div>
 
-    <div class="code-display">
-      <h4>Particle System Code / 粒子系统代码</h4>
-      <pre><code>{{ particleCode }}</code></pre>
-    </div>
+    
 
-    <div class="explanation">
-      <h4>Particle System Tips / 粒子系统要点</h4>
-      <ul>
-        <li>
-          <strong>粒子类：</strong>
-          每个粒子是一个对象，包含位置、速度、加速度、生命周期等属性
-        </li>
-        <li>
-          <strong>更新循环：</strong>
-          每帧更新所有粒子的位置和状态，移除死亡的粒子
-        </li>
-        <li>
-          <strong>性能优化：</strong>
-          限制粒子数量，使用对象池复用粒子对象
-        </li>
-        <li>
-          <strong>视觉效果：</strong>
-          使用透明度、混合模式、渐变等增强视觉效果
-        </li>
-      </ul>
-    </div>
+    
 
-    <div class="info-box">
-      <p>
-        <span class="icon">💡</span>
-        <strong>提示：</strong>
-        移动鼠标或点击画布来产生粒子！不同的效果有不同的交互方式。
-      </p>
-    </div>
+    
   </div>
 </template>
 
@@ -162,18 +141,18 @@ class Particle {
   constructor(x, y) {
     this.x = x
     this.y = y
-    this.vx = (Math.random() - 0.5) * ${speed}
-    this.vy = (Math.random() - 0.5) * ${speed}
+    this.vx = (Math.random() - 0.5) * ${speed.value}
+    this.vy = (Math.random() - 0.5) * ${speed.value}
     this.life = 1.0
     this.decay = 0.01 + Math.random() * 0.02
-    this.size = ${particleSize}
+    this.size = ${particleSize.value}
     this.color = this.randomColor()
   }
 
   update() {
     this.x += this.vx
     this.y += this.vy
-    this.vy += ${gravity}  // 重力
+    this.vy += ${gravity.value}  // 重力
     this.life -= this.decay
   }
 
@@ -378,14 +357,15 @@ onUnmounted(() => {
 
 <style scoped>
 .particle-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .effect-selector {
@@ -401,29 +381,33 @@ onUnmounted(() => {
 
 .button-group {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .button-group button {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  background: white;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .button-group button:hover {
-  border-color: #3498db;
-  background: #f0f8ff;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .button-group button.active {
-  border-color: #3498db;
-  background: #3498db;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .parameters {
@@ -499,86 +483,22 @@ onUnmounted(() => {
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  cursor: crosshair;
-}
-
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.explanation {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
+canvas {
+  border: 3px solid var(--vp-c-divider);
   border-radius: 6px;
-}
-
-.explanation h4 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.explanation ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.explanation li {
-  margin-bottom: 8px;
-  color: #555;
-  font-size: 14px;
-}
-
-.info-box {
-  margin-top: 15px;
-  padding: 12px;
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  border-radius: 4px;
-}
-
-.info-box p {
-  margin: 0;
-  font-size: 14px;
-  color: #856404;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.info-box .icon {
-  font-size: 16px;
+  cursor: crosshair;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
+
 </style>

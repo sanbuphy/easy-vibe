@@ -1,121 +1,115 @@
 <template>
   <div class="state-management-comparison">
     <div class="demo-header">
-      <h4>状态管理库全景对比</h4>
-      <p class="hint">全面对比主流状态管理方案的特性、适用场景和学习曲线</p>
+      <span class="icon">📊</span>
+      <span class="title">状态管理方案对比</span>
+      <span class="subtitle">不同工具的适用场景</span>
     </div>
 
-    <!-- 简化版对比表格 -->
-    <div class="comparison-table-wrapper">
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th class="feature-col">特性</th>
-            <th v-for="lib in libraries" :key="lib.id" class="lib-col">
-              <div class="lib-header">
-                <span class="lib-icon">{{ lib.icon }}</span>
-                <span class="lib-name">{{ lib.name }}</span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="feature-name">学习曲线</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
+    <div class="intro-text">
+      想象你在<span class="highlight">超市</span>采购：小买小卖用购物篮（Zustand），大采购用手推车（Pinia），企业级采购用专业物流（Redux）。根据需求选对工具！
+    </div>
+
+    <div class="demo-content">
+      <div class="comparison-table">
+        <div class="table-header">
+          <div class="header-col first">
+            工具
+          </div>
+          <div class="header-col">
+            难度
+          </div>
+          <div class="header-col">
+            大小
+          </div>
+          <div class="header-col">
+            框架
+          </div>
+        </div>
+        <div class="table-body">
+          <div
+            v-for="lib in libraries"
+            :key="lib.id"
+            class="table-row"
+            :class="{ selected: selectedLib === lib.id }"
+            @click="selectedLib = lib.id"
+          >
+            <div class="row-col first">
+              <span class="lib-icon">{{ lib.icon }}</span>
+              <span class="lib-name">{{ lib.name }}</span>
+            </div>
+            <div class="row-col">
               <div class="curve-bar">
-                <div class="curve-fill" :style="{ width: lib.learningCurve + '%', background: getCurveColor(lib.learningCurve) }"></div>
+                <div
+                  class="curve-fill"
+                  :style="{ width: lib.learningCurve + '%', background: getCurveColor(lib.learningCurve) }"
+                />
               </div>
               <span class="curve-label">{{ getCurveLabel(lib.learningCurve) }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="feature-name">包大小</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
-              <span class="size-badge" :class="getSizeClass(lib.bundleSize)">{{ lib.bundleSize }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="feature-name">TypeScript</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
-              <span class="boolean-badge" :class="{ yes: lib.typescript, no: !lib.typescript }">
-                {{ lib.typescript ? '✓' : '✗' }}
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td class="feature-name">开发工具</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
-              <span class="boolean-badge" :class="{ yes: lib.devtools, no: !lib.devtools }">
-                {{ lib.devtools ? '✓' : '✗' }}
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td class="feature-name">SSR 支持</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
-              <span class="boolean-badge" :class="{ yes: lib.ssr, no: !lib.ssr }">
-                {{ lib.ssr ? '✓' : '✗' }}
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td class="feature-name">适用框架</td>
-            <td v-for="lib in libraries" :key="lib.id" class="feature-value">
-              <span class="text-value">{{ lib.framework }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+            <div class="row-col">
+              <span
+                class="size-badge"
+                :class="getSizeClass(lib.bundleSize)"
+              >{{ lib.bundleSize }}</span>
+            </div>
+            <div class="row-col">
+              <span class="framework-text">{{ lib.framework }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Transition name="fade">
+        <div
+          v-if="selectedLibrary"
+          class="library-detail"
+        >
+          <div class="detail-header">
+            <span class="detail-icon">{{ selectedLibrary.icon }}</span>
+            <div class="detail-title">
+              <h5>{{ selectedLibrary.name }}</h5>
+              <p class="tagline">
+                {{ selectedLibrary.tagline }}
+              </p>
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-section compact">
+              <div class="section-title">
+                🎯 适用场景
+              </div>
+              <div class="section-content">
+                {{ selectedLibrary.scenarios.join('、') }}
+              </div>
+            </div>
+
+            <div class="detail-section compact">
+              <div class="section-title green">
+                ✅ 优点
+              </div>
+              <div class="section-content">
+                {{ selectedLibrary.pros.slice(0, 2).join('；') }}
+              </div>
+            </div>
+
+            <div class="detail-section compact">
+              <div class="section-title red">
+                ❌ 缺点
+              </div>
+              <div class="section-content">
+                {{ selectedLibrary.cons.slice(0, 2).join('；') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
     </div>
 
-    <!-- 选中库的详细信息 -->
-    <div v-if="selectedLibrary" class="library-detail">
-      <div class="detail-header">
-        <span class="detail-icon">{{ selectedLibrary.icon }}</span>
-        <div class="detail-title">
-          <h5>{{ selectedLibrary.name }}</h5>
-          <span class="detail-tagline">{{ selectedLibrary.tagline }}</span>
-        </div>
-        <a :href="selectedLibrary.docsUrl" target="_blank" class="docs-link">
-          官方文档 ↗
-        </a>
-      </div>
-
-      <div class="detail-grid">
-        <div class="detail-section">
-          <h6>🎯 适用场景</h6>
-          <ul>
-            <li v-for="(scenario, index) in selectedLibrary.scenarios" :key="index">{{ scenario }}</li>
-          </ul>
-        </div>
-
-        <div class="detail-section">
-          <h6>✅ 优势</h6>
-          <ul class="advantages">
-            <li v-for="(pro, index) in selectedLibrary.pros" :key="index">{{ pro }}</li>
-          </ul>
-        </div>
-
-        <div class="detail-section">
-          <h6>❌ 劣势</h6>
-          <ul class="disadvantages">
-            <li v-for="(con, index) in selectedLibrary.cons" :key="index">{{ con }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- 决策流程图 -->
-    <div class="decision-flow">
-      <h5>🤔 如何选择？</h5>
-      <div class="flow-chart">
-        <div class="flow-node start">开始</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node question">需要跨框架支持？</div>
-        <div class="flow-arrow">↓ 是</div>
-        <div class="flow-node result">考虑 Pinia / Vuex</div>
-      </div>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>选择建议：</strong>Vue 3 新项目推荐 Pinia，React 中小型项目推荐 Zustand，大型企业级应用推荐 Redux Toolkit。根据项目规模选择最合适的工具。
     </div>
   </div>
 </template>
@@ -123,22 +117,19 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+const selectedLib = ref('pinia')
+
 const libraries = [
   {
     id: 'redux',
     name: 'Redux',
     icon: '🔄',
     tagline: 'JavaScript 应用的可预测状态容器',
-    docsUrl: 'https://redux.js.org/',
     scenarios: ['大型企业级应用', '需要严格数据流控制', '复杂的状态逻辑'],
-    pros: ['严格的数据流，易于调试', '强大的中间件生态', '时间旅行调试', '可预测的状态更新'],
-    cons: ['学习曲线陡峭', '样板代码较多', '小型项目可能过于复杂'],
-    codeExample: '// Redux 示例代码',
+    pros: ['严格的数据流，易于调试', '强大的中间件生态'],
+    cons: ['学习曲线陡峭', '样板代码较多'],
     learningCurve: 80,
     bundleSize: '7KB',
-    typescript: true,
-    devtools: true,
-    ssr: true,
     framework: 'React/Vue/Angular'
   },
   {
@@ -146,16 +137,11 @@ const libraries = [
     name: 'Vuex',
     icon: '🌿',
     tagline: 'Vue.js 的官方状态管理库',
-    docsUrl: 'https://vuex.vuejs.org/',
     scenarios: ['Vue 2/3 中大型项目', '需要模块化管理状态', '团队成员熟悉 Vue 生态'],
-    pros: ['与 Vue 深度集成', '响应式系统', '模块化管理', '优秀的开发工具'],
-    cons: ['仅适用于 Vue', 'Vue 3 中被 Pinia 取代', '相对冗余的 API'],
-    codeExample: '// Vuex 示例代码',
+    pros: ['与 Vue 深度集成', '响应式系统'],
+    cons: ['仅适用于 Vue', 'Vue 3 中被 Pinia 取代'],
     learningCurve: 60,
     bundleSize: '4KB',
-    typescript: true,
-    devtools: true,
-    ssr: true,
     framework: 'Vue Only'
   },
   {
@@ -163,54 +149,41 @@ const libraries = [
     name: 'Pinia',
     icon: '🍍',
     tagline: '直观、类型安全、灵活的 Vue Store',
-    docsUrl: 'https://pinia.vuejs.org/',
     scenarios: ['Vue 3 新项目首选', '重视 TypeScript 支持', '希望简化状态管理'],
-    pros: ['轻量级设计', '原生 TypeScript 支持', '组合式 API 风格', '代码更简洁'],
-    cons: ['Vue 3 专属', '生态系统相对年轻', '大型项目需自定义规范'],
-    codeExample: '// Pinia 示例代码',
+    pros: ['轻量级设计', '原生 TypeScript 支持'],
+    cons: ['Vue 3 专属', '生态系统相对年轻'],
     learningCurve: 30,
     bundleSize: '2KB',
-    typescript: true,
-    devtools: true,
-    ssr: true,
     framework: 'Vue 3 Only'
+  },
+  {
+    id: 'zustand',
+    name: 'Zustand',
+    icon: '🐻',
+    tagline: '极简的 React 状态管理',
+    scenarios: ['React 中小型项目', '追求简洁 API', '不需要复杂中间件'],
+    pros: ['极简 API', '无需 Provider'],
+    cons: ['生态相对较小', '调试工具不如 Redux'],
+    learningCurve: 25,
+    bundleSize: '1KB',
+    framework: 'React Only'
   }
 ]
 
-const features = [
-  { key: 'learningCurve', label: '学习曲线', icon: '📈' },
-  { key: 'bundleSize', label: '包大小', icon: '📦' },
-  { key: 'typescript', label: 'TypeScript', icon: '🔷' },
-  { key: 'devtools', label: '开发工具', icon: '🛠️' },
-  { key: 'ssr', label: 'SSR 支持', icon: '🚀' },
-  { key: 'framework', label: '适用框架', icon: '🔧' }
-]
-
-const selectedLib = ref(null)
-
 const selectedLibrary = computed(() => {
-  if (!selectedLib.value) return null
   return libraries.find(lib => lib.id === selectedLib.value)
 })
 
-function selectLib(id) {
-  selectedLib.value = id
-}
-
-function getValue(lib, key) {
-  return lib[key]
-}
-
 function getCurveColor(value) {
-  if (value <= 30) return '#22c55e'
-  if (value <= 60) return '#f59e0b'
-  return '#ef4444'
+  if (value <= 30) return 'var(--vp-c-brand-1)'
+  if (value <= 60) return 'var(--vp-c-warning-1)'
+  return 'var(--vp-c-danger-1)'
 }
 
 function getCurveLabel(value) {
   if (value <= 30) return '简单'
   if (value <= 60) return '中等'
-  return '陡峭'
+  return '复杂'
 }
 
 function getSizeClass(size) {
@@ -223,98 +196,139 @@ function getSizeClass(size) {
 
 <style scoped>
 .state-management-comparison {
-  padding: 1rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
 .demo-header {
-  margin-bottom: 1.5rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.demo-header h4 {
-  margin: 0 0 0.5rem;
-  color: var(--vp-c-text-1);
+.demo-header .icon {
+  font-size: 1.25rem;
 }
 
-.hint {
-  margin: 0;
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.demo-header .subtitle {
   color: var(--vp-c-text-2);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
 }
 
-.comparison-table-wrapper {
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
+.intro-text {
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+}
+
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.demo-content {
+  margin-bottom: 1rem;
 }
 
 .comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.comparison-table th,
-.comparison-table td {
-  padding: 0.75rem;
-  border: 1px solid var(--vp-c-divider);
-  text-align: left;
-}
-
-.comparison-table th {
   background: var(--vp-c-bg);
-  font-weight: 600;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
 }
 
-.feature-col {
-  width: 120px;
+.table-header {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr 0.8fr 1.2fr;
   background: var(--vp-c-bg-soft);
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.lib-col {
-  min-width: 120px;
+.header-col {
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-right: 1px solid var(--vp-c-divider);
+}
+
+.header-col:last-child {
+  border-right: none;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr 0.8fr 1.2fr;
+  border-bottom: 1px solid var(--vp-c-divider);
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.lib-col:hover,
-.lib-col.selected {
-  background: rgba(102, 126, 234, 0.1);
+.table-row:last-child {
+  border-bottom: none;
 }
 
-.lib-header {
+.table-row:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+.table-row.selected {
+  background: var(--vp-c-brand-soft);
+}
+
+.row-col {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  border-right: 1px solid var(--vp-c-divider);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+}
+
+.row-col:last-child {
+  border-right: none;
+}
+
+.row-col.first {
+  font-weight: 500;
 }
 
 .lib-icon {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .lib-name {
-  font-weight: 500;
-}
-
-.feature-name {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-}
-
-.feature-value {
-  text-align: center;
+  color: var(--vp-c-text-1);
 }
 
 .curve-bar {
-  width: 100%;
-  height: 6px;
+  flex: 1;
+  height: 5px;
   background: var(--vp-c-divider);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 0.25rem;
+  min-width: 50px;
 }
 
 .curve-fill {
@@ -324,15 +338,15 @@ function getSizeClass(size) {
 }
 
 .curve-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--vp-c-text-2);
+  white-space: nowrap;
 }
 
 .size-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
@@ -351,190 +365,101 @@ function getSizeClass(size) {
   color: #ef4444;
 }
 
-.boolean-badge {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  text-align: center;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.boolean-badge.yes {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-}
-
-.boolean-badge.no {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
-.text-value {
-  font-size: 0.85rem;
+.framework-text {
   color: var(--vp-c-text-2);
+  font-size: 0.75rem;
 }
 
 .library-detail {
-  margin-top: 1.5rem;
-  padding: 1rem;
   background: var(--vp-c-bg);
-  border-radius: 8px;
   border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
 .detail-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .detail-icon {
-  font-size: 2rem;
-}
-
-.detail-title {
-  flex: 1;
+  font-size: 1.5rem;
 }
 
 .detail-title h5 {
-  margin: 0 0 0.25rem;
-  font-size: 1.2rem;
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
 }
 
-.detail-tagline {
+.tagline {
+  margin: 0;
   color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-}
-
-.docs-link {
-  padding: 0.5rem 1rem;
-  background: var(--vp-c-brand);
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 0.85rem;
-  transition: opacity 0.2s;
-}
-
-.docs-link:hover {
-  opacity: 0.9;
+  font-size: 0.75rem;
 }
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.detail-section {
-  padding: 1rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-}
-
-.detail-section h6 {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: var(--vp-c-text-1);
-}
-
-.detail-section ul {
-  margin: 0;
-  padding-left: 1.2rem;
-}
-
-.detail-section li {
-  margin: 0.5rem 0;
-  color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-}
-
-.code-block {
-  background: var(--vp-c-bg);
-  border-radius: 6px;
-  padding: 1rem;
-  overflow-x: auto;
-}
-
-.code-block pre {
-  margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-
-.code-block code {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  color: var(--vp-c-text-1);
-}
-
-.decision-flow {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: var(--vp-c-bg);
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.decision-flow h5 {
-  margin: 0 0 1rem;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-.flow-chart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.flow-node {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-align: center;
-}
-
-.flow-node.start {
-  background: var(--vp-c-brand);
-  color: white;
-}
-
-.flow-node.question {
+.detail-section.compact {
   background: var(--vp-c-bg-soft);
-  border: 2px solid var(--vp-c-divider);
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
-.flow-node.result {
-  background: rgba(34, 197, 94, 0.1);
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--vp-c-text-1);
+}
+
+.section-title.green {
   color: #22c55e;
-  border: 2px solid #22c55e;
 }
 
-.flow-arrow {
-  font-size: 1.2rem;
+.section-title.red {
+  color: #ef4444;
+}
+
+.section-content {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.4;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
 }
 
+.info-box .icon {
+  margin-right: 0.25rem;
+}
+
 @media (max-width: 768px) {
-  .comparison-table {
-    font-size: 0.8rem;
-  }
-
-  .comparison-table th,
-  .comparison-table td {
-    padding: 0.5rem;
-  }
-
-  .lib-icon {
-    font-size: 1rem;
+  .table-header,
+  .table-row {
+    grid-template-columns: 1.5fr 1fr 0.7fr 1fr;
   }
 
   .detail-grid {

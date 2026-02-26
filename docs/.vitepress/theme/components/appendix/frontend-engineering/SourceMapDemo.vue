@@ -15,7 +15,9 @@
     <div class="demo-content">
       <div class="code-comparison">
         <div class="code-panel source">
-          <div class="panel-title">📄 源代码 (Source)</div>
+          <div class="panel-title">
+            📄 源代码 (Source)
+          </div>
           <pre class="code-block"><code>function calculateSum(a, b) {
   // 计算两个数的和
   const result = a + b;
@@ -28,16 +30,22 @@ console.log('总和:', sum);</code></pre>
         </div>
 
         <div class="mapping-arrows">
-          <div class="arrow" v-for="i in 5" :key="i">
-            <span class="line"></span>
+          <div
+            v-for="i in 5"
+            :key="i"
+            class="arrow"
+          >
+            <span class="line" />
             <span class="point">→</span>
           </div>
         </div>
 
         <div class="code-panel minified">
-          <div class="panel-title">🔧 压缩后 (Minified)</div>
+          <div class="panel-title">
+            🔧 压缩后 (Minified)
+          </div>
           <pre class="code-block"><code>function n(n,r){var t=n+r;return console.log("结果:",t),t}var r=n(10,20);console.log("总和:",r);
-//# sourceMappingURL=app.js.map</code></pre>
+// sourceMappingURL=app.js.map (指向映射文件)</code></pre>
         </div>
       </div>
 
@@ -104,10 +112,10 @@ console.log('总和:', sum);</code></pre>
 <style scoped>
 .source-map-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 

@@ -15,12 +15,18 @@
   <div class="animation-demo">
     <div class="control-panel">
       <div class="playback-controls">
-        <button class="play-btn" @click="togglePlay">
+        <button
+          class="play-btn"
+          @click="togglePlay"
+        >
           <span class="icon">{{ isPlaying ? '⏸️' : '▶️' }}</span>
           {{ isPlaying ? 'Pause' : 'Play' }}
         </button>
 
-        <button class="reset-btn" @click="resetAnimation">
+        <button
+          class="reset-btn"
+          @click="resetAnimation"
+        >
           <span class="icon">🔄</span>
           Reset / 重置
         </button>
@@ -29,9 +35,15 @@
       <div class="animation-selector">
         <label>Animation / 动画类型</label>
         <select v-model="animationType">
-          <option value="bounce">Bouncing Ball / 弹跳球</option>
-          <option value="rotate">Rotating Square / 旋转方块</option>
-          <option value="wave">Wave / 波浪</option>
+          <option value="bounce">
+            Bouncing Ball / 弹跳球
+          </option>
+          <option value="rotate">
+            Rotating Square / 旋转方块
+          </option>
+          <option value="wave">
+            Wave / 波浪
+          </option>
         </select>
       </div>
 
@@ -39,17 +51,22 @@
         <div class="param-row">
           <label>Speed / 速度: {{ speed }}x</label>
           <input
-            type="range"
             v-model.number="speed"
+            type="range"
             min="0.1"
             max="3"
             step="0.1"
-          />
+          >
         </div>
 
         <div class="param-row">
           <label>Object Count / 对象数量: {{ objectCount }}</label>
-          <input type="range" v-model.number="objectCount" min="1" max="10" />
+          <input
+            v-model.number="objectCount"
+            type="range"
+            min="1"
+            max="10"
+          >
         </div>
       </div>
 
@@ -66,44 +83,18 @@
     </div>
 
     <div class="canvas-container">
-      <canvas ref="canvasRef" width="600" height="400"></canvas>
+      <canvas
+        ref="canvasRef"
+        width="600"
+        height="400"
+      />
     </div>
 
-    <div class="code-display">
-      <h4>Animation Loop Code / 动画循环代码</h4>
-      <pre><code>{{ animationCode }}</code></pre>
-    </div>
+    
 
-    <div class="explanation">
-      <h4>Animation Principles / 动画原理</h4>
-      <ul>
-        <li>
-          <strong>requestAnimationFrame：</strong>
-          浏览器提供的动画 API，在每次重绘前调用回调函数，通常为 60FPS
-        </li>
-        <li>
-          <strong>Clear & Redraw：</strong>
-          每帧先清除画布，再重新绘制所有内容
-        </li>
-        <li>
-          <strong>State Update：</strong>
-          更新对象位置、角度等状态
-        </li>
-        <li>
-          <strong>Performance：</strong>
-          使用时间差计算位置，确保不同刷新率下动画速度一致
-        </li>
-      </ul>
-    </div>
+    
 
-    <div class="info-box">
-      <p>
-        <span class="icon">💡</span>
-        <strong>提示：</strong>
-        动画的本质是快速连续绘制静态画面。Canvas 每秒可以绘制 60
-        帧（60FPS），形成流畅的动画效果。
-      </p>
-    </div>
+    
   </div>
 </template>
 
@@ -408,14 +399,15 @@ onUnmounted(() => {
 
 <style scoped>
 .animation-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .playback-controls {
@@ -426,13 +418,16 @@ onUnmounted(() => {
 
 .play-btn,
 .reset-btn {
-  padding: 10px 20px;
+  padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .play-btn {
@@ -442,7 +437,8 @@ onUnmounted(() => {
 
 .play-btn:hover {
   background: #27ae60;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
 }
 
 .reset-btn {
@@ -452,28 +448,35 @@ onUnmounted(() => {
 
 .reset-btn:hover {
   background: #7f8c8d;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
 }
 
 .animation-selector {
-  margin-bottom: 15px;
+  margin-bottom: 1.25rem;
 }
 
 .animation-selector label {
   display: block;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
 }
 
 .animation-selector select {
   width: 100%;
-  padding: 8px 12px;
-  border: 2px solid #ddd;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--vp-c-divider);
   border-radius: 6px;
-  font-size: 14px;
-  background: white;
+  font-size: 0.875rem;
+  background: var(--vp-c-bg);
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.animation-selector select:hover {
+  border-color: var(--vp-c-brand);
 }
 
 .parameters {
@@ -531,85 +534,21 @@ onUnmounted(() => {
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
-}
-
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.explanation {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
+canvas {
+  border: 3px solid var(--vp-c-divider);
   border-radius: 6px;
-}
-
-.explanation h4 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.explanation ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.explanation li {
-  margin-bottom: 8px;
-  color: #555;
-  font-size: 14px;
-}
-
-.info-box {
-  margin-top: 15px;
-  padding: 12px;
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  border-radius: 4px;
-}
-
-.info-box p {
-  margin: 0;
-  font-size: 14px;
-  color: #856404;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.info-box .icon {
-  font-size: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
+
 </style>

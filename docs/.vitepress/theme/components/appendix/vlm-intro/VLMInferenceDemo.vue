@@ -9,26 +9,46 @@
       <div class="messages">
         <!-- User Message -->
         <div class="message user">
-          <div class="avatar">👤</div>
+          <div class="avatar">
+            👤
+          </div>
           <div class="bubble">
             <div class="image-upload">
-              <div class="placeholder-img">🐱</div>
+              <div class="placeholder-img">
+                🐱
+              </div>
             </div>
-            <div class="text">这只猫在做什么？</div>
+            <div class="text">
+              这只猫在做什么？
+            </div>
           </div>
         </div>
 
         <!-- Assistant Message -->
-        <div class="message assistant" v-if="step > 0">
-          <div class="avatar">🤖</div>
+        <div
+          v-if="step > 0"
+          class="message assistant"
+        >
+          <div class="avatar">
+            🤖
+          </div>
           <div class="bubble">
-            <div v-if="step === 1" class="thinking">
+            <div
+              v-if="step === 1"
+              class="thinking"
+            >
               <span class="icon">👁️</span> 正在观察图片...
             </div>
-            <div v-else-if="step === 2" class="thinking">
+            <div
+              v-else-if="step === 2"
+              class="thinking"
+            >
               <span class="icon">🧠</span> 正在思考...
             </div>
-            <div v-else class="content type-writer">
+            <div
+              v-else
+              class="content type-writer"
+            >
               {{ typedText }}<span class="cursor">|</span>
             </div>
           </div>
@@ -144,7 +164,7 @@ const typeText = () => {
   width: 100px;
   height: 100px;
   background: #e2e8f0;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;

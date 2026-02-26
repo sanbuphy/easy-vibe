@@ -1,8 +1,12 @@
 <template>
   <div class="health-check-demo">
     <div class="header">
-      <div class="title">健康检查机制</div>
-      <div class="subtitle">主动探测、被动感知与智能阈值</div>
+      <div class="title">
+        健康检查机制
+      </div>
+      <div class="subtitle">
+        主动探测、被动感知与智能阈值
+      </div>
     </div>
 
     <!-- 模式选择器 -->
@@ -23,9 +27,15 @@
     <div class="visualization-area">
       <!-- 负载均衡器 -->
       <div class="lb-node">
-        <div class="lb-icon">⚖️</div>
-        <div class="lb-label">负载均衡器</div>
-        <div class="lb-status">{{ currentModeData.label }}</div>
+        <div class="lb-icon">
+          ⚖️
+        </div>
+        <div class="lb-label">
+          负载均衡器
+        </div>
+        <div class="lb-status">
+          {{ currentModeData.label }}
+        </div>
       </div>
 
       <!-- 连接线和健康检查标记 -->
@@ -40,11 +50,16 @@
             checking: server.status === 'checking'
           }"
         >
-          <div class="health-packet" v-if="server.showPacket">{{ server.packetType }}</div>
+          <div
+            v-if="server.showPacket"
+            class="health-packet"
+          >
+            {{ server.packetType }}
+          </div>
           <div class="health-indicator">
             <span v-if="server.status === 'healthy'">✅</span>
             <span v-else-if="server.status === 'unhealthy'">❌</span>
-            <span v-else">🔄</span>
+            <span v-else>🔄</span>
           </div>
         </div>
       </div>
@@ -62,28 +77,55 @@
           }"
         >
           <div class="server-header">
-            <div class="server-icon">🖥️</div>
-            <div class="server-info">
-              <div class="server-name">Server {{ index + 1 }}</div>
-              <div class="server-ip">{{ server.ip }}</div>
+            <div class="server-icon">
+              🖥️
             </div>
-            <div class="status-badge" :class="server.status">
+            <div class="server-info">
+              <div class="server-name">
+                Server {{ index + 1 }}
+              </div>
+              <div class="server-ip">
+                {{ server.ip }}
+              </div>
+            </div>
+            <div
+              class="status-badge"
+              :class="server.status"
+            >
               {{ server.status === 'healthy' ? '健康' : server.status === 'unhealthy' ? '故障' : '检查中' }}
             </div>
           </div>
 
           <div class="server-metrics">
             <div class="metric">
-              <div class="metric-label">响应时间</div>
-              <div class="metric-value" :class="{ warning: server.responseTime > 100 }">{{ server.responseTime }}ms</div>
+              <div class="metric-label">
+                响应时间
+              </div>
+              <div
+                class="metric-value"
+                :class="{ warning: server.responseTime > 100 }"
+              >
+                {{ server.responseTime }}ms
+              </div>
             </div>
             <div class="metric">
-              <div class="metric-label">失败率</div>
-              <div class="metric-value" :class="{ danger: server.errorRate > 5 }">{{ server.errorRate }}%</div>
+              <div class="metric-label">
+                失败率
+              </div>
+              <div
+                class="metric-value"
+                :class="{ danger: server.errorRate > 5 }"
+              >
+                {{ server.errorRate }}%
+              </div>
             </div>
             <div class="metric">
-              <div class="metric-label">连续成功</div>
-              <div class="metric-value">{{ server.consecutiveSuccess }}/3</div>
+              <div class="metric-label">
+                连续成功
+              </div>
+              <div class="metric-value">
+                {{ server.consecutiveSuccess }}/3
+              </div>
             </div>
           </div>
         </div>
@@ -98,34 +140,58 @@
           <span class="card-title">{{ currentModeData.name }}</span>
         </div>
         <div class="card-body">
-          <p class="description">{{ currentModeData.description }}</p>
+          <p class="description">
+            {{ currentModeData.description }}
+          </p>
 
           <div class="config-section">
-            <div class="section-title">关键配置参数</div>
+            <div class="section-title">
+              关键配置参数
+            </div>
             <div class="config-grid">
               <div
                 v-for="param in currentModeData.params"
                 :key="param.name"
                 class="config-item"
               >
-                <div class="config-name">{{ param.name }}</div>
-                <div class="config-value">{{ param.value }}</div>
-                <div class="config-desc">{{ param.desc }}</div>
+                <div class="config-name">
+                  {{ param.name }}
+                </div>
+                <div class="config-value">
+                  {{ param.value }}
+                </div>
+                <div class="config-desc">
+                  {{ param.desc }}
+                </div>
               </div>
             </div>
           </div>
 
           <div class="pros-cons">
             <div class="pros">
-              <div class="pros-cons-title">✅ 优点</div>
+              <div class="pros-cons-title">
+                ✅ 优点
+              </div>
               <ul>
-                <li v-for="pro in currentModeData.pros" :key="pro">{{ pro }}</li>
+                <li
+                  v-for="pro in currentModeData.pros"
+                  :key="pro"
+                >
+                  {{ pro }}
+                </li>
               </ul>
             </div>
             <div class="cons">
-              <div class="pros-cons-title">❌ 缺点</div>
+              <div class="pros-cons-title">
+                ❌ 缺点
+              </div>
               <ul>
-                <li v-for="con in currentModeData.cons" :key="con">{{ con }}</li>
+                <li
+                  v-for="con in currentModeData.cons"
+                  :key="con"
+                >
+                  {{ con }}
+                </li>
               </ul>
             </div>
           </div>
@@ -336,7 +402,7 @@ const activeServer = ref(0)
   padding: 0.75rem 1rem;
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
   font-size: 0.9rem;
@@ -414,7 +480,7 @@ const activeServer = ref(0)
   gap: 0.5rem;
   position: relative;
   padding: 0.5rem;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.3s;
   min-width: 80px;
 }
@@ -470,7 +536,7 @@ const activeServer = ref(0)
   background: var(--vp-c-bg-soft);
   border: 2px solid var(--vp-c-divider);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   transition: all 0.3s;
 }
 
@@ -577,7 +643,7 @@ const activeServer = ref(0)
 }
 
 .detail-card {
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .card-header {
@@ -630,7 +696,7 @@ const activeServer = ref(0)
 .config-item {
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 

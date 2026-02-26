@@ -4,19 +4,39 @@
     <div class="control-panel">
       <div class="panel-section">
         <span class="panel-label">VPC 网段：</span>
-        <el-radio-group v-model="vpcCidr" size="small">
-          <el-radio-button label="172.16.0.0/12">172.16.0.0/12</el-radio-button>
-          <el-radio-button label="10.0.0.0/8">10.0.0.0/8</el-radio-button>
-          <el-radio-button label="192.168.0.0/16">192.168.0.0/16</el-radio-button>
+        <el-radio-group
+          v-model="vpcCidr"
+          size="small"
+        >
+          <el-radio-button label="172.16.0.0/12">
+            172.16.0.0/12
+          </el-radio-button>
+          <el-radio-button label="10.0.0.0/8">
+            10.0.0.0/8
+          </el-radio-button>
+          <el-radio-button label="192.168.0.0/16">
+            192.168.0.0/16
+          </el-radio-button>
         </el-radio-group>
       </div>
 
       <div class="panel-section">
         <span class="panel-label">子网划分：</span>
-        <el-slider v-model="subnetBits" :min="2" :max="4" show-stops :marks="{2: '/24', 3: '/25', 4: '/26'}" style="width: 200px;" />
+        <el-slider
+          v-model="subnetBits"
+          :min="2"
+          :max="4"
+          show-stops
+          :marks="{2: '/24', 3: '/25', 4: '/26'}"
+          style="width: 200px;"
+        />
       </div>
 
-      <el-switch v-model="showCalculation" active-text="显示计算过程" style="margin-left: 20px;" />
+      <el-switch
+        v-model="showCalculation"
+        active-text="显示计算过程"
+        style="margin-left: 20px;"
+      />
     </div>
 
     <!-- 网段可视化 -->
@@ -42,14 +62,19 @@
               <span class="cell-type">{{ subnet.type === 'public' ? '🌐' : '🔒' }}</span>
               <span class="cell-name">{{ subnet.name }}</span>
             </div>
-            <div class="cell-cidr">{{ subnet.cidr }}</div>
+            <div class="cell-cidr">
+              {{ subnet.cidr }}
+            </div>
             <div class="cell-stats">
               <span class="ip-count">{{ subnet.ipCount }} IP</span>
               <span class="az-badge">{{ subnet.az }}</span>
             </div>
 
             <!-- 悬停提示 -->
-            <div class="cell-tooltip" v-if="hoverSubnet === index && showCalculation">
+            <div
+              v-if="hoverSubnet === index && showCalculation"
+              class="cell-tooltip"
+            >
               <div class="tooltip-row">
                 <span>网段范围：</span>
                 <code>{{ subnet.range }}</code>
@@ -69,7 +94,10 @@
     </div>
 
     <!-- 网段计算说明 -->
-    <div class="calculation-panel" v-if="showCalculation">
+    <div
+      v-if="showCalculation"
+      class="calculation-panel"
+    >
       <h4>📐 子网划分计算说明</h4>
 
       <div class="calc-section">
@@ -118,21 +146,27 @@
       <h4>💡 子网设计最佳实践</h4>
       <div class="tips-grid">
         <div class="tip-item">
-          <div class="tip-icon">🎯</div>
+          <div class="tip-icon">
+            🎯
+          </div>
           <div class="tip-content">
             <h5>预留足够 IP</h5>
             <p>每个子网至少预留 20% 的 IP 作为扩容缓冲</p>
           </div>
         </div>
         <div class="tip-item">
-          <div class="tip-icon">🔒</div>
+          <div class="tip-icon">
+            🔒
+          </div>
           <div class="tip-content">
             <h5>公网私网分离</h5>
             <p>核心数据放在私网子网，通过 NAT 访问外网</p>
           </div>
         </div>
         <div class="tip-item">
-          <div class="tip-icon">🌐</div>
+          <div class="tip-icon">
+            🌐
+          </div>
           <div class="tip-content">
             <h5>多 AZ 部署</h5>
             <p>同一 VPC 的不同子网放在不同可用区</p>
@@ -202,7 +236,7 @@ const selectSubnet = (index) => {
 .subnet-design-demo {
   padding: 20px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .control-panel {
@@ -213,7 +247,7 @@ const selectSubnet = (index) => {
   margin-bottom: 20px;
   padding: 16px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .panel-section {
@@ -278,7 +312,7 @@ const selectSubnet = (index) => {
 
 .subnet-cell {
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 12px;
   border: 2px solid transparent;
   cursor: pointer;
@@ -356,7 +390,7 @@ const selectSubnet = (index) => {
   background: #333;
   color: white;
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 12px;
   z-index: 10;
   margin-bottom: 8px;
@@ -373,7 +407,7 @@ const selectSubnet = (index) => {
 /* Calculation Panel */
 .calculation-panel {
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   margin-bottom: 20px;
 }
@@ -447,7 +481,7 @@ const selectSubnet = (index) => {
 /* Tips Panel */
 .tips-panel {
   background: #f0f9eb;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
   border-left: 4px solid #67c23a;
 }

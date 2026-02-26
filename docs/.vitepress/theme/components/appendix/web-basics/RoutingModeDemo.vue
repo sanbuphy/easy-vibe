@@ -5,8 +5,12 @@
 <template>
   <div class="routing-demo">
     <div class="header">
-      <div class="title">路由方式：整页刷新 vs 局部切换</div>
-      <div class="subtitle">点击导航，感受体验差异</div>
+      <div class="title">
+        路由方式：整页刷新 vs 局部切换
+      </div>
+      <div class="subtitle">
+        点击导航，感受体验差异
+      </div>
     </div>
 
     <div class="mode-switch">
@@ -27,14 +31,26 @@
     </div>
 
     <div class="nav">
-      <button v-for="page in pages" :key="page" @click="navigate(page)">
+      <button
+        v-for="page in pages"
+        :key="page"
+        @click="navigate(page)"
+      >
         {{ page }}
       </button>
     </div>
 
     <div class="screen">
-      <div v-if="loading" class="loading">页面加载中...</div>
-      <div v-else class="content">
+      <div
+        v-if="loading"
+        class="loading"
+      >
+        页面加载中...
+      </div>
+      <div
+        v-else
+        class="content"
+      >
         当前页面：<strong>{{ currentPage }}</strong>
       </div>
     </div>
@@ -125,7 +141,7 @@ const navigate = (page) => {
   background: var(--vp-c-brand);
   color: white;
   padding: 0.35rem 0.7rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -134,7 +150,7 @@ const navigate = (page) => {
   margin-top: 1rem;
   border: 1px dashed var(--vp-c-divider);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg);
   min-height: 60px;
   display: flex;

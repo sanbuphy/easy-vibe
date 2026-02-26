@@ -18,24 +18,41 @@
     @keydown="handleKeydown"
     @blur="handleBlur"
   >
-    <div class="focus-overlay" v-if="!isFocused" @click="focus">
+    <div
+      v-if="!isFocused"
+      class="focus-overlay"
+      @click="focus"
+    >
       <div class="focus-btn">
         <span class="icon">⌨️</span>
         <span>Click to Type</span>
       </div>
     </div>
 
-    <div class="main-display" :class="{ 'blur-content': !isFocused }">
-      <div class="key-name">{{ currentKey.name || 'Press any key' }}</div>
+    <div
+      class="main-display"
+      :class="{ 'blur-content': !isFocused }"
+    >
+      <div class="key-name">
+        {{ currentKey.name || 'Press any key' }}
+      </div>
 
       <div class="info-grid">
         <div class="info-box">
-          <div class="label">BYTES (HEX)</div>
-          <div class="value highlight">{{ currentKey.bytes || '-' }}</div>
+          <div class="label">
+            BYTES (HEX)
+          </div>
+          <div class="value highlight">
+            {{ currentKey.bytes || '-' }}
+          </div>
         </div>
         <div class="info-box">
-          <div class="label">SEQUENCE</div>
-          <div class="value code">{{ currentKey.sequence || '-' }}</div>
+          <div class="label">
+            SEQUENCE
+          </div>
+          <div class="value code">
+            {{ currentKey.sequence || '-' }}
+          </div>
         </div>
       </div>
 
@@ -46,7 +63,11 @@
     </div>
 
     <div class="history-strip">
-      <div v-for="(item, i) in history" :key="i" class="history-item">
+      <div
+        v-for="(item, i) in history"
+        :key="i"
+        class="history-item"
+      >
         <span class="h-name">{{ item.name }}</span>
         <span class="arrow">→</span>
         <span class="h-bytes">{{ item.bytes }}</span>
@@ -175,7 +196,7 @@ const handleKeydown = (e) => {
   background: #10b981;
   color: #fff;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -228,7 +249,7 @@ const handleKeydown = (e) => {
 .info-box {
   background: #18181b; /* Zinc 900 */
   padding: 16px 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   min-width: 140px;
   border: 1px solid #27272a;
 }

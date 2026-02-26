@@ -5,13 +5,19 @@
 <template>
   <div class="tracking-overview-demo">
     <div class="header">
-      <div class="title">埋点系统概览</div>
-      <div class="subtitle">从用户行为到数据洞察的完整链路</div>
+      <div class="title">
+        埋点系统概览
+      </div>
+      <div class="subtitle">
+        从用户行为到数据洞察的完整链路
+      </div>
     </div>
 
     <div class="system-flow">
       <div class="flow-section user-actions">
-        <div class="section-title">用户行为层</div>
+        <div class="section-title">
+          用户行为层
+        </div>
         <div class="action-grid">
           <div
             v-for="action in userActions"
@@ -20,20 +26,32 @@
             :class="{ active: selectedAction === action.id }"
             @click="selectAction(action)"
           >
-            <div class="action-icon">{{ action.icon }}</div>
-            <div class="action-name">{{ action.name }}</div>
+            <div class="action-icon">
+              {{ action.icon }}
+            </div>
+            <div class="action-name">
+              {{ action.name }}
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="arrow">↓</div>
+      <div class="arrow">
+        ↓
+      </div>
 
       <div class="flow-section tracking-layer">
-        <div class="section-title">埋点采集层</div>
+        <div class="section-title">
+          埋点采集层
+        </div>
         <div class="tracking-box">
-          <div class="tracking-icon">📊</div>
+          <div class="tracking-icon">
+            📊
+          </div>
           <div class="tracking-info">
-            <div class="event-name">{{ selectedEventData.event }}</div>
+            <div class="event-name">
+              {{ selectedEventData.event }}
+            </div>
             <div class="event-data">
               {{ formatEventData(selectedEventData) }}
             </div>
@@ -41,10 +59,14 @@
         </div>
       </div>
 
-      <div class="arrow">↓</div>
+      <div class="arrow">
+        ↓
+      </div>
 
       <div class="flow-section data-pipeline">
-        <div class="section-title">数据处理层</div>
+        <div class="section-title">
+          数据处理层
+        </div>
         <div class="pipeline-steps">
           <div
             v-for="(step, index) in pipelineSteps"
@@ -52,73 +74,121 @@
             class="pipeline-step"
             :class="{ active: currentStep === index }"
           >
-            <div class="step-number">{{ index + 1 }}</div>
+            <div class="step-number">
+              {{ index + 1 }}
+            </div>
             <div class="step-info">
-              <div class="step-name">{{ step.name }}</div>
-              <div class="step-desc">{{ step.desc }}</div>
+              <div class="step-name">
+                {{ step.name }}
+              </div>
+              <div class="step-desc">
+                {{ step.desc }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="arrow">↓</div>
+      <div class="arrow">
+        ↓
+      </div>
 
       <div class="flow-section insights">
-        <div class="section-title">数据洞察层</div>
+        <div class="section-title">
+          数据洞察层
+        </div>
         <div class="insight-cards">
           <div class="insight-card">
             <div class="insight-value">
               {{ formatNumber(metrics.totalUsers) }}
             </div>
-            <div class="insight-label">总用户数</div>
+            <div class="insight-label">
+              总用户数
+            </div>
           </div>
           <div class="insight-card">
             <div class="insight-value">
               {{ formatNumber(metrics.totalEvents) }}
             </div>
-            <div class="insight-label">总事件数</div>
+            <div class="insight-label">
+              总事件数
+            </div>
           </div>
           <div class="insight-card">
-            <div class="insight-value">{{ metrics.conversionRate }}%</div>
-            <div class="insight-label">转化率</div>
+            <div class="insight-value">
+              {{ metrics.conversionRate }}%
+            </div>
+            <div class="insight-label">
+              转化率
+            </div>
           </div>
           <div class="insight-card">
-            <div class="insight-value">{{ metrics.retentionRate }}%</div>
-            <div class="insight-label">留存率</div>
+            <div class="insight-value">
+              {{ metrics.retentionRate }}%
+            </div>
+            <div class="insight-label">
+              留存率
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="benefits">
-      <div class="benefit-title">埋点的核心价值</div>
+      <div class="benefit-title">
+        埋点的核心价值
+      </div>
       <div class="benefit-grid">
         <div class="benefit-item">
-          <div class="benefit-icon">🎯</div>
+          <div class="benefit-icon">
+            🎯
+          </div>
           <div class="benefit-text">
-            <div class="benefit-name">精准决策</div>
-            <div class="benefit-desc">基于数据而非直觉做决策</div>
+            <div class="benefit-name">
+              精准决策
+            </div>
+            <div class="benefit-desc">
+              基于数据而非直觉做决策
+            </div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🔍</div>
+          <div class="benefit-icon">
+            🔍
+          </div>
           <div class="benefit-text">
-            <div class="benefit-name">用户洞察</div>
-            <div class="benefit-desc">理解用户行为和需求</div>
+            <div class="benefit-name">
+              用户洞察
+            </div>
+            <div class="benefit-desc">
+              理解用户行为和需求
+            </div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">📈</div>
+          <div class="benefit-icon">
+            📈
+          </div>
           <div class="benefit-text">
-            <div class="benefit-name">增长优化</div>
-            <div class="benefit-desc">发现增长机会和瓶颈</div>
+            <div class="benefit-name">
+              增长优化
+            </div>
+            <div class="benefit-desc">
+              发现增长机会和瓶颈
+            </div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">⚡</div>
+          <div class="benefit-icon">
+            ⚡
+          </div>
           <div class="benefit-text">
-            <div class="benefit-name">快速迭代</div>
-            <div class="benefit-desc">验证假设，快速调整</div>
+            <div class="benefit-name">
+              快速迭代
+            </div>
+            <div class="benefit-desc">
+              验证假设，快速调整
+            </div>
           </div>
         </div>
       </div>
@@ -444,7 +514,7 @@ const formatNumber = (num) => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg-soft);
   border-radius: 10px;
 }

@@ -3,23 +3,42 @@
     <div class="magic-frame">
       <!-- The Canvas -->
       <div class="canvas-wrapper">
-        <canvas ref="canvasRef" width="300" height="300"></canvas>
+        <canvas
+          ref="canvasRef"
+          width="300"
+          height="300"
+        />
         
         <!-- Overlay Status -->
-        <div class="status-overlay" :class="{ visible: isProcessing }">
-          <div class="step-counter">Step {{ currentStep }} / {{ totalSteps }}</div>
-          <div class="step-desc">{{ stepDescription }}</div>
+        <div
+          class="status-overlay"
+          :class="{ visible: isProcessing }"
+        >
+          <div class="step-counter">
+            Step {{ currentStep }} / {{ totalSteps }}
+          </div>
+          <div class="step-desc">
+            {{ stepDescription }}
+          </div>
         </div>
       </div>
 
       <!-- Controls -->
       <div class="controls">
-        <button class="magic-btn" @click="startDenoise" :disabled="isProcessing">
+        <button
+          class="magic-btn"
+          :disabled="isProcessing"
+          @click="startDenoise"
+        >
           <span class="icon">✨</span>
           {{ isProcessing ? '去噪中...' : '开始去噪 (Denoise)' }}
         </button>
         
-        <button class="reset-btn" @click="reset" :disabled="isProcessing">
+        <button
+          class="reset-btn"
+          :disabled="isProcessing"
+          @click="reset"
+        >
           <span class="icon">🔄</span> 重置
         </button>
       </div>
@@ -198,7 +217,7 @@ canvas {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #fff;
   opacity: 0;
   transform: translateY(10px);
@@ -236,7 +255,7 @@ button {
   flex: 1;
   border: none;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;

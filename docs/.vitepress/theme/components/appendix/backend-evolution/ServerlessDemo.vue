@@ -7,11 +7,29 @@
 
     <div class="serverless-visualization">
       <div class="function-grid">
-        <div v-for="func in functions" :key="func.name" class="function-card" :class="{ active: func.state === 'running', cold: func.state === 'cold', warming: func.state === 'warming' }" @click="triggerFunction(func.name)">
-          <div class="function-icon">{{ func.icon }}</div>
-          <div class="function-name">{{ func.name }}</div>
-          <div class="function-state" :class="func.state">{{ stateText(func.state) }}</div>
-          <div class="function-metrics" v-if="func.invocations > 0">
+        <div
+          v-for="func in functions"
+          :key="func.name"
+          class="function-card"
+          :class="{ active: func.state === 'running', cold: func.state === 'cold', warming: func.state === 'warming' }"
+          @click="triggerFunction(func.name)"
+        >
+          <div class="function-icon">
+            {{ func.icon }}
+          </div>
+          <div class="function-name">
+            {{ func.name }}
+          </div>
+          <div
+            class="function-state"
+            :class="func.state"
+          >
+            {{ stateText(func.state) }}
+          </div>
+          <div
+            v-if="func.invocations > 0"
+            class="function-metrics"
+          >
             <span>调用: {{ func.invocations }}</span>
             <span>平均: {{ func.avgDuration }}ms</span>
           </div>
@@ -19,7 +37,9 @@
       </div>
 
       <div class="auto-scaling-panel">
-        <div class="scaling-title">自动扩缩容状态</div>
+        <div class="scaling-title">
+          自动扩缩容状态
+        </div>
         <div class="scaling-metrics">
           <div class="metric">
             <span class="metric-label">并发请求:</span>
@@ -35,15 +55,29 @@
           </div>
         </div>
         <div class="scaling-chart">
-          <div v-for="(point, idx) in scalingHistory" :key="idx" class="chart-bar" :style="{ height: point + '%' }" :class="{ high: point > 70 }"></div>
+          <div
+            v-for="(point, idx) in scalingHistory"
+            :key="idx"
+            class="chart-bar"
+            :style="{ height: point + '%' }"
+            :class="{ high: point > 70 }"
+          />
         </div>
       </div>
     </div>
 
     <div class="traffic-simulator">
-      <div class="simulator-title">流量模拟器</div>
+      <div class="simulator-title">
+        流量模拟器
+      </div>
       <div class="traffic-patterns">
-        <button v-for="pattern in trafficPatterns" :key="pattern.name" class="pattern-btn" :class="{ active: currentPattern === pattern.name }" @click="applyPattern(pattern)">
+        <button
+          v-for="pattern in trafficPatterns"
+          :key="pattern.name"
+          class="pattern-btn"
+          :class="{ active: currentPattern === pattern.name }"
+          @click="applyPattern(pattern)"
+        >
           <span class="pattern-icon">{{ pattern.icon }}</span>
           <span class="pattern-name">{{ pattern.name }}</span>
           <span class="pattern-desc">{{ pattern.desc }}</span>
@@ -161,10 +195,10 @@ onUnmounted(() => {
 <style scoped>
 .serverless-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .demo-header {
@@ -199,8 +233,8 @@ onUnmounted(() => {
 .function-card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
@@ -276,8 +310,8 @@ onUnmounted(() => {
 .auto-scaling-panel {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
 .scaling-title {
@@ -335,8 +369,8 @@ onUnmounted(() => {
 .traffic-simulator {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   margin-bottom: 1.5rem;
 }
 

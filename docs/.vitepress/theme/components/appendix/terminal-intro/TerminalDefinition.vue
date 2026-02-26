@@ -1,16 +1,25 @@
 <template>
   <div class="terminal-definition">
     <div class="mode-switch">
-      <button :class="{ active: mode === 'cli' }" @click="mode = 'cli'">
+      <button
+        :class="{ active: mode === 'cli' }"
+        @click="mode = 'cli'"
+      >
         🖥️ CLI (命令行界面)
       </button>
-      <button :class="{ active: mode === 'gui' }" @click="mode = 'gui'">
+      <button
+        :class="{ active: mode === 'gui' }"
+        @click="mode = 'gui'"
+      >
         🖱️ GUI (图形用户界面)
       </button>
     </div>
 
     <!-- CLI Visualization -->
-    <div v-if="mode === 'cli'" class="visualization-container">
+    <div
+      v-if="mode === 'cli'"
+      class="visualization-container"
+    >
       <div class="flow-container">
         <!-- Input Side -->
         <div class="stage input-stage">
@@ -26,26 +35,39 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
-              <path d="M6 8h.001"></path>
-              <path d="M10 8h.001"></path>
-              <path d="M14 8h.001"></path>
-              <path d="M18 8h.001"></path>
-              <path d="M6 12h.001"></path>
-              <path d="M10 12h.001"></path>
-              <path d="M14 12h.001"></path>
-              <path d="M18 12h.001"></path>
-              <path d="M7 16h10"></path>
+              <rect
+                x="2"
+                y="4"
+                width="20"
+                height="16"
+                rx="2"
+                ry="2"
+              />
+              <path d="M6 8h.001" />
+              <path d="M10 8h.001" />
+              <path d="M14 8h.001" />
+              <path d="M18 8h.001" />
+              <path d="M6 12h.001" />
+              <path d="M10 12h.001" />
+              <path d="M14 12h.001" />
+              <path d="M18 12h.001" />
+              <path d="M7 16h10" />
             </svg>
           </div>
-          <div class="label">Input (Keyboard)</div>
-          <div class="sub-label">发送指令 (字符信号)</div>
+          <div class="label">
+            Input (Keyboard)
+          </div>
+          <div class="sub-label">
+            发送指令 (字符信号)
+          </div>
         </div>
 
         <!-- Stream Animation -->
         <div class="stream-path">
-          <div class="stream-line"></div>
-          <div class="stream-label">Character Stream / 字符流</div>
+          <div class="stream-line" />
+          <div class="stream-label">
+            Character Stream / 字符流
+          </div>
           <div
             v-for="char in activeChars"
             :key="char.id"
@@ -64,8 +86,12 @@
               }}<span class="cursor">_</span>
             </div>
           </div>
-          <div class="label">Output (Text Grid)</div>
-          <div class="sub-label">文本网格反馈</div>
+          <div class="label">
+            Output (Text Grid)
+          </div>
+          <div class="sub-label">
+            文本网格反馈
+          </div>
         </div>
       </div>
 
@@ -77,7 +103,10 @@
       </div>
 
       <div class="control-bar">
-        <button @click="startSimulation" :disabled="isAnimating">
+        <button
+          :disabled="isAnimating"
+          @click="startSimulation"
+        >
           <span v-if="!isAnimating">▶ Play Simulation / 演示输入流</span>
           <span v-else>Simulating... / 演示中...</span>
         </button>
@@ -85,11 +114,17 @@
     </div>
 
     <!-- GUI Visualization -->
-    <div v-else class="visualization-container">
+    <div
+      v-else
+      class="visualization-container"
+    >
       <div class="flow-container">
         <!-- Input Side -->
         <div class="stage input-stage">
-          <div class="icon-box gui-input" :class="{ clicking: isGuiClicking }">
+          <div
+            class="icon-box gui-input"
+            :class="{ clicking: isGuiClicking }"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"
@@ -101,18 +136,24 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
-              <path d="M13 13l6 6"></path>
+              <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+              <path d="M13 13l6 6" />
             </svg>
           </div>
-          <div class="label">Input (Mouse)</div>
-          <div class="sub-label">发送事件 (坐标/点击)</div>
+          <div class="label">
+            Input (Mouse)
+          </div>
+          <div class="sub-label">
+            发送事件 (坐标/点击)
+          </div>
         </div>
 
         <!-- Event Animation -->
         <div class="stream-path">
-          <div class="stream-line dashed"></div>
-          <div class="stream-label">Event Loop / 事件循环</div>
+          <div class="stream-line dashed" />
+          <div class="stream-label">
+            Event Loop / 事件循环
+          </div>
           <div
             v-for="ev in guiEvents"
             :key="ev.id"
@@ -127,15 +168,23 @@
         <div class="stage output-stage">
           <div class="gui-screen">
             <div class="window-frame">
-              <div class="win-header"></div>
+              <div class="win-header" />
               <div class="win-body">
                 <div class="icon-grid">
-                  <div class="desktop-icon" :class="{ selected: iconSelected }">
+                  <div
+                    class="desktop-icon"
+                    :class="{ selected: iconSelected }"
+                  >
                     📁
                   </div>
-                  <div class="desktop-icon">📄</div>
+                  <div class="desktop-icon">
+                    📄
+                  </div>
                 </div>
-                <div class="gui-cursor" :style="cursorStyle">
+                <div
+                  class="gui-cursor"
+                  :style="cursorStyle"
+                >
                   <svg
                     width="12"
                     height="12"
@@ -144,14 +193,18 @@
                     stroke="black"
                     stroke-width="2"
                   >
-                    <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+                    <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
                   </svg>
                 </div>
               </div>
             </div>
           </div>
-          <div class="label">Output (Graphics)</div>
-          <div class="sub-label">像素图形渲染</div>
+          <div class="label">
+            Output (Graphics)
+          </div>
+          <div class="sub-label">
+            像素图形渲染
+          </div>
         </div>
       </div>
 
@@ -164,7 +217,10 @@
       </div>
 
       <div class="control-bar">
-        <button @click="startGuiSimulation" :disabled="isGuiAnimating">
+        <button
+          :disabled="isGuiAnimating"
+          @click="startGuiSimulation"
+        >
           <span v-if="!isGuiAnimating">▶ Play Interaction / 演示交互</span>
           <span v-else>Simulating... / 演示中...</span>
         </button>
@@ -421,7 +477,7 @@ const performClick = () => {
   height: 80px;
   background: #000;
   border: 1px solid #3f3f46;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px;
   color: #22c55e;
   font-size: 12px;

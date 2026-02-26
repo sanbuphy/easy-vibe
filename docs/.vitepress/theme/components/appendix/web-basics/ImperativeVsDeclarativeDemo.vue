@@ -1,69 +1,106 @@
 <template>
   <div class="imperative-declarative-demo">
-    <div class="demo-grid">
-      <!-- Imperative (jQuery Style) -->
-      <div class="panel imperative">
-        <div class="panel-header">
-          <span class="badge yellow">Imperative (命令式)</span>
-          <span class="sub-text">jQuery Style</span>
-        </div>
-        <div class="code-preview">
-          <code>
-            // 手动操作 DOM<br />
-            $('#count').text(val);<br />
-            if (val > 5) $('#msg').show();
-          </code>
-        </div>
-        <div class="interactive-area">
-          <div class="output-box">
-            Count: <span id="imp-count-display">{{ impCount }}</span>
-            <div v-show="impShowMsg" class="warning-msg">⚠️ Count is high!</div>
-          </div>
-          <div class="actions">
-            <button @click="impIncrement" class="btn">Step 1: Value++</button>
-            <button @click="impUpdateText" class="btn" :disabled="!impChanged">
-              Step 2: Update Text
-            </button>
-            <button
-              @click="impCheckState"
-              class="btn"
-              :disabled="!impTextUpdated"
-            >
-              Step 3: Check Logic
-            </button>
-          </div>
-          <div class="status-log">{{ impStatus }}</div>
-        </div>
-      </div>
+    <div class="demo-header">
+      <span class="icon">🔄</span>
+      <span class="title">命令式 vs 声明式</span>
+      <span class="subtitle">两种编程思维的对比（通俗说：手动操作 vs 自动响应）</span>
+    </div>
 
-      <!-- Declarative (Vue Style) -->
-      <div class="panel declarative">
-        <div class="panel-header">
-          <span class="badge green">Declarative (声明式)</span>
-          <span class="sub-text">Vue/React Style</span>
-        </div>
-        <div class="code-preview">
-          <code>
-            // 只需要绑定数据<br />
-            {{ '{' + '{ count }' + '}' }}<br />
-            &lt;div v-if="count > 5"&gt;...&lt;/div&gt;
-          </code>
-        </div>
-        <div class="interactive-area">
-          <div class="output-box">
-            Count: <span>{{ decCount }}</span>
-            <div v-if="decCount > 5" class="warning-msg">⚠️ Count is high!</div>
+    <div class="demo-content">
+      <div class="demo-grid">
+        <!-- Imperative (jQuery Style) -->
+        <div class="panel imperative">
+          <div class="panel-header">
+            <span class="badge yellow">命令式 (Imperative)</span>
+            <span class="sub-text">jQuery Style - 手动操作</span>
           </div>
-          <div class="actions">
-            <button @click="decIncrement" class="btn primary">
-              Value++ (Auto Render)
-            </button>
+          <div class="code-preview">
+            <code>
+              // 手动操作 DOM<br>
+              $('#count').text(val);<br>
+              if (val > 5) $('#msg').show();
+            </code>
           </div>
-          <div class="status-log">
-            Framework handles DOM updates automatically.
+          <div class="interactive-area">
+            <div class="output-box">
+              Count: <span id="imp-count-display">{{ impCount }}</span>
+              <div
+                v-show="impShowMsg"
+                class="warning-msg"
+              >
+                ⚠️ Count is high!
+              </div>
+            </div>
+            <div class="actions">
+              <button
+                class="btn"
+                @click="impIncrement"
+              >
+                Step 1: Value++
+              </button>
+              <button
+                class="btn"
+                :disabled="!impChanged"
+                @click="impUpdateText"
+              >
+                Step 2: Update Text
+              </button>
+              <button
+                class="btn"
+                :disabled="!impTextUpdated"
+                @click="impCheckState"
+              >
+                Step 3: Check Logic
+              </button>
+            </div>
+            <div class="status-log">
+              {{ impStatus }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Declarative (Vue Style) -->
+        <div class="panel declarative">
+          <div class="panel-header">
+            <span class="badge green">声明式 (Declarative)</span>
+            <span class="sub-text">Vue/React Style - 自动响应</span>
+          </div>
+          <div class="code-preview">
+            <code v-pre>
+              // 只需要绑定数据
+              {{ count }}
+              &lt;div v-if="count > 5"&gt;...&lt;/div&gt;
+            </code>
+          </div>
+          <div class="interactive-area">
+            <div class="output-box">
+              Count: <span>{{ decCount }}</span>
+              <div
+                v-if="decCount > 5"
+                class="warning-msg"
+              >
+                ⚠️ Count is high!
+              </div>
+            </div>
+            <div class="actions">
+              <button
+                class="btn primary"
+                @click="decIncrement"
+              >
+                Value++ (Auto Render)
+              </button>
+            </div>
+            <div class="status-log">
+              Framework handles DOM updates automatically.
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>命令式像"手把手教电脑怎么做"，声明式像"告诉电脑要什么，它自己搞定"。
     </div>
   </div>
 </template>
@@ -115,16 +152,44 @@ const decIncrement = () => {
 <style scoped>
 .imperative-declarative-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.demo-header .icon {
+  font-size: 1.25rem;
+}
+
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.demo-header .subtitle {
+  color: var(--vp-c-text-2);
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.demo-content {
+  margin-bottom: 0.5rem;
 }
 
 .demo-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 @media (max-width: 640px) {
@@ -136,14 +201,14 @@ const decIncrement = () => {
 .panel {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .panel-header {
-  padding: 0.8rem;
+  padding: 0.75rem;
   border-bottom: 1px solid var(--vp-c-divider);
   display: flex;
   justify-content: space-between;
@@ -152,48 +217,51 @@ const decIncrement = () => {
 }
 
 .badge {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: bold;
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 4px;
   color: white;
 }
+
 .badge.yellow {
-  background: #f59e0b;
+  background: var(--vp-c-warning);
 }
+
 .badge.green {
-  background: #10b981;
+  background: var(--vp-c-success);
 }
 
 .sub-text {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-2);
 }
 
 .code-preview {
-  background: #1e1e2e;
-  padding: 0.8rem;
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
   font-family: monospace;
-  font-size: 0.8rem;
-  color: #a6accd;
-  height: 80px;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-1);
+  height: 70px;
+  overflow: hidden;
 }
 
 .interactive-area {
-  padding: 1rem;
+  padding: 0.75rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .output-box {
   background: var(--vp-c-bg-soft);
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 6px;
   text-align: center;
   font-weight: bold;
-  min-height: 80px;
+  min-height: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,10 +269,9 @@ const decIncrement = () => {
 }
 
 .warning-msg {
-  color: #ef4444;
+  color: var(--vp-c-danger);
   margin-top: 0.5rem;
-  font-size: 0.9rem;
-  animation: popIn 0.3s;
+  font-size: 0.85rem;
 }
 
 .actions {
@@ -217,42 +284,53 @@ const decIncrement = () => {
   padding: 0.5rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
-  background: white;
+  background: var(--vp-c-bg);
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   transition: all 0.2s;
 }
+
 .btn:hover:not(:disabled) {
-  background: #f3f4f6;
+  background: var(--vp-c-bg-soft);
 }
+
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .btn.primary {
-  background: #3b82f6;
+  background: var(--vp-c-brand);
   color: white;
   border: none;
 }
+
 .btn.primary:hover {
-  background: #2563eb;
+  opacity: 0.9;
 }
 
 .status-log {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  font-size: 0.7rem;
+  color: var(--vp-c-text-2);
   font-style: italic;
   min-height: 1.2em;
 }
 
-@keyframes popIn {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  display: flex;
+  gap: 0.25rem;
+}
+
+.info-box .icon {
+  flex-shrink: 0;
+}
+
+.info-box strong {
+  color: var(--vp-c-text-1);
 }
 </style>

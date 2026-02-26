@@ -3,38 +3,78 @@
     <h4>Go 协程 (Goroutine) 与 GMP 调度演示</h4>
 
     <div class="controls">
-      <el-radio-group v-model="viewMode" size="small">
-        <el-radio-button label="overview">整体视图</el-radio-button>
-        <el-radio-button label="gmp">GMP 调度</el-radio-button>
-        <el-radio-button label="channel">Channel 通信</el-radio-button>
+      <el-radio-group
+        v-model="viewMode"
+        size="small"
+      >
+        <el-radio-button label="overview">
+          整体视图
+        </el-radio-button>
+        <el-radio-button label="gmp">
+          GMP 调度
+        </el-radio-button>
+        <el-radio-button label="channel">
+          Channel 通信
+        </el-radio-button>
       </el-radio-group>
 
-      <el-button type="primary" size="small" @click="startDemo" :disabled="isRunning">
+      <el-button
+        type="primary"
+        size="small"
+        :disabled="isRunning"
+        @click="startDemo"
+      >
         {{ isRunning ? '运行中...' : '开始演示' }}
       </el-button>
 
-      <el-button size="small" @click="addGoroutine" :disabled="goroutines.length >= 20">
+      <el-button
+        size="small"
+        :disabled="goroutines.length >= 20"
+        @click="addGoroutine"
+      >
         +Goroutine
       </el-button>
 
-      <el-button size="small" @click="reset">重置</el-button>
+      <el-button
+        size="small"
+        @click="reset"
+      >
+        重置
+      </el-button>
     </div>
 
     <!-- GMP 调度视图 -->
-    <div v-if="viewMode === 'gmp' || viewMode === 'overview'" class="gmp-view">
+    <div
+      v-if="viewMode === 'gmp' || viewMode === 'overview'"
+      class="gmp-view"
+    >
       <div class="gmp-container">
         <!-- Global Queue -->
         <div class="queue-section global-queue">
           <div class="queue-header">
             <span class="queue-name">Global Queue (G)</span>
-            <el-tag size="small" type="info">{{ globalQueue.length }}</el-tag>
+            <el-tag
+              size="small"
+              type="info"
+            >
+              {{ globalQueue.length }}
+            </el-tag>
           </div>
           <div class="queue-content">
-            <div v-for="g in globalQueue" :key="g.id" class="g-item"
-              :style="{ backgroundColor: g.color }">
+            <div
+              v-for="g in globalQueue"
+              :key="g.id"
+              class="g-item"
+              :style="{ backgroundColor: g.color }"
+            >
               G{{ g.id }}
             </div>
-            <div v-if="globalQueue.length === 0" class="empty-queue">空</div>
+            <div
+              v-if="globalQueue.length === 0"
+              class="empty-queue"
+            >
+              空
+            </div>
           </div>
         </div>
 
@@ -45,26 +85,47 @@
           </div>
 
           <div class="processors-grid">
-            <div v-for="(p, idx) in processors" :key="idx" class="processor"
+            <div
+              v-for="(p, idx) in processors"
+              :key="idx"
+              class="processor"
               :class="{ 'active': p.active }"
-              :style="{ borderColor: p.active ? p.color : '#e4e7ed' }">
+              :style="{ borderColor: p.active ? p.color : '#e4e7ed' }"
+            >
               <div class="processor-header">
                 <span class="processor-name">P{{ idx }}</span>
-                <span class="processor-status" :class="{ 'running': p.active }">{{ p.active ? '运行中' : '空闲' }}</span>
+                <span
+                  class="processor-status"
+                  :class="{ 'running': p.active }"
+                >{{ p.active ? '运行中' : '空闲' }}</span>
               </div>
 
               <div class="local-queue">
-                <div class="queue-label">本地队列</div>
+                <div class="queue-label">
+                  本地队列
+                </div>
                 <div class="local-g-list">
-                  <div v-for="g in p.localQueue" :key="g.id" class="local-g-item"
-                    :style="{ backgroundColor: g.color }">
+                  <div
+                    v-for="g in p.localQueue"
+                    :key="g.id"
+                    class="local-g-item"
+                    :style="{ backgroundColor: g.color }"
+                  >
                     G{{ g.id }}
                   </div>
-                  <div v-if="p.localQueue.length === 0" class="empty-local">-</div>
+                  <div
+                    v-if="p.localQueue.length === 0"
+                    class="empty-local"
+                  >
+                    -
+                  </div>
                 </div>
               </div>
 
-              <div class="m-binding" v-if="p.m">
+              <div
+                v-if="p.m"
+                class="m-binding"
+              >
                 <span class="m-label">绑定 M{{ p.m.id }}</span>
               </div>
             </div>
@@ -78,9 +139,13 @@
           </div>
 
           <div class="machines-list">
-            <div v-for="m in machines" :key="m.id" class="machine-item"
+            <div
+              v-for="m in machines"
+              :key="m.id"
+              class="machine-item"
               :class="{ 'active': m.active }"
-              :style="{ borderColor: m.active ? '#67c23a' : '#e4e7ed' }">
+              :style="{ borderColor: m.active ? '#67c23a' : '#e4e7ed' }"
+            >
               <span class="machine-id">M{{ m.id }}</span>
               <span class="machine-status">{{ m.active ? '运行中' : '休眠' }}</span>
             </div>
@@ -90,15 +155,19 @@
     </div>
 
     <div class="explanation">
-      <el-alert title="GMP 调度模型" type="success"
+      <el-alert
+        title="GMP 调度模型"
+        type="success"
         :description="gmpDescription"
-        show-icon :closable="false" />
+        show-icon
+        :closable="false"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const gmpDescription = 'G (Goroutine): 待执行的任务。M (Machine): 操作系统线程，执行 G 的载体。P (Processor): 逻辑处理器，提供执行上下文。G 先放入 P 的本地队列，P 与 M 绑定后，M 从 P 获取 G 执行。当本地队列空时，会从全局队列或其他 P 偷任务。'
 
@@ -218,7 +287,7 @@ initGMP()
 .demo-container {
   padding: 20px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 h4 {
@@ -236,7 +305,7 @@ h4 {
 
 .gmp-view {
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   margin-bottom: 16px;
 }
@@ -249,7 +318,7 @@ h4 {
 
 .queue-section {
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 12px;
 }
 
@@ -291,7 +360,7 @@ h4 {
 .processors-section,
 .machines-section {
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 12px;
 }
 
@@ -314,7 +383,7 @@ h4 {
 .processor {
   background: white;
   border: 2px solid #e4e7ed;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px;
   transition: all 0.3s;
 }

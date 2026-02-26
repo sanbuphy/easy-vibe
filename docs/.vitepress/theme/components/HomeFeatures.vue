@@ -110,13 +110,13 @@ const i18n = {
           title: '真实项目',
           headline: '拒绝玩具代码。',
           desc: '深入理解用户鉴权、数据存储、文件上传等核心业务逻辑。',
-          link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/chapter5-from-database-to-supabase'
+          link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
         },
         {
           title: '部署上线',
           headline: '让世界看到你的作品。',
           desc: '学习服务器配置、域名解析和自动化部署，打通产品落地的最后一公里。',
-          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/extra6-zeabur-what-is-it-and-how-to-deploy-web-applications'
+          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
         }
       ]
     },
@@ -133,7 +133,7 @@ const i18n = {
         {
           title: 'AI 智能体',
           desc: '构建具备记忆与规划能力的 Agent，实现自主任务执行。',
-          link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/extra5-what-is-rag-and-how-does-it-work-and-future'
+          link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
         },
         {
           title: '长效稳定',
@@ -155,62 +155,62 @@ const i18n = {
         {
           title: 'AI 进化史',
           desc: '回顾人工智能发展历程中的关键里程碑。',
-          link: '/zh-cn/appendix/ai-evolution'
+          link: '/zh-cn/appendix/8-artificial-intelligence/ai-history'
         },
         {
           title: '提示词工程',
           desc: '掌握与 AI 高效对话的技巧，解锁潜力。',
-          link: '/zh-cn/appendix/prompt-engineering'
+          link: '/zh-cn/appendix/8-artificial-intelligence/prompt-engineering'
         },
         {
           title: '大语言模型',
           desc: '深入浅出解析 LLM 的工作原理与应用。',
-          link: '/zh-cn/appendix/llm-intro'
+          link: '/zh-cn/appendix/8-artificial-intelligence/llm-principles'
         },
         {
           title: 'Agent 智能体',
           desc: '探索具备自主决策与执行能力的 AI 架构。',
-          link: '/zh-cn/appendix/agent-intro'
+          link: '/zh-cn/appendix/8-artificial-intelligence/ai-agents'
         },
         {
           title: '前端基础',
           desc: 'HTML/CSS/JS 三大基石，入门必修课。',
-          link: '/zh-cn/appendix/web-basics'
+          link: '/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive'
         },
         {
           title: '前端进化史',
           desc: '了解前端技术栈演变，把握发展趋势。',
-          link: '/zh-cn/appendix/frontend-evolution'
+          link: '/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks'
         },
         {
           title: '后端架构',
           desc: '从单体到微服务，探索架构演进之路。',
-          link: '/zh-cn/appendix/backend-evolution'
+          link: '/zh-cn/appendix/4-server-and-backend/backend-layered-architecture'
         },
         {
           title: '后端语言',
           desc: '对比主流后端语言特性，选择最佳技术栈。',
-          link: '/zh-cn/appendix/backend-languages'
+          link: '/zh-cn/appendix/4-server-and-backend/backend-languages'
         },
         {
           title: '数据库原理',
           desc: '理解数据库核心原理，掌握数据存储艺术。',
-          link: '/zh-cn/appendix/database-intro'
+          link: '/zh-cn/appendix/5-data/database-fundamentals'
         },
         {
           title: 'API 设计',
           desc: 'API 接口设计与开发的基础知识。',
-          link: '/zh-cn/appendix/api-intro'
+          link: '/zh-cn/appendix/4-server-and-backend/api-intro'
         },
         {
           title: 'Git 版本控制',
           desc: '深入理解 Git 原理与高级用法。',
-          link: '/zh-cn/appendix/git-intro'
+          link: '/zh-cn/appendix/2-development-tools/git-version-control'
         },
         {
           title: '计算机网络',
           desc: '网络协议与通信原理的基础知识。',
-          link: '/zh-cn/appendix/computer-networks'
+          link: '/zh-cn/appendix/1-computer-fundamentals/computer-networks'
         }
       ]
     },
@@ -220,7 +220,7 @@ const i18n = {
       btn: '>_ Start'
     }
   },
-  'en-us': {
+  'en': {
     nav: {
       title: 'Easy-Vibe Tutorial',
       home: 'Home',
@@ -231,27 +231,27 @@ const i18n = {
       start: 'Start Learning'
     },
     stage1: {
-      cat: 'Stage 1 · Novice & PM',
+      cat: 'Stage 1 · Getting Started',
       title: 'Zero to Hero, <br><span class="highlight">Be Your Own PM.</span>',
-      sub: 'No CS background needed. Just speak your idea, and AI will turn it into high-fidelity web prototypes.',
+      sub: 'No CS background needed. Just speak your ideas—AI will turn them into high-fidelity web prototypes.',
       cards: [
         {
-          title: 'AI Product Manager',
-          desc: 'From idea to prototype, just by speaking.',
-          sub: 'Non-tech friendly',
-          link: '/en-us/stage-0/'
+          title: 'Learning Map',
+          desc: 'Understand the complete learning path from zero to full-stack development.',
+          sub: 'All Ages Friendly',
+          link: '/en/stage-0/0.1-learning-map/'
         },
         {
           title: 'Gamified Intro',
-          desc: 'Build Snake, Tetris, and break the fear of code.',
-          sub: 'Learn by playing',
-          link: '/en-us/stage-0/'
+          desc: 'Experience the magic of AI programming by building games like Snake.',
+          sub: 'Learn by Playing',
+          link: '/en/stage-0/0.2-ai-capabilities-through-games/'
         },
         {
           title: 'Vibe Coding',
-          desc: 'Master the core of AI coding: Prompt Engineering & Context.',
+          desc: 'Master the core of AI coding: From product ideas to interactive prototypes.',
           sub: 'Core Mindset',
-          link: '/en-us/stage-0/'
+          link: '/en/stage-0/'
         }
       ]
     },
@@ -259,25 +259,25 @@ const i18n = {
       cat: 'Stage 2 · Junior/Mid Dev',
       title:
         'Go Full Stack, <br><span class="highlight">Build Real Apps.</span>',
-      sub: 'Master frontend-backend separation. Build commercial-grade projects with DB, API, and complex interactions.',
+      sub: 'Master frontend-backend separation and build commercial-grade projects with DB and API.',
       cards: [
         {
           title: 'Full Stack',
           headline: 'Frontend & Backend.',
           desc: 'From DB design to API and components, build a modern web app completely.',
-          link: '/en-us/stage-2/'
+          link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
         },
         {
           title: 'Real Projects',
           headline: 'No Toy Code.',
           desc: 'Deep dive into Auth, Storage, File Uploads and core business logic.',
-          link: '/en-us/stage-2/'
+          link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
         },
         {
           title: 'Deployment',
           headline: 'Show the World.',
           desc: 'Server config, DNS, CI/CD. The last mile of product delivery.',
-          link: '/en-us/stage-2/'
+          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
         }
       ]
     },
@@ -290,22 +290,22 @@ const i18n = {
         {
           title: 'WeChat Mini-app',
           desc: 'Cross-platform dev, reaching millions of users.',
-          link: '/en-us/stage-3/'
+          link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
         },
         {
           title: 'AI Native Apps',
           desc: 'RAG, Agent. Explore the limits of LLMs.',
-          link: '/en-us/stage-3/'
+          link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
         },
         {
           title: 'Complex Arch',
-          desc: 'High concurrency, High availability architecture design.',
-          link: '/en-us/stage-3/'
+          desc: 'Architecture design for high concurrency and stable AI tasks.',
+          link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
         },
         {
           title: 'Personal Brand',
           desc: 'Build your own website and academic blog.',
-          link: '/en-us/stage-3/'
+          link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
         }
       ]
     },
@@ -318,62 +318,62 @@ const i18n = {
         {
           title: 'AI History',
           desc: 'Milestones in AI evolution.',
-          link: '/en-us/appendix/ai-evolution'
+          link: '/zh-cn/appendix/8-artificial-intelligence/ai-history'
         },
         {
           title: 'Prompt Eng',
           desc: 'Master AI communication skills.',
-          link: '/en-us/appendix/prompt-engineering'
+          link: '/zh-cn/appendix/8-artificial-intelligence/prompt-engineering'
         },
         {
           title: 'LLM Intro',
           desc: 'Understanding Large Language Models.',
-          link: '/en-us/appendix/llm-intro'
+          link: '/zh-cn/appendix/8-artificial-intelligence/llm-principles'
         },
         {
           title: 'AI Agents',
           desc: 'Autonomous decision-making AI.',
-          link: '/en-us/appendix/agent-intro'
+          link: '/zh-cn/appendix/8-artificial-intelligence/ai-agents'
         },
         {
           title: 'Web Basics',
           desc: 'HTML/CSS/JS fundamentals.',
-          link: '/en-us/appendix/web-basics'
+          link: '/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive'
         },
         {
           title: 'Frontend Evo',
           desc: 'Evolution of frontend tech stack.',
-          link: '/en-us/appendix/frontend-evolution'
+          link: '/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks'
         },
         {
           title: 'Backend Arch',
           desc: 'From monolith to microservices.',
-          link: '/en-us/appendix/backend-evolution'
+          link: '/zh-cn/appendix/4-server-and-backend/backend-layered-architecture'
         },
         {
           title: 'Backend Lang',
           desc: 'Choosing the right tech stack.',
-          link: '/en-us/appendix/backend-languages'
+          link: '/zh-cn/appendix/4-server-and-backend/backend-languages'
         },
         {
           title: 'Database',
           desc: 'Core principles of data storage.',
-          link: '/en-us/appendix/database-intro'
+          link: '/zh-cn/appendix/5-data/database-fundamentals'
         },
         {
           title: 'API Design',
           desc: 'Designing robust interfaces.',
-          link: '/en-us/appendix/api-intro'
+          link: '/zh-cn/appendix/4-server-and-backend/api-intro'
         },
         {
           title: 'Git',
           desc: 'Version control mastery.',
-          link: '/en-us/appendix/git-intro'
+          link: '/zh-cn/appendix/2-development-tools/git-version-control'
         },
         {
           title: 'Networks',
           desc: 'Protocols and communication.',
-          link: '/en-us/appendix/computer-networks'
+          link: '/zh-cn/appendix/1-computer-fundamentals/computer-networks'
         }
       ]
     },
@@ -1374,12 +1374,12 @@ const i18n = {
 import { computed } from 'vue'
 const t = computed(() => {
   const code = lang.value ? lang.value.toLowerCase() : 'zh-cn'
-  return i18n[code] || i18n['en-us']
+  return i18n[code] || i18n['en']
 })
 
 const locales = [
   { code: 'zh-cn', text: '简体中文' },
-  { code: 'en-us', text: 'English' },
+  { code: 'en', text: 'English' },
   { code: 'ja-jp', text: '日本語' },
   { code: 'zh-tw', text: '繁體中文' },
   { code: 'ko-kr', text: '한국어' },
@@ -1502,7 +1502,7 @@ const stage2Cards = [
     desc: '深入理解用户鉴权、数据存储、文件上传等核心业务逻辑。',
     imageColor: '#8EC5FC',
     visualType: 'server',
-    link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/chapter5-from-database-to-supabase'
+    link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
   },
   {
     title: '部署上线',
@@ -1510,7 +1510,7 @@ const stage2Cards = [
     desc: '学习服务器配置、域名解析和自动化部署，打通产品落地的最后一公里。',
     imageColor: '#96E6A1',
     visualType: 'cloud',
-    link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/extra6-zeabur-what-is-it-and-how-to-deploy-web-applications'
+    link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
   }
 ]
 
@@ -1528,7 +1528,7 @@ const stage3Cards = [
     desc: 'RAG、Agent，探索 LLM 的无限可能。',
     tag: 'Advanced',
     visualType: 'ai',
-    link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/extra5-what-is-rag-and-how-does-it-work-and-future'
+    link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
   },
   {
     title: '复杂业务架构',
@@ -1552,73 +1552,73 @@ const appendixCards = [
     title: '人工智能',
     desc: 'LLM、Agent、RAG，深入 AI 底层原理。',
     tag: 'AI',
-    link: '/zh-cn/appendix/ai-evolution'
+    link: '/zh-cn/appendix/8-artificial-intelligence/ai-history'
   },
   {
     title: '提示词工程',
     desc: '掌握与 AI 高效对话的技巧，解锁潜力。',
     tag: 'AI',
-    link: '/zh-cn/appendix/prompt-engineering'
+    link: '/zh-cn/appendix/8-artificial-intelligence/prompt-engineering'
   },
   {
     title: '大语言模型',
     desc: '深入浅出解析 LLM 的工作原理与应用。',
     tag: 'AI',
-    link: '/zh-cn/appendix/llm-intro'
+    link: '/zh-cn/appendix/8-artificial-intelligence/llm-principles'
   },
   {
     title: 'Agent 智能体',
     desc: '探索具备自主决策与执行能力的 AI 架构。',
     tag: 'AI',
-    link: '/zh-cn/appendix/agent-intro'
+    link: '/zh-cn/appendix/8-artificial-intelligence/ai-agents'
   },
   {
     title: '前端基础',
     desc: 'HTML/CSS/JS 三大基石，入门必修课。',
     tag: 'Frontend',
-    link: '/zh-cn/appendix/web-basics'
+    link: '/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive'
   },
   {
     title: '前端进化史',
     desc: '了解前端技术栈演变，把握发展趋势。',
     tag: 'Frontend',
-    link: '/zh-cn/appendix/frontend-evolution'
+    link: '/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks'
   },
   {
     title: '后端架构',
     desc: '从单体到微服务，探索架构演进之路。',
     tag: 'Backend',
-    link: '/zh-cn/appendix/backend-evolution'
+    link: '/zh-cn/appendix/4-server-and-backend/backend-layered-architecture'
   },
   {
     title: '后端语言',
     desc: '对比主流后端语言特性，选择最佳技术栈。',
     tag: 'Backend',
-    link: '/zh-cn/appendix/backend-languages'
+    link: '/zh-cn/appendix/4-server-and-backend/backend-languages'
   },
   {
     title: '数据库原理',
     desc: '理解数据库核心原理，掌握数据存储艺术。',
     tag: 'Database',
-    link: '/zh-cn/appendix/database-intro'
+    link: '/zh-cn/appendix/5-data/database-fundamentals'
   },
   {
     title: 'API 设计',
     desc: 'API 接口设计与开发的基础知识。',
     tag: 'API',
-    link: '/zh-cn/appendix/api-intro'
+    link: '/zh-cn/appendix/4-server-and-backend/api-intro'
   },
   {
     title: 'Git 版本控制',
     desc: '深入理解 Git 原理与高级用法。',
     tag: 'General',
-    link: '/zh-cn/appendix/git-intro'
+    link: '/zh-cn/appendix/2-development-tools/git-version-control'
   },
   {
     title: '计算机网络',
     desc: '网络协议与通信原理的基础知识。',
     tag: 'General',
-    link: '/zh-cn/appendix/computer-networks'
+    link: '/zh-cn/appendix/1-computer-fundamentals/computer-networks'
   }
 ]
 </script>
@@ -1674,12 +1674,15 @@ const appendixCards = [
                 @click.stop="toggleLangMenu"
               >
                 <span class="text">
-                  <span class="vpi-languages option-icon"></span>
-                  <span class="vpi-chevron-down text-icon"></span>
+                  <span class="vpi-languages option-icon" />
+                  <span class="vpi-chevron-down text-icon" />
                 </span>
               </button>
               <!-- Dropdown Menu -->
-              <div class="lang-dropdown glass" v-if="showLangMenu">
+              <div
+                v-if="showLangMenu"
+                class="lang-dropdown glass"
+              >
                 <button
                   v-for="locale in locales"
                   :key="locale.code"
@@ -1696,22 +1699,34 @@ const appendixCards = [
           </div>
           <a
             class="buy-btn"
-            :href="withBase('/zh-cn/stage-0/0.1-learning-map/')"
-            >{{ t.footer.btn }}</a
-          >
+            :href="withBase(t.stage1.cards[0].link)"
+          >{{ t.footer.btn }}</a>
         </div>
       </div>
     </nav>
 
     <!-- Home Anchor -->
-    <div id="home" style="height: 0"></div>
+    <div
+      id="home"
+      style="height: 0"
+    />
 
     <!-- Stage 1: Product Manager -->
-    <section id="pm" class="section-container">
+    <section
+      id="pm"
+      class="section-container"
+    >
       <div class="section-header">
-        <h2 class="section-category">{{ t.stage1.cat }}</h2>
-        <h3 class="section-headline" v-html="t.stage1.title"></h3>
-        <p class="section-sub">{{ t.stage1.sub }}</p>
+        <h2 class="section-category">
+          {{ t.stage1.cat }}
+        </h2>
+        <h3
+          class="section-headline"
+          v-html="t.stage1.title"
+        />
+        <p class="section-sub">
+          {{ t.stage1.sub }}
+        </p>
       </div>
 
       <div class="feature-grid">
@@ -1721,7 +1736,10 @@ const appendixCards = [
           :href="withBase(t.stage1.cards[i].link)"
           class="feature-card glass"
         >
-          <div class="feature-icon" :style="{ background: card.color }">
+          <div
+            class="feature-icon"
+            :style="{ background: card.color }"
+          >
             {{ card.icon }}
           </div>
           <div class="feature-content">
@@ -1733,11 +1751,21 @@ const appendixCards = [
     </section>
 
     <!-- Stage 2: Junior/Mid Dev -->
-    <section id="junior" class="section-container">
+    <section
+      id="junior"
+      class="section-container"
+    >
       <div class="section-header">
-        <h2 class="section-category">{{ t.stage2.cat }}</h2>
-        <h3 class="section-headline" v-html="t.stage2.title"></h3>
-        <p class="section-sub">{{ t.stage2.sub }}</p>
+        <h2 class="section-category">
+          {{ t.stage2.cat }}
+        </h2>
+        <h3
+          class="section-headline"
+          v-html="t.stage2.title"
+        />
+        <p class="section-sub">
+          {{ t.stage2.sub }}
+        </p>
       </div>
 
       <div class="comm-grid">
@@ -1751,7 +1779,7 @@ const appendixCards = [
             class="comm-visual"
             :style="{ backgroundColor: card.imageColor }"
           >
-            <div class="visual-placeholder"></div>
+            <div class="visual-placeholder" />
           </div>
           <div class="comm-text">
             <h4 class="comm-title">{{ t.stage2.cards[index].title }}</h4>
@@ -1763,11 +1791,21 @@ const appendixCards = [
     </section>
 
     <!-- Stage 3: Senior Dev -->
-    <section id="senior" class="section-container">
+    <section
+      id="senior"
+      class="section-container"
+    >
       <div class="section-header">
-        <h2 class="section-category">{{ t.stage3.cat }}</h2>
-        <h3 class="section-headline" v-html="t.stage3.title"></h3>
-        <p class="section-sub">{{ t.stage3.sub }}</p>
+        <h2 class="section-category">
+          {{ t.stage3.cat }}
+        </h2>
+        <h3
+          class="section-headline"
+          v-html="t.stage3.title"
+        />
+        <p class="section-sub">
+          {{ t.stage3.sub }}
+        </p>
       </div>
 
       <div class="scroll-container">
@@ -1781,21 +1819,34 @@ const appendixCards = [
             <div class="prod-tag">{{ card.tag }}</div>
             <h4>{{ t.stage3.cards[index].title }}</h4>
             <p>{{ t.stage3.cards[index].desc }}</p>
-            <div class="prod-visual"></div>
+            <div class="prod-visual" />
           </a>
         </div>
       </div>
     </section>
 
     <!-- Appendix -->
-    <section id="appendix" class="section-container">
+    <section
+      id="appendix"
+      class="section-container"
+    >
       <div class="section-header">
-        <h2 class="section-category">{{ t.appendix.cat }}</h2>
-        <h3 class="section-headline" v-html="t.appendix.title"></h3>
-        <p class="section-sub">{{ t.appendix.sub }}</p>
+        <h2 class="section-category">
+          {{ t.appendix.cat }}
+        </h2>
+        <h3
+          class="section-headline"
+          v-html="t.appendix.title"
+        />
+        <p class="section-sub">
+          {{ t.appendix.sub }}
+        </p>
       </div>
 
-      <div class="appendix-scroll-wrapper" ref="appendixWrapper">
+      <div
+        ref="appendixWrapper"
+        class="appendix-scroll-wrapper"
+      >
         <div class="appendix-track">
           <a
             v-for="(card, index) in t.appendix.cards"
@@ -1803,7 +1854,10 @@ const appendixCards = [
             :href="withBase(card.link)"
             class="appendix-card"
           >
-            <div class="appendix-icon-wrapper" :class="'icon-' + (index % 4)">
+            <div
+              class="appendix-icon-wrapper"
+              :class="'icon-' + (index % 4)"
+            >
               <span class="appendix-emoji">{{
                 ['🤖', '🧠', '🎨', '🚀', '⚙️', '💾', '🛠️', '🌐'][index] || '📚'
               }}</span>
@@ -1819,11 +1873,14 @@ const appendixCards = [
       </div>
 
       <!-- Slider Indicator -->
-      <div class="appendix-controls" v-if="totalPages > 1">
+      <div
+        v-if="totalPages > 1"
+        class="appendix-controls"
+      >
         <button
           class="control-btn play-btn"
-          @click="autoScroll"
           aria-label="Auto Scroll"
+          @click="autoScroll"
         >
           <svg
             width="12"
@@ -1845,20 +1902,19 @@ const appendixCards = [
             class="indicator-dot"
             :class="{ active: currentPage === i - 1 }"
             @click="scrollToPage(i - 1)"
-          ></div>
+          />
         </div>
       </div>
     </section>
 
     <!-- Footer Callout -->
     <div class="footer-callout">
-      <h2 v-html="t.footer.title"></h2>
+      <h2 v-html="t.footer.title" />
       <p>{{ t.footer.desc }}</p>
       <a
         class="buy-btn large"
         :href="withBase('/zh-cn/stage-0/0.1-learning-map/')"
-        >{{ t.footer.btn }}</a
-      >
+      >{{ t.footer.btn }}</a>
     </div>
   </div>
 </template>
@@ -1914,7 +1970,7 @@ a {
 .nav-title {
   font-weight: 600;
   font-size: 19px;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   flex-shrink: 0;
   letter-spacing: -0.01em;
 }
@@ -1931,7 +1987,7 @@ a {
   background: none;
   border: none;
   font-size: 12px;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   cursor: pointer;
   transition: opacity 0.2s;
   padding: 0;
@@ -1944,7 +2000,7 @@ a {
 .nav-links button:hover,
 .nav-links button.active,
 .nav-link-item:hover {
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   opacity: 1;
 }
 
@@ -1965,7 +2021,7 @@ a {
   background: none;
   border: none;
   padding: 0;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1982,7 +2038,7 @@ a {
   background: none;
   border: none;
   padding: 0;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2004,13 +2060,13 @@ a {
 .button .option-icon {
   width: 20px;
   height: 20px;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
 }
 
 .button .text-icon {
   width: 14px;
   height: 14px;
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
 }
 
 /* GitHub Stars Styles */
@@ -2020,7 +2076,7 @@ a {
 }
 
 :deep(.nav-github-stars .github-stars-link) {
-  color: #000 !important;
+  color: var(--vp-c-text-1) !important;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -2078,8 +2134,8 @@ a {
 }
 
 .buy-btn {
-  background: #000;
-  color: #fff !important;
+  background: var(--vp-c-text-1);
+  color: var(--vp-c-bg) !important;
   padding: 4px 12px;
   border-radius: 980px;
   font-size: 12px;

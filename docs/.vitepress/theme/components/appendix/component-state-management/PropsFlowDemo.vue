@@ -1,163 +1,141 @@
 <template>
   <div class="props-flow-demo">
     <div class="demo-header">
-      <h4>Props 数据流演示</h4>
-      <p class="hint">观察父组件如何通过 props 向子组件传递数据，以及子组件如何通过事件向父组件通信</p>
+      <span class="icon">📦</span>
+      <span class="title">Props 数据传递</span>
+      <span class="subtitle">父亲给儿子送礼物的单向流动</span>
     </div>
 
-    <div class="flow-container">
-      <!-- 父组件可视化 -->
-      <div class="parent-component">
-        <div class="component-header">
-          <span class="tag">Parent.vue</span>
-          <span class="badge blue">数据持有者</span>
-        </div>
+    <div class="intro-text">
+      想象你在<span class="highlight">快递公司</span>工作：包裹（数据）只能从寄件人（父组件）发往收件人（子组件），收件人不能直接修改包裹内容，只能通过电话（事件）让寄件人修改。
+    </div>
 
-        <div class="data-box">
-          <div class="data-title">data() {</div>
-          <div class="data-item" :class="{ changed: hasChanged }">
-            <span class="key">user:</span>
-            <span class="value">{ name: '{{ userName }}', age: {{ userAge }} }</span>
-          </div>
-          <div class="data-item">
-            <span class="key">theme:</span>
-            <span class="value">'{{ theme }}'</span>
-          </div>
-          <div class="data-title">}</div>
+    <div class="demo-content">
+      <div class="component-box parent">
+        <div class="component-label">
+          👨 父组件 (寄件人)
         </div>
-
-        <div class="props-config">
-          <div class="config-title">传递给子组件的 Props:</div>
-          <div class="prop-tag" v-for="prop in activeProps" :key="prop">
-            :{{ prop }}="{{ prop }}"
+        <div class="data-display">
+          <div class="data-row">
+            <span class="key">包裹内容:</span>
+            <span class="value">{{ user.name }} ({{ user.age }}岁)</span>
+          </div>
+          <div class="data-row">
+            <span class="key">包装颜色:</span>
+            <span
+              class="value"
+              :class="theme"
+            >{{ theme === 'light' ? '亮色' : '暗色' }}</span>
+          </div>
+        </div>
+        <div class="props-output">
+          <span class="label">📮 发送包裹:</span>
+          <div class="prop-tags">
+            <span class="prop-tag">:user</span>
+            <span class="prop-tag">:theme</span>
           </div>
         </div>
       </div>
 
-      <!-- 流动动画 -->
-      <div class="flow-animation">
-        <div class="flow-line" :class="{ active: isFlowing }">
-          <div class="flow-particles" v-if="isFlowing">
-            <span v-for="i in 5" :key="i" class="particle">●</span>
-          </div>
+      <div
+        class="flow-arrow"
+        :class="{ active: isFlowing }"
+      >
+        <div class="arrow-body">
+          ▼
         </div>
-        <div class="flow-label" :class="{ active: isFlowing }">
-          {{ isFlowing ? '传递 Props' : '等待交互' }}
+        <div class="flow-text">
+          {{ isFlowing ? '快递派送中...' : 'Props 单向传递' }}
         </div>
       </div>
 
-      <!-- 子组件可视化 -->
-      <div class="child-component">
-        <div class="component-header">
-          <span class="tag">Child.vue</span>
-          <span class="badge green">数据展示</span>
+      <div class="component-box child">
+        <div class="component-label">
+          👦 子组件 (收件人)
         </div>
-
-        <div class="props-box">
-          <div class="props-title">props: {</div>
-          <div class="prop-item" v-for="prop in activeProps" :key="prop" :class="{ receiving: isFlowing }">
-            <span class="prop-name">{{ prop }}</span>
-            <span class="prop-type">{ type: {{ getPropType(prop) }} }</span>
+        <div class="props-display">
+          <div class="label">
+            📬 接收包裹:
           </div>
-          <div class="props-title">}</div>
-        </div>
-
-        <div class="render-preview">
-          <div class="preview-title">渲染预览:</div>
-          <div class="preview-content">
-            <div class="user-card">
-              <div class="avatar">👤</div>
-              <div class="user-info">
-                <div class="user-name">{{ userName || '未知用户' }}</div>
-                <div class="user-meta">
-                  <span class="age">{{ userAge }}岁</span>
-                  <span class="theme-badge" :class="theme">{{ theme }}</span>
-                </div>
-              </div>
-            </div>
+          <div class="prop-item">
+            <span class="prop-name">user</span>
+            <span class="prop-value">{{ user.name }} ({{ user.age }}岁)</span>
+          </div>
+          <div class="prop-item">
+            <span class="prop-name">theme</span>
+            <span
+              class="prop-value"
+              :class="theme"
+            >{{ theme === 'light' ? '亮色' : '暗色' }}</span>
           </div>
         </div>
-
-        <div class="emit-section">
-          <div class="emit-title">向父组件通信:</div>
-          <button class="emit-btn" @click="emitUpdate">$emit('update', { name: '王五' })</button>
-        </div>
+        <button
+          class="emit-btn"
+          @click="handleEmit"
+        >
+          📞 打电话给爸爸改名字
+        </button>
       </div>
     </div>
 
-    <div class="interaction-panel">
-      <div class="panel-title">🎮 交互控制台</div>
+    <div class="interaction-area">
       <div class="control-group">
-        <label>修改父组件数据:</label>
-        <input v-model="userName" placeholder="用户名" @input="triggerFlow" />
-        <input v-model.number="userAge" type="number" placeholder="年龄" @input="triggerFlow" />
-        <select v-model="theme" @change="triggerFlow">
-          <option value="light">Light 主题</option>
-          <option value="dark">Dark 主题</option>
+        <label>📝 修改包裹内容：</label>
+        <input
+          v-model="user.name"
+          placeholder="收件人姓名"
+          @input="triggerFlow"
+        >
+        <input
+          v-model.number="user.age"
+          type="number"
+          placeholder="年龄"
+          @input="triggerFlow"
+        >
+        <select
+          v-model="theme"
+          @change="triggerFlow"
+        >
+          <option value="light">
+            亮色包装
+          </option>
+          <option value="dark">
+            暗色包装
+          </option>
         </select>
       </div>
-      <div class="control-group">
-        <label>选择传递的 Props:</label>
-        <label class="checkbox"><input type="checkbox" v-model="propSelection.user" /> user</label>
-        <label class="checkbox"><input type="checkbox" v-model="propSelection.theme" /> theme</label>
-      </div>
-      <div class="flow-status" :class="{ active: isFlowing }">
-        {{ isFlowing ? '⬇️ 数据正在流动...' : '⏸️ 等待数据变化' }}
-      </div>
+    </div>
+
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>Props 是单向数据流，父组件像寄件人，子组件像收件人。子组件不能直接修改 props，只能通过 emit 事件通知父组件修改。
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, reactive } from 'vue'
 
-// 父组件数据
-const userName = ref('张三')
-const userAge = ref(25)
+const user = reactive({
+  name: '小明',
+  age: 25
+})
+
 const theme = ref('light')
-const hasChanged = ref(false)
-
-// Props 选择
-const propSelection = ref({
-  user: true,
-  theme: true
-})
-
-const activeProps = computed(() => {
-  return Object.entries(propSelection.value)
-    .filter(([, v]) => v)
-    .map(([k]) => k)
-})
-
-// 流动动画控制
 const isFlowing = ref(false)
+
 let flowTimeout = null
 
 const triggerFlow = () => {
-  hasChanged.value = true
   isFlowing.value = true
   clearTimeout(flowTimeout)
   flowTimeout = setTimeout(() => {
     isFlowing.value = false
-    hasChanged.value = false
-  }, 1500)
+  }, 1000)
 }
 
-// 监听数据变化
-watch([userName, userAge, theme], () => {
-  triggerFlow()
-}, { deep: true })
-
-const getPropType = (prop) => {
-  const types = {
-    user: 'Object',
-    theme: 'String'
-  }
-  return types[prop] || 'Any'
-}
-
-const emitUpdate = () => {
-  userName.value = '王五'
+const handleEmit = () => {
+  user.name = '小红'
   triggerFlow()
 }
 </script>
@@ -165,389 +143,215 @@ const emitUpdate = () => {
 <style scoped>
 .props-flow-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
 .demo-header {
-  margin-bottom: 20px;
-}
-
-.demo-header h4 {
-  margin: 0 0 8px 0;
-  color: var(--vp-c-text-1);
-}
-
-.hint {
-  margin: 0;
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-.flow-container {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 968px) {
-  .flow-container {
-    grid-template-columns: 1fr;
-  }
-
-  .flow-animation {
-    flex-direction: row !important;
-    padding: 12px !important;
-  }
-
-  .flow-line {
-    width: 100% !important;
-    height: 2px !important;
-  }
-}
-
-.parent-component,
-.child-component {
-  background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.component-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.tag {
-  font-family: monospace;
-  font-size: 13px;
-  padding: 4px 8px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand);
-  border-radius: 4px;
+.demo-header .icon {
+  font-size: 1.25rem;
 }
 
-.badge {
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 10px;
+.demo-header .title {
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-.badge.blue {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.badge.green {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.data-box,
-.props-box {
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 12px;
-  font-family: monospace;
-  font-size: 13px;
-}
-
-.data-title,
-.props-title {
-  color: var(--vp-c-text-3);
-  margin-bottom: 4px;
-}
-
-.data-item,
-.prop-item {
-  padding: 4px 8px;
-  margin: 2px 0;
-  border-radius: 3px;
-  transition: all 0.3s ease;
-}
-
-.data-item.changed {
-  background: #fef3c7;
-  animation: pulse 0.5s ease;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-
-.data-item .key {
-  color: var(--vp-c-brand);
-}
-
-.data-item .value {
+.demo-header .subtitle {
   color: var(--vp-c-text-2);
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
 }
 
-.prop-item.receiving {
-  background: #dcfce7;
-  animation: receive 0.5s ease;
+.intro-text {
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
 }
 
-@keyframes receive {
-  0% { transform: translateX(-10px); opacity: 0.5; }
-  100% { transform: translateX(0); opacity: 1; }
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
 }
 
+.demo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.component-box {
+  background: var(--vp-c-bg);
+  border: 2px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.component-label {
+  font-weight: 600;
+  color: var(--vp-c-brand);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 0.85rem;
+}
+
+.data-display,
+.props-display {
+  margin-bottom: 0.5rem;
+}
+
+.data-row,
+.prop-item {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.key,
 .prop-name {
   color: var(--vp-c-brand);
+  font-weight: 500;
 }
 
-.prop-type {
-  color: var(--vp-c-text-3);
-  font-size: 11px;
-  margin-left: 8px;
-}
-
-.props-config {
-  margin-bottom: 12px;
-}
-
-.config-title {
-  font-size: 12px;
+.value,
+.prop-value {
   color: var(--vp-c-text-2);
-  margin-bottom: 6px;
+}
+
+.value.light,
+.prop-value.light {
+  background: #fef3c7;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.value.dark,
+.prop-value.dark {
+  background: #374151;
+  color: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.props-output {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-2);
+}
+
+.prop-tags {
+  display: flex;
+  gap: 0.25rem;
 }
 
 .prop-tag {
-  display: inline-block;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand);
+  padding: 2px 8px;
+  border-radius: 4px;
   font-family: monospace;
-  font-size: 12px;
-  padding: 4px 8px;
-  margin: 2px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand);
-  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
-.flow-animation {
+.flow-arrow {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.flow-line {
-  width: 2px;
-  height: 80px;
-  background: var(--vp-c-divider);
-  position: relative;
+  gap: 0.25rem;
+  padding: 0.4rem;
   transition: all 0.3s ease;
 }
 
-.flow-line.active {
-  background: var(--vp-c-brand);
-  box-shadow: 0 0 10px var(--vp-c-brand);
-}
-
-.flow-particles {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.particle {
+.flow-arrow.active {
   color: var(--vp-c-brand);
-  font-size: 8px;
-  animation: flowDown 1s linear infinite;
-  opacity: 0;
 }
 
-.particle:nth-child(1) { animation-delay: 0s; }
-.particle:nth-child(2) { animation-delay: 0.2s; }
-.particle:nth-child(3) { animation-delay: 0.4s; }
-.particle:nth-child(4) { animation-delay: 0.6s; }
-.particle:nth-child(5) { animation-delay: 0.8s; }
-
-@keyframes flowDown {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(60px);
-  }
-}
-
-.flow-label {
-  margin-top: 12px;
-  font-size: 13px;
+.arrow-body {
+  font-size: 1.3rem;
   color: var(--vp-c-text-3);
-  text-align: center;
   transition: all 0.3s ease;
 }
 
-.flow-label.active {
+.flow-arrow.active .arrow-body {
+  color: var(--vp-c-brand);
+  transform: scale(1.2);
+}
+
+.flow-text {
+  font-size: 0.8rem;
+  color: var(--vp-c-text-3);
+}
+
+.flow-arrow.active .flow-text {
   color: var(--vp-c-brand);
   font-weight: 600;
-}
-
-.render-preview {
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.preview-title {
-  font-size: 12px;
-  color: var(--vp-c-text-3);
-  margin-bottom: 8px;
-}
-
-.preview-content {
-  background: var(--vp-c-bg);
-  border-radius: 4px;
-  padding: 12px;
-}
-
-.user-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.avatar {
-  font-size: 32px;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vp-c-brand-soft);
-  border-radius: 50%;
-}
-
-.user-info {
-  flex: 1;
-}
-
-.user-name {
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  font-size: 14px;
-}
-
-.user-meta {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-  font-size: 12px;
-}
-
-.age {
-  color: var(--vp-c-text-2);
-}
-
-.theme-badge {
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-.theme-badge.light {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.theme-badge.dark {
-  background: #374151;
-  color: #f3f4f6;
-}
-
-.emit-section {
-  padding: 12px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-}
-
-.emit-title {
-  font-size: 12px;
-  color: var(--vp-c-text-3);
-  margin-bottom: 8px;
 }
 
 .emit-btn {
   width: 100%;
-  padding: 8px 12px;
+  padding: 0.5rem 1rem;
   background: var(--vp-c-brand);
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 13px;
-  font-family: monospace;
   cursor: pointer;
+  font-size: 0.85rem;
   transition: all 0.2s ease;
 }
 
 .emit-btn:hover {
-  background: var(--vp-c-brand-dark);
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 
-.interaction-panel {
-  margin-top: 20px;
-  padding: 16px;
+.interaction-area {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-}
-
-.panel-title {
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  margin-bottom: 12px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .control-group {
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .control-group label {
-  display: block;
-  font-size: 13px;
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
-  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .control-group input,
 .control-group select {
-  width: 100%;
-  padding: 8px 12px;
+  padding: 0.4rem 0.6rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
-  font-size: 14px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  margin-bottom: 8px;
+  font-size: 0.85rem;
 }
 
 .control-group input:focus,
@@ -556,32 +360,15 @@ const emitUpdate = () => {
   border-color: var(--vp-c-brand);
 }
 
-.checkbox {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 6px;
-  margin-right: 16px;
-  cursor: pointer;
-}
-
-.checkbox input {
-  width: auto !important;
-  margin: 0 !important;
-}
-
-.flow-status {
-  padding: 10px 16px;
-  background: var(--vp-c-bg-soft);
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
   border-radius: 6px;
-  text-align: center;
-  font-size: 14px;
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
-  transition: all 0.3s ease;
 }
 
-.flow-status.active {
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand);
-  font-weight: 600;
+.info-box .icon {
+  margin-right: 0.25rem;
 }
 </style>

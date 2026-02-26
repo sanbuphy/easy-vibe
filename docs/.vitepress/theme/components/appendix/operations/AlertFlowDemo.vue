@@ -5,8 +5,12 @@
 <template>
   <div class="alert-flow-demo">
     <div class="header">
-      <div class="title">告警流程 (Alerting Flow)</div>
-      <div class="subtitle">从发现异常到通知运维的自动化流程</div>
+      <div class="title">
+        告警流程 (Alerting Flow)
+      </div>
+      <div class="subtitle">
+        从发现异常到通知运维的自动化流程
+      </div>
     </div>
 
     <div class="controls">
@@ -29,18 +33,40 @@
           { active: step.active, completed: step.completed }
         ]"
       >
-        <div class="step-number">{{ index + 1 }}</div>
-        <div class="step-content">
-          <div class="step-title">{{ step.title }}</div>
-          <div class="step-desc">{{ step.desc }}</div>
-          <div v-if="step.details" class="step-details">{{ step.details }}</div>
+        <div class="step-number">
+          {{ index + 1 }}
         </div>
-        <div v-if="index < steps.length - 1" class="step-arrow">→</div>
+        <div class="step-content">
+          <div class="step-title">
+            {{ step.title }}
+          </div>
+          <div class="step-desc">
+            {{ step.desc }}
+          </div>
+          <div
+            v-if="step.details"
+            class="step-details"
+          >
+            {{ step.details }}
+          </div>
+        </div>
+        <div
+          v-if="index < steps.length - 1"
+          class="step-arrow"
+        >
+          →
+        </div>
       </div>
     </div>
 
-    <div class="alert-info" v-if="currentAlert">
-      <div class="alert-header" :class="'level-' + currentAlert.level">
+    <div
+      v-if="currentAlert"
+      class="alert-info"
+    >
+      <div
+        class="alert-header"
+        :class="'level-' + currentAlert.level"
+      >
         <span class="alert-icon">⚠️</span>
         <span class="alert-title">告警详情</span>
         <span class="alert-level">{{ currentAlert.levelName }}</span>
@@ -70,7 +96,9 @@
     </div>
 
     <div class="level-guide">
-      <div class="guide-title">告警级别说明</div>
+      <div class="guide-title">
+        告警级别说明
+      </div>
       <div class="levels">
         <div class="level-item">
           <span class="level-badge p0">P0</span>
@@ -281,9 +309,9 @@ const triggerScenario = async (scenarioId) => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px solid var(--vp-c-divider);
   transition: all 0.3s;
 }
@@ -360,7 +388,7 @@ const triggerScenario = async (scenarioId) => {
 }
 
 .alert-header {
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -398,7 +426,7 @@ const triggerScenario = async (scenarioId) => {
 }
 
 .alert-body {
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -426,7 +454,7 @@ const triggerScenario = async (scenarioId) => {
 .level-guide {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
 }
 

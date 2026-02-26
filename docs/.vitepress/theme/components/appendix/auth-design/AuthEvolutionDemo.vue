@@ -5,8 +5,12 @@
 <template>
   <div class="auth-evolution-demo">
     <div class="header">
-      <div class="title">🧭 鉴权方案演进：从 Basic 到 OAuth2</div>
-      <div class="subtitle">点击卡片，快速建立“场景 → 方案”的直觉。</div>
+      <div class="title">
+        🧭 鉴权方案演进：从 Basic 到 OAuth2
+      </div>
+      <div class="subtitle">
+        点击卡片，快速建立“场景 → 方案”的直觉。
+      </div>
     </div>
 
     <div class="timeline">
@@ -21,25 +25,45 @@
           <span class="icon">{{ s.icon }}</span>
           <span class="name">{{ s.name }}</span>
         </div>
-        <div class="stage-sub">{{ s.when }}</div>
+        <div class="stage-sub">
+          {{ s.when }}
+        </div>
       </button>
     </div>
 
     <div class="card">
-      <div class="card-title">{{ active.icon }} {{ active.name }}</div>
-      <div class="desc">{{ active.desc }}</div>
+      <div class="card-title">
+        {{ active.icon }} {{ active.name }}
+      </div>
+      <div class="desc">
+        {{ active.desc }}
+      </div>
 
       <div class="grid">
         <div class="box">
-          <div class="box-title">✅ 适合</div>
+          <div class="box-title">
+            ✅ 适合
+          </div>
           <ul class="list">
-            <li v-for="(x, i) in active.pros" :key="i">{{ x }}</li>
+            <li
+              v-for="(x, i) in active.pros"
+              :key="i"
+            >
+              {{ x }}
+            </li>
           </ul>
         </div>
         <div class="box">
-          <div class="box-title">⚠️ 主要风险</div>
+          <div class="box-title">
+            ⚠️ 主要风险
+          </div>
           <ul class="list">
-            <li v-for="(x, i) in active.cons" :key="i">{{ x }}</li>
+            <li
+              v-for="(x, i) in active.cons"
+              :key="i"
+            >
+              {{ x }}
+            </li>
           </ul>
         </div>
       </div>
@@ -127,9 +151,9 @@ const active = computed(
 .auth-evolution-demo {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 1.5rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .header {
@@ -151,13 +175,13 @@ const active = computed(
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .stage {
   text-align: left;
   padding: 0.75rem;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
   cursor: pointer;
@@ -193,8 +217,8 @@ const active = computed(
 .card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
 }
 
 .card-title {
@@ -219,7 +243,7 @@ const active = computed(
 .box {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-alt);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 

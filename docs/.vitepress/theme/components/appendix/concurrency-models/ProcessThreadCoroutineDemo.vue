@@ -3,27 +3,50 @@
     <h4>进程 / 线程 / 协程 对比演示</h4>
 
     <div class="controls">
-      <el-radio-group v-model="model" size="small">
-        <el-radio-button label="process">多进程</el-radio-button>
-        <el-radio-button label="thread">多线程</el-radio-button>
-        <el-radio-button label="coroutine">协程</el-radio-button>
+      <el-radio-group
+        v-model="model"
+        size="small"
+      >
+        <el-radio-button label="process">
+          多进程
+        </el-radio-button>
+        <el-radio-button label="thread">
+          多线程
+        </el-radio-button>
+        <el-radio-button label="coroutine">
+          协程
+        </el-radio-button>
       </el-radio-group>
 
       <el-button
         type="primary"
         size="small"
-        @click="startSimulation"
         :disabled="isRunning"
+        @click="startSimulation"
       >
         {{ isRunning ? '运行中...' : '开始模拟' }}
       </el-button>
     </div>
 
     <div class="stats-bar">
-      <el-statistic title="内存占用" :value="memoryUsage" suffix="MB" />
-      <el-statistic title="上下文切换" :value="contextSwitches" />
-      <el-statistic title="完成任务" :value="completedTasks" />
-      <el-statistic title="耗时" :value="elapsedTime" suffix="ms" />
+      <el-statistic
+        title="内存占用"
+        :value="memoryUsage"
+        suffix="MB"
+      />
+      <el-statistic
+        title="上下文切换"
+        :value="contextSwitches"
+      />
+      <el-statistic
+        title="完成任务"
+        :value="completedTasks"
+      />
+      <el-statistic
+        title="耗时"
+        :value="elapsedTime"
+        suffix="ms"
+      />
     </div>
 
     <div class="visualization">
@@ -35,7 +58,10 @@
           :class="{ active: core.active, type: core.type }"
         >
           <span class="core-label">CPU {{ idx + 1 }}</span>
-          <div class="task-indicator" v-if="core.task">
+          <div
+            v-if="core.task"
+            class="task-indicator"
+          >
             {{ core.task }}
           </div>
         </div>
@@ -138,7 +164,6 @@ async function startSimulation() {
   isRunning.value = true
 
   const startTime = Date.now()
-  const taskCount = pendingTasks.value.length
   const baseSwitchCost = model.value === 'process' ? 10 : model.value === 'thread' ? 2 : 1
 
   // 模拟任务处理
@@ -177,7 +202,7 @@ resetSimulation()
 .demo-container {
   padding: 20px;
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   margin: 20px 0;
 }
 
@@ -212,7 +237,7 @@ resetSimulation()
 .core {
   background: white;
   border: 2px solid #dcdfe6;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   text-align: center;
   transition: all 0.3s;
@@ -253,7 +278,7 @@ resetSimulation()
 
 .task-queue {
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
 }
 

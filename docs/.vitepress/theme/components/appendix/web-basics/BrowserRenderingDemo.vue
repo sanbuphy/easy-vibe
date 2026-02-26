@@ -1,685 +1,232 @@
 <template>
-  <div class="browser-rendering-demo">
-    <div class="stepper">
-      <button
-        v-for="(step, index) in steps"
-        :key="index"
-        class="step-btn"
-        :class="{
-          active: currentStep === index,
-          completed: currentStep > index
-        }"
-        @click="currentStep = index"
-      >
-        <span class="step-num">{{ index + 1 }}</span>
-        <span class="step-label">{{ step.label }}</span>
-      </button>
-    </div>
-
-    <div class="stage-container">
-      <div class="stage-info">
-        <h3>{{ steps[currentStep].title }}</h3>
-        <p>{{ steps[currentStep].desc }}</p>
+  <div class="browser-rendering-demo custom-demo-base">
+    <div class="demo-label">浏览器渲染 ── 干瘪文字拆解组装变成精美画面</div>
+    <div class="demo-panel">
+      
+      <div class="stepper">
+        <button v-for="(step, index) in steps" :key="index"
+          class="step-btn"
+          :class="{ active: currentStep === index, completed: currentStep > index }"
+          @click="currentStep = index"
+        >
+          <div class="step-icon">{{ step.icon }}</div>
+          <div class="step-name">{{ step.name }}</div>
+        </button>
       </div>
 
-      <div class="visualization-window">
-        <!-- HTML/CSS Source -->
-        <div class="source-view">
-          <div class="window-title">积木说明书 (HTML/CSS)</div>
-          <div class="code-content">
-            <!-- HTML Highlighted always after Step 0 -->
-            <div
-              class="line"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'html'
-              }"
-              @mouseenter="hoveredPart = 'html'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;!DOCTYPE html&gt;
-            </div>
-            <div
-              class="line"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'html'
-              }"
-              @mouseenter="hoveredPart = 'html'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;html&gt;
-            </div>
-            <div
-              class="line indent"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'body'
-              }"
-              @mouseenter="hoveredPart = 'body'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;body&gt;
-            </div>
-            <div
-              class="line indent-2"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'card'
-              }"
-              @mouseenter="hoveredPart = 'card'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;div class="card"&gt;
-            </div>
-            <div
-              class="line indent-3"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'img'
-              }"
-              @mouseenter="hoveredPart = 'img'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;img class="icon" src="castle.png" /&gt;
-            </div>
-            <div
-              class="line indent-3"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'title'
-              }"
-              @mouseenter="hoveredPart = 'title'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;h2 class="title"&gt;乐高城堡&lt;/h2&gt;
-            </div>
-            <div
-              class="line indent-3"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'btn'
-              }"
-              @mouseenter="hoveredPart = 'btn'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;button class="btn"&gt;购买&lt;/button&gt;
-            </div>
-            <div
-              class="line indent-2"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'card'
-              }"
-              @mouseenter="hoveredPart = 'card'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;/div&gt;
-            </div>
-            <div
-              class="line indent"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'body'
-              }"
-              @mouseenter="hoveredPart = 'body'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;/body&gt;
-            </div>
-            <div
-              class="line"
-              :class="{
-                active: currentStep >= 0,
-                hovered: hoveredPart === 'html'
-              }"
-              @mouseenter="hoveredPart = 'html'"
-              @mouseleave="hoveredPart = null"
-            >
-              &lt;/html&gt;
-            </div>
-
-            <div class="spacer"></div>
-
-            <!-- CSS Highlighted precisely based on step usage -->
-            <!-- Layout properties -->
-            <div
-              class="line"
-              :class="{
-                active: currentStep === 2,
-                hovered: hoveredPart === 'card'
-              }"
-              @mouseenter="hoveredPart = 'card'"
-              @mouseleave="hoveredPart = null"
-            >
-              .card { display: flex; padding: 10px; }
-            </div>
-            <div
-              class="line"
-              :class="{
-                active: currentStep === 2,
-                hovered: hoveredPart === 'img'
-              }"
-              @mouseenter="hoveredPart = 'img'"
-              @mouseleave="hoveredPart = null"
-            >
-              .icon { width: 50px; height: 50px; }
-            </div>
-            <!-- Style properties -->
-            <div
-              class="line"
-              :class="{
-                active: currentStep === 1 || currentStep === 3,
-                hovered: hoveredPart === 'title'
-              }"
-              @mouseenter="hoveredPart = 'title'"
-              @mouseleave="hoveredPart = null"
-            >
-              .title { color: red; }
-            </div>
-            <div
-              class="line"
-              :class="{
-                active: currentStep === 1 || currentStep === 3,
-                hovered: hoveredPart === 'btn'
-              }"
-              @mouseenter="hoveredPart = 'btn'"
-              @mouseleave="hoveredPart = null"
-            >
-              .btn { background: blue; }
-            </div>
-          </div>
+      <div class="stage-window">
+        <!-- 侧边说明 -->
+        <div class="explanations">
+          <div class="exp-title">{{ steps[currentStep].title }}</div>
+          <div class="exp-desc">{{ steps[currentStep].desc }}</div>
         </div>
 
-        <div class="transform-arrow">→</div>
+        <!-- 当前结果呈现区域 -->
+        <div class="render-canvas">
+          <!-- Step 0: 代码 -->
+          <div v-if="currentStep === 0" class="canvas-item code-raw fade-in">
+            <pre><code><b>&lt;html&gt;</b>
+  <b>&lt;style&gt;</b>
+   .title { color: #f00; }
+  <b>&lt;/style&gt;</b>
+  <b>&lt;body&gt;</b>
+   <b>&lt;h1 class="title"&gt;</b>
+     Google Search
+   <b>&lt;/h1&gt;</b>
+   <b>&lt;input /&gt;</b>
+  <b>&lt;/body&gt;</b>
+<b>&lt;/html&gt;</b></code></pre>
+          </div>
 
-        <!-- Render Result -->
-        <div class="result-view">
-          <div class="window-title">{{ steps[currentStep].resultTitle }}</div>
-
-          <div class="render-canvas">
-            <!-- Step 1: DOM (Skeleton) -->
-            <transition-group name="block">
-              <div
-                v-if="currentStep >= 0"
-                key="html"
-                class="block-box root"
-                :class="{ hovered: hoveredPart === 'html' }"
-                @mouseenter.stop="hoveredPart = 'html'"
-                @mouseleave="hoveredPart = null"
-              >
-                <span class="block-label">html</span>
-                <div
-                  class="block-box body"
-                  :class="{ hovered: hoveredPart === 'body' }"
-                  @mouseenter.stop="hoveredPart = 'body'"
-                  @mouseleave="hoveredPart = null"
-                >
-                  <span class="block-label">body</span>
-
-                  <!-- Product Card -->
-                  <div
-                    class="block-box card"
-                    :class="{
-                      layout: currentStep >= 2,
-                      hovered: hoveredPart === 'card'
-                    }"
-                    @mouseenter.stop="hoveredPart = 'card'"
-                    @mouseleave="hoveredPart = null"
-                  >
-                    <span class="block-label">div.card</span>
-
-                    <!-- Image -->
-                    <div
-                      class="block-box img"
-                      :class="{
-                        layout: currentStep >= 2,
-                        hovered: hoveredPart === 'img'
-                      }"
-                      @mouseenter.stop="hoveredPart = 'img'"
-                      @mouseleave="hoveredPart = null"
-                    >
-                      <span class="block-label">img.icon</span>
-                      <span v-if="currentStep >= 3" class="content-img"
-                        >🏰</span
-                      >
-                    </div>
-
-                    <!-- Title -->
-                    <div
-                      class="block-box title"
-                      :class="{
-                        styled: currentStep >= 1,
-                        layout: currentStep >= 2,
-                        hovered: hoveredPart === 'title'
-                      }"
-                      @mouseenter.stop="hoveredPart = 'title'"
-                      @mouseleave="hoveredPart = null"
-                    >
-                      <span class="block-label">h2.title</span>
-                      <span v-if="currentStep >= 3" class="content"
-                        >乐高城堡</span
-                      >
-                    </div>
-
-                    <!-- Button -->
-                    <div
-                      class="block-box btn"
-                      :class="{
-                        styled: currentStep >= 1,
-                        layout: currentStep >= 2,
-                        hovered: hoveredPart === 'btn'
-                      }"
-                      @mouseenter.stop="hoveredPart = 'btn'"
-                      @mouseleave="hoveredPart = null"
-                    >
-                      <span class="block-label">button.btn</span>
-                      <span v-if="currentStep >= 3" class="content-btn"
-                        >购买</span
-                      >
-                    </div>
+          <!-- Step 1: DOM树 -->
+          <div v-if="currentStep === 1" class="canvas-item dom-tree fade-in">
+            <div class="tree-node">html
+              <div class="tree-children">
+                <div class="tree-node">body
+                  <div class="tree-children">
+                    <div class="tree-node leaf">h1 (Google)</div>
+                    <div class="tree-node leaf">input (搜索框)</div>
                   </div>
                 </div>
               </div>
-            </transition-group>
-
-            <!-- Overlays for different steps -->
-            <div v-if="currentStep === 1" class="overlay-info style-info">
-              <div class="brush">🖌️ 正在上色 (Style)...</div>
             </div>
+          </div>
 
-            <div v-if="currentStep === 2" class="overlay-info layout-info">
-              <div class="ruler">📏 正在排版 (Layout)...</div>
-            </div>
+          <!-- Step 2: 结合 CSS -->
+          <div v-if="currentStep === 2" class="canvas-item css-merge fade-in">
+             <div class="merge-box">
+                <div class="box-left">h1 (Google)</div>
+                <div class="box-plus">+</div>
+                <div class="box-right">.title { color: #f00 }</div>
+                <div class="box-arrow">↓</div>
+                <div class="box-result">h1 (红色文字规则)</div>
+             </div>
+          </div>
 
-            <div v-if="currentStep === 3" class="overlay-info paint-info">
-              <div class="paint">✨ 绘制完成 (Paint)!</div>
-            </div>
+          <!-- Step 3: Layout -->
+          <div v-if="currentStep === 3" class="canvas-item layout-plan fade-in">
+             <div class="blueprint">
+                <div class="bp-box bp-h1">x:50, y:20<br>w:200, h:40</div>
+                <div class="bp-box bp-input">x:50, y:80<br>w:400, h:30</div>
+             </div>
+          </div>
+
+          <!-- Step 4: Paint -->
+          <div v-if="currentStep === 4" class="canvas-item final-paint fade-in">
+             <div class="browser-fake">
+               <h1 style="color:red; font-family:sans-serif; margin-bottom:20px; font-weight:normal;">Google Search</h1>
+               <div style="width:100%; max-width:400px; height:36px; border-radius:20px; border:1px solid #dfe1e5; padding:0 20px; display:flex; align-items:center;">
+                  🔍 
+               </div>
+             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="demo-status">点击上方各步骤图标，查看每一阶段的工厂作业产出</div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const steps = [
-  {
-    label: 'DOM (搭骨架)',
-    title: '1. 搭建骨架 (DOM)',
-    desc: '浏览器工头 (Parser) 解析 HTML 代码，构建出完整的文档树结构。注意：即使代码中省略了 html/body，浏览器也会自动补全。',
-    resultTitle: 'DOM 树结构'
-  },
-  {
-    label: 'Style (上色)',
-    title: '2. 计算样式 (Recalculate Style)',
-    desc: '装修工 (CSS Parser) 匹配 CSS 规则。比如发现 .title 需要红色，.btn 需要蓝色背景。此时只关心"长什么样"，不关心"在哪"。',
-    resultTitle: '附带样式的节点'
-  },
-  {
-    label: 'Layout (排版)',
-    title: '3. 布局排版 (Layout/Reflow)',
-    desc: '测量员 (Layout) 根据 display:flex 和 padding 等属性，计算每个盒子的精确位置和大小。图片在左，文字在右。',
-    resultTitle: '几何布局'
-  },
-  {
-    label: 'Paint (绘制)',
-    title: '4. 像素绘制 (Paint)',
-    desc: '画家 (Paint) 按照计算好的位置和样式，真正把像素点画在屏幕上。最终你看到了一个完整的商品卡片。',
-    resultTitle: '最终画面'
-  }
-]
-
 const currentStep = ref(0)
-const hoveredPart = ref(null)
+const steps = [
+  { icon: '📄', name: '源码', title: '拿到纯文本源代码', desc: '刚传回来的只是一堆干瘪的 HTML, CSS 等代码字符。这只是建造网页的说明书，不是真正的画面。' },
+  { icon: '🦴', name: 'DOM解析', title: '1. 搭骨架 (DOM 解析)', desc: '第一步通读 HTML 标签，构建树状骨架图（DOM 树），了解结构关系，例如"标题框在身体(body)里"。' },
+  { icon: '🎨', name: 'CSS解析', title: '2. 样式附加 (CSS 解析)', desc: '第二步读 CSS，把对应的样式规则（如"标题为红色"）关联并绑定到我们刚才搭建好的特定骨架节点上。' },
+  { icon: '📏', name: 'Layout排版', title: '3. 几何排版 (Layout)', desc: '第三步拿尺子量每个骨架的大小。结合你的屏幕尺寸，精确计算出每个元素所在的绝对坐标 x, y 和明确的长宽高尺寸。' },
+  { icon: '🖼️', name: 'Paint绘制', title: '4. 像素涂色 (Paint)', desc: '最后，有了骨架、颜色规则、和精准坐标尺寸，浏览器控制像素画笔，在一瞬间完成上色和填充！' }
+]
 </script>
 
 <style scoped>
-.browser-rendering-demo {
+.custom-demo-base {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+}
+
+.demo-label {
+  font-size: 0.78rem;
+  font-weight: bold;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.2px;
+}
+
+.demo-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   background: var(--vp-c-bg);
-  margin: 1rem 0;
-  font-family: var(--vp-font-family-mono);
-  overflow: hidden;
+}
+
+.demo-status {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--vp-c-text-3);
+  text-align: center;
+  font-weight: bold;
 }
 
 .stepper {
   display: flex;
-  background: var(--vp-c-bg-soft);
-  border-bottom: 1px solid var(--vp-c-divider);
+  justify-content: space-between;
+  border-bottom: 2px solid var(--vp-c-divider);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
 }
 
 .step-btn {
   flex: 1;
-  padding: 1rem;
-  border: none;
   background: transparent;
+  border: none;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
+  gap: 0.4rem;
+  opacity: 0.5;
+  transition: all 0.3s;
 }
 
-.step-btn:hover {
+.step-btn.active { opacity: 1; transform: scale(1.1); }
+.step-btn.completed { opacity: 0.8; }
+
+.step-icon { font-size: 1.5rem; }
+.step-name { font-size: 0.8rem; font-weight: bold; color: var(--vp-c-text-1); }
+
+.stage-window {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  min-height: 200px;
+}
+
+.explanations {
+  flex: 1;
+  padding: 1.5rem;
   background: var(--vp-c-bg-alt);
+  border-radius: 8px;
+  border-left: 4px solid var(--vp-c-brand-1, #3b82f6);
 }
 
-.step-btn.active {
-  color: var(--vp-c-brand);
-  background: var(--vp-c-bg);
-  font-weight: bold;
-}
+.exp-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 0.8rem; color: var(--vp-c-text-1); }
+.exp-desc { font-size: 0.85rem; color: var(--vp-c-text-2); line-height: 1.6; }
 
-.step-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--vp-c-brand);
-}
-
-.step-num {
-  background: var(--vp-c-bg-alt);
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+.render-canvas {
+  flex: 1.2;
+  height: 280px;
+  border: 2px dashed var(--vp-c-divider);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.step-btn.active .step-num,
-.step-btn.completed .step-num {
-  background: var(--vp-c-brand);
-  color: white;
-  border-color: var(--vp-c-brand);
-}
-
-.stage-container {
-  padding: 1.5rem;
-}
-
-.stage-info {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.stage-info h3 {
-  margin: 0 0 0.5rem 0;
-  color: var(--vp-c-text-1);
-}
-
-.stage-info p {
-  margin: 0;
-  color: var(--vp-c-text-2);
-  font-size: 0.9rem;
-}
-
-.visualization-window {
-  display: flex;
-  gap: 1rem;
-  align-items: stretch;
-  min-height: 400px;
-}
-
-.source-view,
-.result-view {
-  flex: 1;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  position: relative;
   background: var(--vp-c-bg-alt);
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
 }
 
-.window-title {
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: var(--vp-c-text-2);
-  background: var(--vp-c-bg-soft);
-  text-align: center;
-}
+.canvas-item { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.code-content {
-  padding: 1rem;
-  font-size: 0.8rem;
-  font-family: monospace;
-  overflow-y: auto;
-}
+/* Code state */
+.code-raw pre { background: var(--vp-code-bg); padding: 1rem; border-radius: 6px; font-size: 0.75rem; color: var(--vp-code-color); width: 100%; height: 100%; overflow: auto; margin:0; line-height: 1.5;}
 
-.line {
-  padding: 2px 4px;
-  border-radius: 2px;
-  opacity: 0.3;
-  transition: opacity 0.5s;
-  white-space: nowrap;
-}
+/* DOM Tree state */
+.tree-node { border: 2px solid var(--vp-c-brand-soft); background: var(--vp-c-bg); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: bold; text-align: center; color: var(--vp-c-text-1); }
+.tree-children { display: flex; gap: 1.5rem; margin-top: 2rem; position: relative; justify-content: center; }
+.tree-children::before { content:''; position: absolute; top: -2rem; left: 50%; width: 2px; height: 2rem; background: var(--vp-c-brand-soft); }
+.tree-children .tree-node { position: relative; }
+.tree-children .tree-node::before { content:''; position: absolute; top: -2rem; left: 50%; width: 2px; height: 2rem; background: var(--vp-c-brand-soft); }
+.tree-node.leaf { background: var(--vp-c-brand-soft, #eff6ff); color: var(--vp-c-brand-1, #3b82f6); border-color: var(--vp-c-brand-1); }
 
-.line.active {
-  opacity: 1;
-  background: rgba(59, 130, 246, 0.1);
-  font-weight: bold;
-  color: #2563eb;
-}
+/* CSS Merge */
+.merge-box { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; font-family: var(--vp-font-family-mono); font-size: 0.85rem;}
+.box-left, .box-right { padding: 0.8rem 1.2rem; border-radius: 6px; border: 2px dashed var(--vp-c-text-3); background: var(--vp-c-bg); color: var(--vp-c-text-1); }
+.box-result { padding: 0.8rem 1.2rem; border-radius: 6px; background: var(--vp-c-danger-soft, #fee2e2); color: var(--vp-c-danger-3, #b91c1c); border: 2px solid var(--vp-c-danger-1, #ef4444); font-weight: bold; }
+.box-arrow, .box-plus { font-size: 1.5rem; font-weight: bold; color: var(--vp-c-text-2); }
 
-.line.indent {
-  padding-left: 1rem;
-}
-.line.indent-2 {
-  padding-left: 2rem;
-}
-.line.indent-3 {
-  padding-left: 3rem;
-}
-.line.mt-2 {
-  margin-top: 1rem;
-}
+/* Layout Plan */
+.blueprint { width: 100%; height: 100%; position: relative; border: 2px solid var(--vp-c-brand-1); background: rgba(59, 130, 246, 0.05); }
+.blueprint::before { content: 'Viewport Blueprint'; position: absolute; font-size: 0.75rem; color: var(--vp-c-brand-1); top: 8px; left: 8px; font-family: monospace; font-weight: bold; }
+.bp-box { position: absolute; border: 2px dashed var(--vp-c-warning-1, #f59e0b); background: var(--vp-c-warning-soft, #fffbeb); color: var(--vp-c-warning-1); font-size: 0.75rem; padding: 4px; display: flex; align-items: center; justify-content: center; text-align: center; font-family: monospace; font-weight: bold; }
+.bp-box.bp-h1 { top: 25%; left: 10%; width: 50%; height: 25%; }
+.bp-box.bp-input { top: 60%; left: 10%; width: 80%; height: 20%; }
 
-.transform-arrow {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  color: var(--vp-c-text-3);
-}
+/* Final Paint */
+.browser-fake { width: 100%; height: 100%; background: #fff; padding: 2rem; display: flex; flex-direction: column; justify-content: center; color: #1a1a1a; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+html.dark .browser-fake { background: #111; color: #eee; }
 
-.result-view {
-  background: white;
-  position: relative;
-}
-
-.render-canvas {
-  padding: 2rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow-y: auto;
-}
-
-/* Blocks Animation */
-.block-box {
-  border: 1px dashed #9ca3af;
-  background: #f3f4f6;
-  padding: 0.5rem;
-  margin: 0.2rem;
-  border-radius: 2px;
-  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  min-width: 50px;
-  min-height: 30px;
-  display: flex;
-  flex-direction: column;
-}
-
-.block-box.root {
-  width: 95%;
-  border-color: #e5e7eb;
-  background: #fff;
-}
-.block-box.body {
-  width: 90%;
-  border-color: #d1d5db;
-  background: #f9fafb;
-}
-.block-box.card {
-  width: 80%;
-  border-color: #9ca3af;
-  background: #e5e7eb;
-}
-
-.block-label {
-  font-size: 0.6rem;
-  color: #9ca3af;
-  position: absolute;
-  top: -8px;
-  left: 4px;
-  background: white;
-  padding: 0 2px;
-}
-
-/* Step 2: Style */
-.block-box.title.styled {
-  color: red; /* Text color applied but not painted yet */
-  border: 1px solid red; /* Visual cue for style applied */
-  background: #fee2e2;
-}
-
-.block-box.btn.styled {
-  background: blue;
-  color: white;
-  border: 1px solid blue;
-}
-
-/* Step 3: Layout */
-.block-box.card.layout {
-  display: flex;
-  flex-direction: row; /* Horizontal layout */
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.block-box.img.layout {
-  width: 50px;
-  height: 50px;
-  background: #eee;
-  border: none;
-}
-
-.block-box.title.layout {
-  border: none;
-  background: transparent;
-  margin: 0;
-  padding: 0;
-}
-
-.block-box.btn.layout {
-  margin-left: auto; /* Push to right */
-  padding: 5px 15px;
-  border-radius: 4px;
-}
-
-/* Content visibility for Paint step */
-.content,
-.content-img,
-.content-btn {
-  font-size: 1rem;
-  font-weight: bold;
-  animation: fadeIn 0.5s;
-  align-self: center;
-}
-
-.content-img {
-  font-size: 2rem;
-}
-.content-btn {
-  font-size: 0.8rem;
-}
-
-/* Overlay Info */
-.overlay-info {
-  position: absolute;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  text-align: center;
-  animation: bounceIn 0.5s;
-  pointer-events: none;
-}
-
-.brush,
-.ruler,
-.paint {
-  display: inline-block;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Vue Transitions */
-.block-enter-active,
-.block-leave-active {
-  transition: all 0.5s ease;
-}
-
-.block-enter-from {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes bounceIn {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Hover Interactions */
-.line.hovered {
-  background: rgba(59, 130, 246, 0.15);
-  opacity: 1 !important;
-  cursor: crosshair;
-}
-
-.block-box.hovered {
-  box-shadow: 0 0 0 2px #3b82f6;
-  z-index: 10;
-  background-color: rgba(59, 130, 246, 0.05);
-  cursor: crosshair;
+@media (max-width: 768px) {
+  .stage-window { flex-direction: column; }
+  .stepper { flex-wrap: wrap; gap: 1rem; }
+  .step-btn { flex: 1 1 20%; }
 }
 </style>

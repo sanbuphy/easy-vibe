@@ -1,13 +1,19 @@
 <template>
   <div class="session-persistence-demo">
     <div class="header">
-      <div class="title">会话保持机制</div>
-      <div class="subtitle">Cookie、IP哈希与粘性会话的技术对比</div>
+      <div class="title">
+        会话保持机制
+      </div>
+      <div class="subtitle">
+        Cookie、IP哈希与粘性会话的技术对比
+      </div>
     </div>
 
     <!-- 场景选择 -->
     <div class="scenario-selector">
-      <div class="scenario-label">应用场景：</div>
+      <div class="scenario-label">
+        应用场景：
+      </div>
       <div class="scenario-buttons">
         <button
           v-for="scenario in scenarios"
@@ -48,9 +54,18 @@
             :class="{ active: activeUser === user.id }"
             @click="activeUser = user.id"
           >
-            <div class="avatar-icon">{{ user.avatar }}</div>
-            <div class="user-name">{{ user.name }}</div>
-            <div v-if="hasSessionCookie" class="cookie-badge">🍪</div>
+            <div class="avatar-icon">
+              {{ user.avatar }}
+            </div>
+            <div class="user-name">
+              {{ user.name }}
+            </div>
+            <div
+              v-if="hasSessionCookie"
+              class="cookie-badge"
+            >
+              🍪
+            </div>
           </div>
         </div>
       </div>
@@ -58,8 +73,12 @@
       <!-- 请求流程 -->
       <div class="request-flow">
         <div class="flow-step">
-          <div class="step-label">请求</div>
-          <div class="step-arrow">↓</div>
+          <div class="step-label">
+            请求
+          </div>
+          <div class="step-arrow">
+            ↓
+          </div>
         </div>
 
         <!-- 负载均衡器 -->
@@ -72,16 +91,29 @@
             <div class="mechanism-display">
               <span class="display-icon">{{ currentMechanismData.icon }}</span>
               <div class="display-info">
-                <div class="display-name">{{ currentMechanismData.name }}</div>
-                <div class="display-desc">{{ currentMechanismData.shortDesc }}</div>
+                <div class="display-name">
+                  {{ currentMechanismData.name }}
+                </div>
+                <div class="display-desc">
+                  {{ currentMechanismData.shortDesc }}
+                </div>
               </div>
             </div>
           </div>
           <!-- 会话表 -->
-          <div v-if="currentMechanism === 'cookie' || currentMechanism === 'sticky'" class="session-table">
-            <div class="table-title">会话映射表</div>
+          <div
+            v-if="currentMechanism === 'cookie' || currentMechanism === 'sticky'"
+            class="session-table"
+          >
+            <div class="table-title">
+              会话映射表
+            </div>
             <div class="table-rows">
-              <div v-for="mapping in sessionMappings" :key="mapping.session" class="table-row">
+              <div
+                v-for="mapping in sessionMappings"
+                :key="mapping.session"
+                class="table-row"
+              >
                 <span class="session-id">{{ mapping.session }}</span>
                 <span class="mapping-arrow">→</span>
                 <span class="server-name">{{ mapping.server }}</span>
@@ -89,8 +121,13 @@
             </div>
           </div>
           <!-- IP哈希环 -->
-          <div v-if="currentMechanism === 'iphash'" class="hash-ring">
-            <div class="ring-title">IP哈希环</div>
+          <div
+            v-if="currentMechanism === 'iphash'"
+            class="hash-ring"
+          >
+            <div class="ring-title">
+              IP哈希环
+            </div>
             <div class="ring-visual">
               <div
                 v-for="(server, index) in hashRingServers"
@@ -109,7 +146,9 @@
         </div>
 
         <div class="flow-step">
-          <div class="step-arrow">↓</div>
+          <div class="step-arrow">
+            ↓
+          </div>
         </div>
 
         <!-- 后端服务器 -->
@@ -120,15 +159,27 @@
             class="backend-server"
             :class="{ target: isTargetServer(server.id) }"
           >
-            <div class="server-icon">🖥️</div>
-            <div class="server-info">
-              <div class="server-name">{{ server.name }}</div>
-              <div class="server-ip">{{ server.ip }}</div>
+            <div class="server-icon">
+              🖥️
             </div>
-            <div class="server-status" :class="server.status">
+            <div class="server-info">
+              <div class="server-name">
+                {{ server.name }}
+              </div>
+              <div class="server-ip">
+                {{ server.ip }}
+              </div>
+            </div>
+            <div
+              class="server-status"
+              :class="server.status"
+            >
               {{ server.status === 'healthy' ? '✓' : '✗' }}
             </div>
-            <div v-if="isTargetServer(server.id)" class="selected-indicator">
+            <div
+              v-if="isTargetServer(server.id)"
+              class="selected-indicator"
+            >
               选中
             </div>
           </div>
@@ -136,9 +187,14 @@
       </div>
 
       <!-- 响应流程 -->
-      <div class="response-flow" v-if="currentMechanism === 'cookie'">
+      <div
+        v-if="currentMechanism === 'cookie'"
+        class="response-flow"
+      >
         <div class="flow-step">
-          <div class="step-arrow">↑</div>
+          <div class="step-arrow">
+            ↑
+          </div>
         </div>
         <div class="set-cookie-box">
           <div class="cookie-header">
@@ -154,7 +210,9 @@
 
     <!-- 机制对比表 -->
     <div class="mechanism-comparison">
-      <div class="comparison-title">三种会话保持机制对比</div>
+      <div class="comparison-title">
+        三种会话保持机制对比
+      </div>
       <div class="comparison-grid">
         <div class="comparison-card">
           <div class="card-header">
@@ -436,7 +494,7 @@ onUnmounted(() => {
   padding: 0.75rem 0.5rem;
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -565,8 +623,8 @@ onUnmounted(() => {
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
 .lb-header {
@@ -598,7 +656,7 @@ onUnmounted(() => {
   gap: 0.75rem;
   background: white;
   padding: 0.75rem;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #e2e8f0;
 }
 
@@ -625,7 +683,7 @@ onUnmounted(() => {
 .session-table {
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 
@@ -666,7 +724,7 @@ onUnmounted(() => {
 .hash-ring {
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 
@@ -729,7 +787,7 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg-soft);
   border: 2px solid var(--vp-c-divider);
   border-radius: 10px;
@@ -845,7 +903,7 @@ onUnmounted(() => {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .comparison-title {

@@ -77,6 +77,10 @@
   border-top: 0 !important;
 }
 
+.vp-doc h2 .header-anchor {
+  top: 10px !important;
+}
+
 .vp-doc :where(h3) {
   margin: 18px 0 8px;
 }
@@ -400,4 +404,16 @@
 .VPDocAsideOutline.has-outline .outline-marker {
   position: absolute;
   will-change: top;
+}
+
+/* Unified demo info-box label alignment */
+.vp-doc .info-box {
+  display: flex;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.vp-doc .info-box strong {
+  white-space: nowrap;
+  flex-shrink: 0;
 }

@@ -2,13 +2,17 @@
   <div class="dto-flow-demo">
     <div class="demo-header">
       <h4>🔄 DTO 流转：数据在不同层之间的转换</h4>
-      <p class="subtitle">DTO（Data Transfer Object）是层与层之间传递数据的载体</p>
+      <p class="subtitle">
+        DTO（Data Transfer Object）是层与层之间传递数据的载体
+      </p>
     </div>
 
     <!-- 流程图 -->
     <div class="flow-diagram">
       <div class="flow-step">
-        <div class="step-title">Controller 层</div>
+        <div class="step-title">
+          Controller 层
+        </div>
         <div class="step-code">
           <div class="code-line">
             <span class="comment">// 接收 Request DTO</span>
@@ -25,10 +29,14 @@
         </div>
       </div>
 
-      <div class="flow-arrow">⬇️ 转换为 Service 需要的参数</div>
+      <div class="flow-arrow">
+        ⬇️ 转换为 Service 需要的参数
+      </div>
 
       <div class="flow-step">
-        <div class="step-title">Service 层</div>
+        <div class="step-title">
+          Service 层
+        </div>
         <div class="step-code">
           <div class="code-line">
             <span class="comment">// 业务处理</span>
@@ -54,10 +62,14 @@
         </div>
       </div>
 
-      <div class="flow-arrow">⬇️ 转换为 Repository 需要的 Entity</div>
+      <div class="flow-arrow">
+        ⬇️ 转换为 Repository 需要的 Entity
+      </div>
 
       <div class="flow-step">
-        <div class="step-title">Repository 层</div>
+        <div class="step-title">
+          Repository 层
+        </div>
         <div class="step-code">
           <div class="code-line">
             <span class="comment">// 数据持久化</span>
@@ -74,10 +86,14 @@
         </div>
       </div>
 
-      <div class="flow-arrow">⬆️ 返回 Entity，转换为 DTO</div>
+      <div class="flow-arrow">
+        ⬆️ 返回 Entity，转换为 DTO
+      </div>
 
       <div class="flow-step">
-        <div class="step-title">返回给客户端</div>
+        <div class="step-title">
+          返回给客户端
+        </div>
         <div class="step-code">
           <div class="code-line">
             <span class="comment">// Response DTO</span>
@@ -109,10 +125,18 @@
       <h5>📋 不同层的 DTO 职责</h5>
       <div class="comparison-table">
         <div class="table-header">
-          <div class="col-layer">层级</div>
-          <div class="col-dto">DTO 类型</div>
-          <div class="col-purpose">职责</div>
-          <div class="col-example">示例</div>
+          <div class="col-layer">
+            层级
+          </div>
+          <div class="col-dto">
+            DTO 类型
+          </div>
+          <div class="col-purpose">
+            职责
+          </div>
+          <div class="col-example">
+            示例
+          </div>
         </div>
         <div class="table-row">
           <div class="col-layer">
@@ -202,7 +226,7 @@ const viewMode = ref('conversion')
 
 .flow-step {
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   border-left: 4px solid #409eff;
 }
@@ -286,7 +310,7 @@ const viewMode = ref('conversion')
 
 .table-header {
   background: #f5f7fa;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
   color: #303133;
   font-size: 13px;

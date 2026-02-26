@@ -27,11 +27,9 @@ const currentCost = computed(() => (totalTokens.value / 1000 * costPer1kTokens).
 const systemHeight = computed(() => (systemPromptTokens / windowLimit) * 100)
 const inputHeight = computed(() => (currentInputTokens / windowLimit) * 100)
 // History 高度展示逻辑：
-// 我们希望展示“总高度”，即使超过 100%。
+// 我们希望展示"总高度"，即使超过 100%。
 // 父容器会限制显示区域，溢出部分通过视觉暗示。
 const historyHeight = computed(() => (historyTokens.value / windowLimit) * 100)
-
-const totalHeight = computed(() => systemHeight.value + historyHeight.value + inputHeight.value)
 </script>
 
 <template>
@@ -43,12 +41,15 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
           <span class="value">{{ round }}</span>
           <span class="label">当前轮次</span>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" />
         <div class="stat-item">
-          <span class="value" :class="{ error: isOverflow }">{{ totalTokens }}</span>
+          <span
+            class="value"
+            :class="{ error: isOverflow }"
+          >{{ totalTokens }}</span>
           <span class="label">Token 占用</span>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" />
         <div class="stat-item">
           <span class="value">${{ currentCost }}</span>
           <span class="label">本轮成本</span>
@@ -61,11 +62,17 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
       <!-- 上方预留空间给溢出提示 -->
       <div class="overflow-zone">
         <transition name="fade">
-          <div v-if="isOverflow" class="overflow-badge">
+          <div
+            v-if="isOverflow"
+            class="overflow-badge"
+          >
             <span class="icon">🗑️</span>
             <span>溢出截断：前 {{ forgottenRounds }} 轮对话已被遗忘！</span>
           </div>
-          <div v-else class="safe-badge">
+          <div
+            v-else
+            class="safe-badge"
+          >
             <span class="icon">✅</span>
             <span>记忆完整</span>
           </div>
@@ -81,15 +88,23 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
         <!-- 堆叠内容容器 -->
         <!-- 使用 flex-direction: column-reverse 让底部对齐 -->
         <div class="stack-container">
-          
           <!-- System (基座) -->
-          <div class="block system" :style="{ height: `${systemHeight}%` }">
+          <div
+            class="block system"
+            :style="{ height: `${systemHeight}%` }"
+          >
             <span class="block-text">System Prompt ({{ systemPromptTokens }})</span>
           </div>
 
           <!-- History (中间) -->
-          <div class="block history" :style="{ height: `${historyHeight}%` }">
-            <span class="block-text" v-if="historyHeight > 10">
+          <div
+            class="block history"
+            :style="{ height: `${historyHeight}%` }"
+          >
+            <span
+              v-if="historyHeight > 10"
+              class="block-text"
+            >
               History ({{ round - 1 }} rounds)
             </span>
             <!-- 溢出遮罩：当溢出时，History 的底部实际上是被“挤出去”的 -->
@@ -103,10 +118,12 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
           </div>
 
           <!-- Input (最新) -->
-          <div class="block input" :style="{ height: `${inputHeight}%` }">
+          <div
+            class="block input"
+            :style="{ height: `${inputHeight}%` }"
+          >
             <span class="block-text">New Input</span>
           </div>
-          
         </div>
         
         <!-- 溢出遮罩层：如果 totalHeight > 100%，显示一个红色的遮罩在顶部，表示这部分虽然生成了但塞不进去/或者旧的被挤走了 -->
@@ -121,12 +138,12 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
       <div class="slider-wrapper">
         <span class="slider-hint">拖动滑块增加对话轮次：</span>
         <input 
+          v-model.number="round" 
           type="range" 
           min="1" 
           :max="maxRound" 
-          v-model.number="round" 
           class="custom-slider"
-        />
+        >
         <div class="slider-labels">
           <span>第 1 轮</span>
           <span>第 {{ maxRound }} 轮</span>
@@ -137,7 +154,10 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
         <p v-if="!isOverflow">
           💡 <strong>一切正常</strong>：当前 Token 数 ({{ totalTokens }}) 未超过窗口限制。模型能完美回忆起所有对话细节。
         </p>
-        <p v-else class="warning-text">
+        <p
+          v-else
+          class="warning-text"
+        >
           ⚠️ <strong>发生遗忘</strong>：Token 总量 ({{ totalTokens }}) 已超过窗口限制 ({{ windowLimit }})。
           为了放入新对话，系统被迫丢弃了最早的 <strong>{{ forgottenRounds }}</strong> 轮历史记录。
         </p>
@@ -149,10 +169,10 @@ const totalHeight = computed(() => systemHeight.value + historyHeight.value + in
 <style scoped>
 .agent-context-flow {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
   overflow: hidden;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 /* 1. 顶部统计栏 */

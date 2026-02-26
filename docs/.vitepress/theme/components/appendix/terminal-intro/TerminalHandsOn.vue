@@ -4,29 +4,43 @@
       <!-- Left Panel: Task Guide -->
       <div class="task-panel">
         <div class="panel-header">
-          <span class="panel-title"
-            >🎯 实操任务 ({{ currentTaskIndex + 1 }}/{{ tasks.length }})</span
-          >
+          <span class="panel-title">🎯 实操任务 ({{ currentTaskIndex + 1 }}/{{ tasks.length }})</span>
           <div class="os-selector">
-            <select v-model="currentOS" @change="resetCurrentTask">
-              <option value="mac">macOS</option>
-              <option value="win-ps">Windows PowerShell</option>
-              <option value="win-cmd">Windows CMD</option>
-              <option value="linux">Linux</option>
+            <select
+              v-model="currentOS"
+              @change="resetCurrentTask"
+            >
+              <option value="mac">
+                macOS
+              </option>
+              <option value="win-ps">
+                Windows PowerShell
+              </option>
+              <option value="win-cmd">
+                Windows CMD
+              </option>
+              <option value="linux">
+                Linux
+              </option>
             </select>
           </div>
         </div>
 
         <div class="task-content">
           <h3>{{ currentTask.title }}</h3>
-          <p class="task-desc">{{ currentTask.description }}</p>
+          <p class="task-desc">
+            {{ currentTask.description }}
+          </p>
 
           <div class="ai-helper">
             <div class="ai-header">
               <span class="ai-icon">🤖</span>
               <span class="ai-title">不知道怎么写？问问 AI</span>
             </div>
-            <div class="ai-chat" v-show="isAiOpen">
+            <div
+              v-show="isAiOpen"
+              class="ai-chat"
+            >
               <div class="chat-bubble user">
                 {{ currentTask.aiQuery }}
               </div>
@@ -34,7 +48,7 @@
                 <p>
                   {{
                     currentTask.aiResponse[currentOS] ||
-                    currentTask.aiResponse.common
+                      currentTask.aiResponse.common
                   }}
                 </p>
                 <!-- Multiple Commands Support -->
@@ -55,12 +69,7 @@
                 <button
                   v-else-if="currentTask.expectedCmd"
                   class="copy-btn"
-                  @click="
-                    copyCommand(
-                      currentTask.expectedCmd[currentOS] ||
-                        currentTask.expectedCmd.common
-                    )
-                  "
+                  @click="copyCurrentTaskCommand"
                 >
                   复制命令
                 </button>
@@ -68,61 +77,90 @@
             </div>
           </div>
 
-          <div class="expected-result" v-if="!isTaskCompleted">
+          <div
+            v-if="!isTaskCompleted"
+            class="expected-result"
+          >
             <span class="label">预期目标：</span>
             <span class="value">{{ currentTask.goal }}</span>
           </div>
 
-          <div class="success-message" v-if="isTaskCompleted">
+          <div
+            v-if="isTaskCompleted"
+            class="success-message"
+          >
             <span class="icon">🎉</span>
             <span>太棒了！任务完成！</span>
             <button
+              v-if="currentTaskIndex < tasks.length - 1"
               class="next-btn"
               @click="nextTask"
-              v-if="currentTaskIndex < tasks.length - 1"
             >
               下一关
             </button>
-            <button class="reset-btn" @click="resetAll" v-else>重新开始</button>
+            <button
+              v-else
+              class="reset-btn"
+              @click="resetAll"
+            >
+              重新开始
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Right Panel: Terminal Emulator -->
-      <div class="terminal-panel" :class="currentOS">
+      <div
+        class="terminal-panel"
+        :class="currentOS"
+      >
         <div class="terminal-header">
           <div class="dots">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
+            <span class="dot red" />
+            <span class="dot yellow" />
+            <span class="dot green" />
           </div>
-          <div class="title">{{ terminalTitle }}</div>
+          <div class="title">
+            {{ terminalTitle }}
+          </div>
         </div>
-        <div class="terminal-body" ref="terminalBody" @click="focusInput">
-          <div v-for="(line, index) in history" :key="index" class="line">
-            <span v-if="line.type === 'input'" class="prompt">{{
+        <div
+          ref="terminalBody"
+          class="terminal-body"
+          @click="focusInput"
+        >
+          <div
+            v-for="(line, index) in history"
+            :key="index"
+            class="line"
+          >
+            <span
+              v-if="line.type === 'input'"
+              class="prompt"
+            >{{
               line.prompt
             }}</span>
             <span :class="line.type">{{ line.content }}</span>
           </div>
 
           <div
-            class="line input-line"
             v-if="!isTaskCompleted || currentTaskIndex < tasks.length - 1"
+            class="line input-line"
           >
             <span class="prompt">{{ prompt }}</span>
             <input
               ref="cmdInput"
               v-model="inputCmd"
-              @keydown.enter="executeCommand"
-              @keydown.tab.prevent
               type="text"
               spellcheck="false"
               autocomplete="off"
-            />
-            <span v-if="inputCmd.length > 0" class="enter-hint"
-              >⏎ 按回车执行</span
+              @keydown.enter="executeCommand"
+              @keydown.tab.prevent
             >
+            <span
+              v-if="inputCmd.length > 0"
+              class="enter-hint"
+            >⏎ 按回车执行</span>
           </div>
         </div>
       </div>
@@ -398,6 +436,11 @@ const copyCommand = (cmd) => {
   focusInput()
 }
 
+const copyCurrentTaskCommand = () => {
+  const cmd = currentTask.value.expectedCmd[currentOS.value] || currentTask.value.expectedCmd.common
+  copyCommand(cmd)
+}
+
 const focusInput = () => {
   if (cmdInput.value) {
     cmdInput.value.focus()
@@ -584,7 +627,7 @@ watch(currentOS, () => {
 .ai-helper {
   margin-bottom: 20px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   background: var(--vp-c-bg);
 }
@@ -613,7 +656,7 @@ watch(currentOS, () => {
 
 .chat-bubble {
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.9rem;
   margin-bottom: 10px;
   max-width: 90%;
@@ -675,7 +718,7 @@ watch(currentOS, () => {
   padding: 15px;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   color: #10b981;
   font-weight: bold;
   display: flex;
@@ -786,7 +829,7 @@ watch(currentOS, () => {
 .terminal-body {
   flex: 1;
   padding: 10px;
-  overflow-y: auto;
+  
   cursor: text;
   font-size: 14px;
   line-height: 1.5;

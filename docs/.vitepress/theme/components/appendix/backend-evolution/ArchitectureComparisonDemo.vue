@@ -1,20 +1,38 @@
 <template>
   <div class="architecture-comparison-demo">
     <div class="demo-header">
-      <h4>🏗️ 架构演进对比</h4>
-      <p>四个时代的核心架构特征对比</p>
+      <span class="icon">🏗️</span>
+      <span class="title">架构演进对比</span>
+      <span class="subtitle">四个时代的核心架构特征</span>
     </div>
 
     <div class="comparison-grid">
-      <div class="era-card" v-for="era in eras" :key="era.name" :class="{ active: selectedEra === era.name }" @click="selectedEra = era.name">
-        <div class="era-icon">{{ era.icon }}</div>
-        <div class="era-name">{{ era.name }}</div>
-        <div class="era-year">{{ era.year }}</div>
-        <div class="era-tag">{{ era.tag }}</div>
+      <div
+        v-for="era in eras"
+        :key="era.name"
+        class="era-card"
+        :class="{ active: selectedEra === era.name }"
+        @click="selectedEra = era.name"
+      >
+        <div class="era-icon">
+          {{ era.icon }}
+        </div>
+        <div class="era-name">
+          {{ era.name }}
+        </div>
+        <div class="era-year">
+          {{ era.year }}
+        </div>
+        <div class="era-tag">
+          {{ era.tag }}
+        </div>
       </div>
     </div>
 
-    <div class="detail-panel" v-if="selectedEra">
+    <div
+      v-if="selectedEra"
+      class="detail-panel"
+    >
       <div class="detail-header">
         <span class="detail-icon">{{ currentEra.icon }}</span>
         <h5>{{ currentEra.name }} ({{ currentEra.year }})</h5>
@@ -24,31 +42,55 @@
         <div class="feature-section">
           <h6>🏗️ 架构特征</h6>
           <ul>
-            <li v-for="(feat, i) in currentEra.features" :key="i">{{ feat }}</li>
+            <li
+              v-for="(feat, i) in currentEra.features"
+              :key="i"
+            >
+              {{ feat }}
+            </li>
           </ul>
         </div>
 
         <div class="feature-section">
           <h6>✅ 优点</h6>
           <ul>
-            <li v-for="(pro, i) in currentEra.pros" :key="i">{{ pro }}</li>
+            <li
+              v-for="(pro, i) in currentEra.pros"
+              :key="i"
+            >
+              {{ pro }}
+            </li>
           </ul>
         </div>
 
         <div class="feature-section">
           <h6>❌ 痛点</h6>
           <ul>
-            <li v-for="(con, i) in currentEra.cons" :key="i">{{ con }}</li>
+            <li
+              v-for="(con, i) in currentEra.cons"
+              :key="i"
+            >
+              {{ con }}
+            </li>
           </ul>
         </div>
 
         <div class="tech-stack">
           <h6>🔧 典型技术</h6>
           <div class="tech-tags">
-            <span v-for="(tech, i) in currentEra.techs" :key="i" class="tech-tag">{{ tech }}</span>
+            <span
+              v-for="(tech, i) in currentEra.techs"
+              :key="i"
+              class="tech-tag"
+            >{{ tech }}</span>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想:</strong>架构演进是为了解决上一个时代的痛点,但也带来了新的复杂度。
     </div>
   </div>
 </template>
@@ -106,40 +148,49 @@ const currentEra = computed(() => {
 <style scoped>
 .architecture-comparison-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  padding: 1.5rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
 .demo-header {
-  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.demo-header h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+.demo-header .icon {
+  font-size: 1rem;
+}
+
+.demo-header .title {
+  font-weight: bold;
+  font-size: 0.9rem;
   color: var(--vp-c-text-1);
 }
 
-.demo-header p {
-  margin: 0;
-  font-size: 0.9rem;
+.demo-header .subtitle {
   color: var(--vp-c-text-2);
+  font-size: 0.75rem;
+  margin-left: 0.4rem;
 }
 
 .comparison-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
 .era-card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 4px;
+  padding: 0.5rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -147,96 +198,95 @@ const currentEra = computed(() => {
 
 .era-card:hover {
   border-color: var(--vp-c-brand);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .era-card.active {
   border-color: var(--vp-c-brand);
-  background: rgba(102, 126, 234, 0.1);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  background: var(--vp-c-brand-soft);
 }
 
 .era-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .era-name {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-1);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
 }
 
 .era-year {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   color: var(--vp-c-text-3);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .era-tag {
   display: inline-block;
-  padding: 0.15rem 0.5rem;
+  padding: 0.1rem 0.3rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 10px;
-  font-size: 0.7rem;
+  border-radius: 6px;
+  font-size: 0.55rem;
   color: var(--vp-c-text-2);
 }
 
 .detail-panel {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: 4px;
+  padding: 0.5rem;
 }
 
 .detail-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .detail-icon {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .detail-header h5 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   color: var(--vp-c-text-1);
 }
 
 .detail-content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 0.4rem;
 }
 
 .feature-section {
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 1rem;
+  border-radius: 4px;
+  padding: 0.4rem;
 }
 
 .feature-section h6 {
-  margin: 0 0 0.75rem 0;
-  font-size: 0.85rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 0.7rem;
   color: var(--vp-c-brand);
 }
 
 .feature-section ul {
   margin: 0;
-  padding-left: 1.25rem;
-  font-size: 0.85rem;
+  padding-left: 0.75rem;
+  font-size: 0.65rem;
   color: var(--vp-c-text-2);
 }
 
 .feature-section li {
-  margin-bottom: 0.4rem;
-  line-height: 1.5;
+  margin-bottom: 0.15rem;
+  line-height: 1.3;
 }
 
 .feature-section li:last-child {
@@ -246,29 +296,48 @@ const currentEra = computed(() => {
 .tech-stack {
   grid-column: 1 / -1;
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 1rem;
+  border-radius: 4px;
+  padding: 0.4rem;
 }
 
 .tech-stack h6 {
-  margin: 0 0 0.75rem 0;
-  font-size: 0.85rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 0.7rem;
   color: var(--vp-c-brand);
 }
 
 .tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .tech-tag {
-  padding: 0.25rem 0.75rem;
+  padding: 0.15rem 0.4rem;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 4px;
-  font-size: 0.8rem;
+  border-radius: 3px;
+  font-size: 0.6rem;
   color: var(--vp-c-text-2);
+}
+
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-2);
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.2rem;
+}
+
+.info-box .icon {
+  flex-shrink: 0;
+}
+
+.info-box strong {
+  color: var(--vp-c-text-1);
 }
 
 @media (max-width: 768px) {

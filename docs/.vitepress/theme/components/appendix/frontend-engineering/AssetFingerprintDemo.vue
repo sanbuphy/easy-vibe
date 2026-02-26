@@ -20,15 +20,18 @@
       </div>
 
       <div class="controls">
-        <button class="control-btn" @click="simulateBuild">
+        <button
+          class="control-btn"
+          @click="simulateBuild"
+        >
           🔄 重新构建
         </button>
 
         <div class="toggle-group">
           <label class="toggle-label">
             <input
-              type="checkbox"
               v-model="showHash"
+              type="checkbox"
               @change="updateFileNames"
             >
             <span class="toggle-text">启用 Hash</span>
@@ -57,16 +60,25 @@
             }"
             @click="selectFile(file)"
           >
-            <div class="file-icon" :class="file.type">
+            <div
+              class="file-icon"
+              :class="file.type"
+            >
               {{ getFileIcon(file.type) }}
             </div>
 
             <div class="file-info">
               <div class="file-name-row">
                 <span class="file-base">{{ file.baseName }}</span>
-                <span v-if="showHash" class="file-hash">.{{ file.hash }}</span>
+                <span
+                  v-if="showHash"
+                  class="file-hash"
+                >.{{ file.hash }}</span>
                 <span class="file-ext">.{{ file.ext }}</span>
-                <span v-if="file.changed" class="changed-badge">更新</span>
+                <span
+                  v-if="file.changed"
+                  class="changed-badge"
+                >更新</span>
               </div>
               <div class="file-meta">
                 <span class="file-size">{{ formatSize(file.size) }}</span>
@@ -90,15 +102,15 @@
         <div class="cache-visualization">
           <div class="cache-legend">
             <div class="legend-item">
-              <span class="legend-color hit"></span>
+              <span class="legend-color hit" />
               <span>缓存命中 (Hash 匹配)</span>
             </div>
             <div class="legend-item">
-              <span class="legend-color miss"></span>
+              <span class="legend-color miss" />
               <span>缓存未命中 (Hash 变化)</span>
             </div>
             <div class="legend-item">
-              <span class="legend-color new"></span>
+              <span class="legend-color new" />
               <span>新文件 (无缓存)</span>
             </div>
           </div>
@@ -111,9 +123,18 @@
               :class="block.status"
               :style="{ animationDelay: `${index * 0.05}s` }"
             >
-              <div class="block-icon">{{ block.icon }}</div>
-              <div class="block-name">{{ block.name }}</div>
-              <div v-if="block.hash" class="block-hash">{{ block.hash }}</div>
+              <div class="block-icon">
+                {{ block.icon }}
+              </div>
+              <div class="block-name">
+                {{ block.name }}
+              </div>
+              <div
+                v-if="block.hash"
+                class="block-hash"
+              >
+                {{ block.hash }}
+              </div>
             </div>
           </div>
         </div>
@@ -122,16 +143,28 @@
           <h4>📊 缓存策略效果</h4>
           <div class="stats-grid">
             <div class="stat-item">
-              <div class="stat-value">{{ cacheHitRate }}%</div>
-              <div class="stat-label">缓存命中率</div>
+              <div class="stat-value">
+                {{ cacheHitRate }}%
+              </div>
+              <div class="stat-label">
+                缓存命中率
+              </div>
             </div>
             <div class="stat-item">
-              <div class="stat-value">{{ bandwidthSaved }}</div>
-              <div class="stat-label">节省带宽</div>
+              <div class="stat-value">
+                {{ bandwidthSaved }}
+              </div>
+              <div class="stat-label">
+                节省带宽
+              </div>
             </div>
             <div class="stat-item">
-              <div class="stat-value">{{ loadTime }}</div>
-              <div class="stat-label">平均加载时间</div>
+              <div class="stat-value">
+                {{ loadTime }}
+              </div>
+              <div class="stat-label">
+                平均加载时间
+              </div>
             </div>
           </div>
         </div>
@@ -139,16 +172,27 @@
     </div>
 
     <!-- 文件详情 -->
-    <div v-if="selectedFile" class="file-details">
+    <div
+      v-if="selectedFile"
+      class="file-details"
+    >
       <div class="detail-header">
-        <span class="detail-icon" :class="selectedFile.type">
+        <span
+          class="detail-icon"
+          :class="selectedFile.type"
+        >
           {{ getFileIcon(selectedFile.type) }}
         </span>
         <div class="detail-title-wrap">
           <span class="detail-title">{{ selectedFile.name }}</span>
           <span class="detail-path">dist/{{ selectedFile.path }}</span>
         </div>
-        <button class="close-btn" @click="selectedFile = null">×</button>
+        <button
+          class="close-btn"
+          @click="selectedFile = null"
+        >
+          ×
+        </button>
       </div>
 
       <div class="detail-content">
@@ -174,7 +218,10 @@
           </div>
         </div>
 
-        <div class="detail-section" v-if="selectedFile.dependencies?.length">
+        <div
+          v-if="selectedFile.dependencies?.length"
+          class="detail-section"
+        >
           <h4>🔗 依赖的模块 ({{ selectedFile.dependencies.length }})</h4>
           <div class="deps-tags">
             <span
@@ -221,7 +268,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 const showHash = ref(true)
 const selectedNode = ref(null)
@@ -310,17 +357,15 @@ const getNode = (id) => files.value.find(f => f.id === id)
 onMounted(() => {
   simulateBuild()
 })
-
-import { watch } from 'vue'
 </script>
 
 <style scoped>
 .asset-fingerprint-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
@@ -414,7 +459,7 @@ import { watch } from 'vue'
 .files-panel,
 .cache-panel {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   overflow: hidden;
 }
@@ -441,7 +486,7 @@ import { watch } from 'vue'
 
 .files-list {
   max-height: 300px;
-  overflow-y: auto;
+  
 }
 
 .file-item {
@@ -541,7 +586,7 @@ import { watch } from 'vue'
 }
 
 .cache-visualization {
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .cache-legend {
@@ -679,8 +724,8 @@ import { watch } from 'vue'
 
 .file-details {
   background: var(--vp-c-bg);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
   margin-bottom: 1rem;
 }
@@ -697,7 +742,7 @@ import { watch } from 'vue'
 .detail-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;

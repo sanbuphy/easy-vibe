@@ -5,8 +5,12 @@
 <template>
   <div class="seckill-demo">
     <div class="header">
-      <div class="title">秒杀系统：消息队列的典型应用</div>
-      <div class="subtitle">处理 10 万/秒的并发请求，保证不超卖</div>
+      <div class="title">
+        秒杀系统：消息队列的典型应用
+      </div>
+      <div class="subtitle">
+        处理 10 万/秒的并发请求，保证不超卖
+      </div>
     </div>
 
     <div class="scenario-settings">
@@ -16,7 +20,13 @@
           <strong>{{ stock }}</strong>
           件
         </label>
-        <input v-model="stock" type="range" min="10" max="1000" step="10" />
+        <input
+          v-model="stock"
+          type="range"
+          min="10"
+          max="1000"
+          step="10"
+        >
       </div>
       <div class="setting">
         <label>
@@ -30,7 +40,7 @@
           min="100"
           max="10000"
           step="100"
-        />
+        >
       </div>
       <div class="setting">
         <label>
@@ -44,33 +54,52 @@
           min="50"
           max="500"
           step="10"
-        />
+        >
       </div>
     </div>
 
     <div class="action-bar">
-      <button class="start-btn" @click="startSeckill" :disabled="running">
+      <button
+        class="start-btn"
+        :disabled="running"
+        @click="startSeckill"
+      >
         🚀 开始秒杀
       </button>
-      <button class="reset-btn" @click="reset">🔄 重置</button>
+      <button
+        class="reset-btn"
+        @click="reset"
+      >
+        🔄 重置
+      </button>
     </div>
 
     <div class="architecture">
       <div class="arch-layer gateway">
-        <div class="layer-title">🌐 网关层 - 限流</div>
+        <div class="layer-title">
+          🌐 网关层 - 限流
+        </div>
         <div class="layer-content">
           <div class="stat-box">
-            <div class="stat-label">总请求数</div>
-            <div class="stat-value">{{ totalRequests.toLocaleString() }}</div>
+            <div class="stat-label">
+              总请求数
+            </div>
+            <div class="stat-value">
+              {{ totalRequests.toLocaleString() }}
+            </div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">限流通过</div>
+            <div class="stat-label">
+              限流通过
+            </div>
             <div class="stat-value success">
               {{ passedRequests.toLocaleString() }}
             </div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">被拒绝</div>
+            <div class="stat-label">
+              被拒绝
+            </div>
             <div class="stat-value error">
               {{ rejectedRequests.toLocaleString() }}
             </div>
@@ -78,32 +107,43 @@
         </div>
       </div>
 
-      <div class="arch-arrow">⬇️</div>
+      <div class="arch-arrow">
+        ⬇️
+      </div>
 
       <div class="arch-layer redis">
-        <div class="layer-title">⚡ Redis 预扣库存</div>
+        <div class="layer-title">
+          ⚡ Redis 预扣库存
+        </div>
         <div class="layer-content">
           <div class="stock-display">
             <div class="stock-bar">
               <div
                 class="stock-fill"
                 :style="{ width: stockPercent + '%' }"
-              ></div>
+              />
             </div>
             <div class="stock-text">
               剩余: {{ remainingStock }} / {{ stock }}
             </div>
           </div>
-          <div class="redis-status" :class="redisStatus.class">
+          <div
+            class="redis-status"
+            :class="redisStatus.class"
+          >
             {{ redisStatus.text }}
           </div>
         </div>
       </div>
 
-      <div class="arch-arrow">⬇️</div>
+      <div class="arch-arrow">
+        ⬇️
+      </div>
 
       <div class="arch-layer queue">
-        <div class="layer-title">📦 消息队列缓冲</div>
+        <div class="layer-title">
+          📦 消息队列缓冲
+        </div>
         <div class="layer-content">
           <div class="queue-visual">
             <div class="queue-box">
@@ -116,63 +156,109 @@
                   class="queue-bar"
                   :class="queueStatus"
                   :style="{ width: queuePercent + '%' }"
-                ></div>
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="arch-arrow">⬇️</div>
+      <div class="arch-arrow">
+        ⬇️
+      </div>
 
       <div class="arch-layer consumer">
-        <div class="layer-title">⚙️ 订单服务处理</div>
+        <div class="layer-title">
+          ⚙️ 订单服务处理
+        </div>
         <div class="layer-content">
           <div class="stat-box">
-            <div class="stat-label">处理中</div>
-            <div class="stat-value">{{ processing }}</div>
+            <div class="stat-label">
+              处理中
+            </div>
+            <div class="stat-value">
+              {{ processing }}
+            </div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">成功订单</div>
-            <div class="stat-value success">{{ successOrders }}</div>
+            <div class="stat-label">
+              成功订单
+            </div>
+            <div class="stat-value success">
+              {{ successOrders }}
+            </div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">失败订单</div>
-            <div class="stat-value error">{{ failedOrders }}</div>
+            <div class="stat-label">
+              失败订单
+            </div>
+            <div class="stat-value error">
+              {{ failedOrders }}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="real-time-stats">
-      <div class="stats-title">📊 实时监控</div>
+      <div class="stats-title">
+        📊 实时监控
+      </div>
       <div class="stats-grid">
         <div class="stat-item">
-          <div class="stat-label">平均响应时间</div>
-          <div class="stat-value">{{ avgLatency }}ms</div>
+          <div class="stat-label">
+            平均响应时间
+          </div>
+          <div class="stat-value">
+            {{ avgLatency }}ms
+          </div>
         </div>
         <div class="stat-item">
-          <div class="stat-label">订单成功率</div>
-          <div class="stat-value">{{ orderSuccessRate }}%</div>
+          <div class="stat-label">
+            订单成功率
+          </div>
+          <div class="stat-value">
+            {{ orderSuccessRate }}%
+          </div>
         </div>
         <div class="stat-item">
-          <div class="stat-label">队列积压</div>
-          <div class="stat-value">{{ queueLength }}</div>
+          <div class="stat-label">
+            队列积压
+          </div>
+          <div class="stat-value">
+            {{ queueLength }}
+          </div>
         </div>
         <div class="stat-item">
-          <div class="stat-label">预计清空时间</div>
-          <div class="stat-value">{{ estimatedTime }}</div>
+          <div class="stat-label">
+            预计清空时间
+          </div>
+          <div class="stat-value">
+            {{ estimatedTime }}
+          </div>
         </div>
       </div>
     </div>
 
     <div class="log-section">
       <div class="log-header">
-        <div class="log-title">📋 事件日志</div>
-        <button class="clear-log" @click="clearLogs">清空</button>
+        <div class="log-title">
+          📋 事件日志
+        </div>
+        <button
+          class="clear-log"
+          @click="clearLogs"
+        >
+          清空
+        </button>
       </div>
       <div class="log-content">
-        <div v-if="logs.length === 0" class="log-empty">暂无日志</div>
+        <div
+          v-if="logs.length === 0"
+          class="log-empty"
+        >
+          暂无日志
+        </div>
         <div
           v-for="(log, index) in logs.slice(0, 15)"
           :key="index"
@@ -186,7 +272,9 @@
     </div>
 
     <div class="key-points">
-      <div class="point-title">🎯 核心设计要点</div>
+      <div class="point-title">
+        🎯 核心设计要点
+      </div>
       <div class="point-list">
         <div class="point-item">
           <span class="point-icon">1️⃣</span>
@@ -198,22 +286,19 @@
         <div class="point-item">
           <span class="point-icon">2️⃣</span>
           <div>
-            <strong>Redis 预扣：</strong
-            >原子操作扣减库存，快速判断是否有货，避免无效请求
+            <strong>Redis 预扣：</strong>原子操作扣减库存，快速判断是否有货，避免无效请求
           </div>
         </div>
         <div class="point-item">
           <span class="point-icon">3️⃣</span>
           <div>
-            <strong>消息队列：</strong
-            >将成功的扣库存请求放入队列，异步处理，削峰填谷
+            <strong>消息队列：</strong>将成功的扣库存请求放入队列，异步处理，削峰填谷
           </div>
         </div>
         <div class="point-item">
           <span class="point-icon">4️⃣</span>
           <div>
-            <strong>异步处理：</strong
-            >订单服务慢慢消费队列，创建订单，保证不超卖
+            <strong>异步处理：</strong>订单服务慢慢消费队列，创建订单，保证不超卖
           </div>
         </div>
       </div>
@@ -448,14 +533,14 @@ onUnmounted(() => {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .start-btn,
 .reset-btn {
   padding: 0.75rem 2rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s;
@@ -495,7 +580,7 @@ onUnmounted(() => {
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .layer-title {
@@ -513,7 +598,7 @@ onUnmounted(() => {
 
 .stat-box {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
   text-align: center;
 }
@@ -546,7 +631,7 @@ onUnmounted(() => {
   grid-column: 1 / -1;
   padding: 0.75rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .stock-bar {
@@ -600,7 +685,7 @@ onUnmounted(() => {
 
 .queue-box {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
 }
 
@@ -641,8 +726,8 @@ onUnmounted(() => {
 .real-time-stats {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   border: 1px solid var(--vp-c-divider);
 }
 
@@ -661,7 +746,7 @@ onUnmounted(() => {
   text-align: center;
   padding: 0.75rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .stat-item .stat-label {
@@ -679,8 +764,8 @@ onUnmounted(() => {
 .log-section {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   border: 1px solid var(--vp-c-divider);
 }
 
@@ -707,9 +792,9 @@ onUnmounted(() => {
 
 .log-content {
   max-height: 300px;
-  overflow-y: auto;
+  
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0.75rem;
   font-size: 0.8rem;
 }
@@ -717,7 +802,7 @@ onUnmounted(() => {
 .log-empty {
   text-align: center;
   color: var(--vp-c-text-3);
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .log-entry {
@@ -759,7 +844,7 @@ onUnmounted(() => {
 .key-points {
   background: rgba(59, 130, 246, 0.1);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 

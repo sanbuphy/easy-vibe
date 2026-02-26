@@ -5,65 +5,110 @@
 <template>
   <div class="microservice-latency-demo">
     <div class="header">
-      <div class="title">微服务延迟：网络调用的代价</div>
+      <div class="title">
+        微服务延迟：网络调用的代价
+      </div>
       <div class="subtitle">
         每次服务间调用都增加网络延迟，累积后响应时间变长
       </div>
     </div>
 
     <div class="controls">
-      <label
-        >服务间调用次数：<strong>{{ callCount }}</strong></label
+      <label>服务间调用次数：<strong>{{ callCount }}</strong></label>
+      <input
+        v-model="callCount"
+        type="range"
+        min="1"
+        max="10"
+        step="1"
       >
-      <input v-model="callCount" type="range" min="1" max="10" step="1" />
 
-      <label
-        >网络延迟：<strong>{{ networkLatency }} ms</strong></label
+      <label>网络延迟：<strong>{{ networkLatency }} ms</strong></label>
+      <input
+        v-model="networkLatency"
+        type="range"
+        min="1"
+        max="50"
+        step="1"
       >
-      <input v-model="networkLatency" type="range" min="1" max="50" step="1" />
     </div>
 
     <div class="comparison">
       <div class="architecture monolith">
-        <div class="arch-title">单体架构</div>
+        <div class="arch-title">
+          单体架构
+        </div>
         <div class="arch-box">
           <div class="single-process">
-            <div class="module">User</div>
-            <div class="module">Order</div>
-            <div class="module">Payment</div>
+            <div class="module">
+              User
+            </div>
+            <div class="module">
+              Order
+            </div>
+            <div class="module">
+              Payment
+            </div>
           </div>
         </div>
         <div class="latency">
-          <div class="latency-value">{{ monolithLatency }} ms</div>
-          <div class="latency-label">内存调用（~0ms）</div>
+          <div class="latency-value">
+            {{ monolithLatency }} ms
+          </div>
+          <div class="latency-label">
+            内存调用（~0ms）
+          </div>
         </div>
       </div>
 
       <div class="architecture microservices">
-        <div class="arch-title">微服务架构</div>
+        <div class="arch-title">
+          微服务架构
+        </div>
         <div class="arch-box">
           <div class="services">
-            <div class="service">User Svc</div>
-            <div class="network-arrow" v-if="callCount > 1">
+            <div class="service">
+              User Svc
+            </div>
+            <div
+              v-if="callCount > 1"
+              class="network-arrow"
+            >
               ⇄ {{ networkLatency }}ms
             </div>
-            <div class="service">Order Svc</div>
-            <div class="network-arrow" v-if="callCount > 2">
+            <div class="service">
+              Order Svc
+            </div>
+            <div
+              v-if="callCount > 2"
+              class="network-arrow"
+            >
               ⇄ {{ networkLatency }}ms
             </div>
-            <div class="service">Payment Svc</div>
+            <div class="service">
+              Payment Svc
+            </div>
           </div>
         </div>
         <div class="latency">
-          <div class="latency-value high">{{ microLatency }} ms</div>
-          <div class="latency-label">网络调用累积</div>
+          <div class="latency-value high">
+            {{ microLatency }} ms
+          </div>
+          <div class="latency-label">
+            网络调用累积
+          </div>
         </div>
       </div>
     </div>
 
     <div class="insight">
-      <div class="insight-icon" v-html="insightIcon"></div>
-      <div class="insight-text">{{ insight }}</div>
+      <div
+        class="insight-icon"
+        v-html="insightIcon"
+      />
+      <div class="insight-text">
+        {{ insight }}
+      </div>
     </div>
   </div>
 </template>
@@ -150,7 +195,7 @@ const insightIcon = computed(() => {
 .architecture {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
 }
 
@@ -248,7 +293,7 @@ const insightIcon = computed(() => {
   margin-top: 1.5rem;
   padding: 0.75rem 1rem;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
 }
 

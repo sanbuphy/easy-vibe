@@ -13,86 +13,124 @@
 -->
 <template>
   <div class="canvas-basics-demo">
-    <div class="control-panel">
-      <div class="shape-selector">
-        <label>Shape / 形状</label>
-        <div class="button-group">
-          <button
-            v-for="shape in shapes"
-            :key="shape.value"
-            :class="{ active: currentShape === shape.value }"
-            @click="currentShape = shape.value"
+    <div class="demo-header">
+      <span class="icon">🎨</span>
+      <span class="title">Canvas 基础</span>
+      <span class="subtitle">用代码画图（通俗说：编程画板）</span>
+    </div>
+
+    <div class="demo-content">
+      <div class="controls">
+        <div class="shape-selector">
+          <label>Shape / 形状</label>
+          <div class="button-group">
+            <button
+              v-for="shape in shapes"
+              :key="shape.value"
+              :class="{ active: currentShape === shape.value }"
+              @click="currentShape = shape.value"
+            >
+              {{ shape.label }}
+            </button>
+          </div>
+        </div>
+
+        <div class="parameters">
+          <div class="param-row">
+            <label>Fill Color / 填充颜色</label>
+            <input
+              v-model="fillColor"
+              type="color"
+            >
+          </div>
+
+          <div class="param-row">
+            <label>Stroke Color / 描边颜色</label>
+            <input
+              v-model="strokeColor"
+              type="color"
+            >
+          </div>
+
+          <div class="param-row">
+            <label>Stroke Width / 描边宽度: {{ strokeWidth }}px</label>
+            <input
+              v-model.number="strokeWidth"
+              type="range"
+              min="1"
+              max="20"
+            >
+          </div>
+
+          <div
+            v-if="currentShape === 'rect'"
+            class="param-row"
           >
-            {{ shape.label }}
-          </button>
+            <label>Size / 大小: {{ rectSize }}px</label>
+            <input
+              v-model.number="rectSize"
+              type="range"
+              min="20"
+              max="200"
+            >
+          </div>
+
+          <div
+            v-if="currentShape === 'circle'"
+            class="param-row"
+          >
+            <label>Radius / 半径: {{ circleRadius }}px</label>
+            <input
+              v-model.number="circleRadius"
+              type="range"
+              min="10"
+              max="150"
+            >
+          </div>
+
+          <div
+            v-if="currentShape === 'line'"
+            class="param-row"
+          >
+            <label>Line Length / 线条长度: {{ lineLength }}px</label>
+            <input
+              v-model.number="lineLength"
+              type="range"
+              min="50"
+              max="300"
+            >
+          </div>
         </div>
+
+        <button
+          class="draw-btn"
+          @click="draw"
+        >
+          <span class="icon">🎨</span>
+          Draw / 绘制
+        </button>
+
+        <button
+          class="clear-btn"
+          @click="clearCanvas"
+        >
+          <span class="icon">🗑️</span>
+          Clear / 清除
+        </button>
       </div>
 
-      <div class="parameters">
-        <div class="param-row">
-          <label>Fill Color / 填充颜色</label>
-          <input type="color" v-model="fillColor" />
-        </div>
-
-        <div class="param-row">
-          <label>Stroke Color / 描边颜色</label>
-          <input type="color" v-model="strokeColor" />
-        </div>
-
-        <div class="param-row">
-          <label>Stroke Width / 描边宽度: {{ strokeWidth }}px</label>
-          <input type="range" v-model.number="strokeWidth" min="1" max="20" />
-        </div>
-
-        <div class="param-row" v-if="currentShape === 'rect'">
-          <label>Size / 大小: {{ rectSize }}px</label>
-          <input type="range" v-model.number="rectSize" min="20" max="200" />
-        </div>
-
-        <div class="param-row" v-if="currentShape === 'circle'">
-          <label>Radius / 半径: {{ circleRadius }}px</label>
-          <input
-            type="range"
-            v-model.number="circleRadius"
-            min="10"
-            max="150"
-          />
-        </div>
-
-        <div class="param-row" v-if="currentShape === 'line'">
-          <label>Line Length / 线条长度: {{ lineLength }}px</label>
-          <input type="range" v-model.number="lineLength" min="50" max="300" />
-        </div>
+      <div class="canvas-container">
+        <canvas
+          ref="canvasRef"
+          width="600"
+          height="400"
+        />
       </div>
 
-      <button class="draw-btn" @click="draw">
-        <span class="icon">🎨</span>
-        Draw / 绘制
-      </button>
-
-      <button class="clear-btn" @click="clearCanvas">
-        <span class="icon">🗑️</span>
-        Clear / 清除
-      </button>
+      
     </div>
 
-    <div class="canvas-container">
-      <canvas ref="canvasRef" width="600" height="400"></canvas>
-    </div>
-
-    <div class="code-display">
-      <h4>Code / 代码</h4>
-      <pre><code>{{ currentCode }}</code></pre>
-    </div>
-
-    <div class="info-box">
-      <p>
-        <span class="icon">💡</span>
-        <strong>提示：</strong>
-        Canvas
-        是一个位图画布，所有绘制都是像素操作。绘制后无法修改已有内容，只能覆盖或清除重绘。
-      </p>
-    </div>
+    
   </div>
 </template>
 
@@ -101,8 +139,8 @@ import { ref, computed, watch, onMounted } from 'vue'
 
 const canvasRef = ref(null)
 const currentShape = ref('rect')
-const fillColor = ref('#3498db')
-const strokeColor = ref('#2c3e50')
+const fillColor = ref('#3b82f6')
+const strokeColor = ref('#1e293b')
 const strokeWidth = ref(2)
 const rectSize = ref(100)
 const circleRadius = ref(50)
@@ -231,177 +269,178 @@ onMounted(() => {
 
 <style scoped>
 .canvas-basics-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.control-panel {
-  margin-bottom: 20px;
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--vp-c-divider);
+}
+
+.demo-header .icon {
+  font-size: 1.5rem;
+}
+
+.demo-header .title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--vp-c-text-1);
+}
+
+.demo-header .subtitle {
+  color: var(--vp-c-text-2);
+  font-size: 0.875rem;
+  margin-left: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background: var(--vp-c-brand);
+  color: white;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.demo-content {
+  margin-bottom: 0.5rem;
+}
+
+.controls {
+  margin-bottom: 1rem;
 }
 
 .shape-selector {
-  margin-bottom: 15px;
+  margin-bottom: 1.25rem;
 }
 
 .shape-selector label {
   display: block;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #2c3e50;
+  margin-bottom: 0.625rem;
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
 }
 
 .button-group {
   display: flex;
-  gap: 8px;
+  gap: 0.625rem;
   flex-wrap: wrap;
 }
 
 .button-group button {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  background: white;
+  padding: 0.625rem 1.25rem;
+  border: 2px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .button-group button:hover {
-  border-color: #3498db;
-  background: #f0f8ff;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .button-group button.active {
-  border-color: #3498db;
-  background: #3498db;
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .parameters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 15px;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .param-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.25rem;
 }
 
 .param-row label {
-  font-size: 13px;
+  font-size: 0.75rem;
   font-weight: 500;
-  color: #555;
+  color: var(--vp-c-text-1);
 }
 
 .param-row input[type='range'] {
   width: 100%;
+  accent-color: var(--vp-c-brand);
 }
 
 .param-row input[type='color'] {
   width: 100%;
-  height: 36px;
-  border: 1px solid #ddd;
+  height: 32px;
+  border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
   cursor: pointer;
 }
 
 .draw-btn,
 .clear-btn {
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 0.5rem;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .draw-btn {
-  background: #3498db;
+  background: var(--vp-c-brand);
   color: white;
 }
 
 .draw-btn:hover {
-  background: #2980b9;
-  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 .clear-btn {
-  background: #e74c3c;
+  background: var(--vp-c-danger);
   color: white;
 }
 
 .clear-btn:hover {
-  background: #c0392b;
-  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  background: white;
-}
-
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.info-box {
-  margin-top: 15px;
-  padding: 12px;
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  border-radius: 4px;
-}
-
-.info-box p {
-  margin: 0;
-  font-size: 14px;
-  color: #856404;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.info-box .icon {
-  font-size: 16px;
+canvas {
+  border: 3px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
+
 </style>

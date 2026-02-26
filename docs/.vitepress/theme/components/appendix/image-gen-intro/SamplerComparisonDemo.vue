@@ -33,9 +33,16 @@
           >
             <div class="sampler-header">
               <span class="sampler-name">{{ sampler.name }}</span>
-              <el-tag :type="sampler.speed" size="small">{{ sampler.speedLabel }}</el-tag>
+              <el-tag
+                :type="sampler.speed"
+                size="small"
+              >
+                {{ sampler.speedLabel }}
+              </el-tag>
             </div>
-            <div class="sampler-desc">{{ sampler.description }}</div>
+            <div class="sampler-desc">
+              {{ sampler.description }}
+            </div>
             <div class="sampler-pros-cons">
               <div class="pros">
                 <el-icon><CircleCheck /></el-icon>
@@ -74,7 +81,10 @@
           </div>
 
           <div class="sampler-details">
-            <el-descriptions :column="2" border>
+            <el-descriptions
+              :column="2"
+              border
+            >
               <el-descriptions-item label="推荐步数">
                 {{ currentSampler.recommendedSteps }}
               </el-descriptions-item>
@@ -98,23 +108,37 @@
 
         <!-- 推荐矩阵 -->
         <div class="recommendation-matrix">
-          <div class="matrix-title">🎯 采样器选择指南</div>
+          <div class="matrix-title">
+            🎯 采样器选择指南
+          </div>
           <div class="matrix-grid">
             <div class="matrix-row header">
-              <div class="matrix-cell">场景</div>
-              <div class="matrix-cell">推荐采样器</div>
-              <div class="matrix-cell">原因</div>
+              <div class="matrix-cell">
+                场景
+              </div>
+              <div class="matrix-cell">
+                推荐采样器
+              </div>
+              <div class="matrix-cell">
+                原因
+              </div>
             </div>
             <div
               v-for="rec in recommendations"
               :key="rec.scenario"
               class="matrix-row"
             >
-              <div class="matrix-cell scenario">{{ rec.scenario }}</div>
-              <div class="matrix-cell">
-                <el-tag type="primary">{{ rec.sampler }}</el-tag>
+              <div class="matrix-cell scenario">
+                {{ rec.scenario }}
               </div>
-              <div class="matrix-cell reason">{{ rec.reason }}</div>
+              <div class="matrix-cell">
+                <el-tag type="primary">
+                  {{ rec.sampler }}
+                </el-tag>
+              </div>
+              <div class="matrix-cell reason">
+                {{ rec.reason }}
+              </div>
             </div>
           </div>
         </div>
@@ -356,7 +380,7 @@ watch([selectedSampler, steps], drawPathVisualization)
 
 <style scoped>
 .sampler-demo {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .header-title {
@@ -380,7 +404,7 @@ watch([selectedSampler, steps], drawPathVisualization)
 
 .sampler-card {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   cursor: pointer;
   transition: all 0.2s;
@@ -437,7 +461,7 @@ watch([selectedSampler, steps], drawPathVisualization)
 
 .visualization-section {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -460,7 +484,7 @@ watch([selectedSampler, steps], drawPathVisualization)
 
 .path-visualization {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   margin-bottom: 16px;
 }
@@ -477,7 +501,7 @@ watch([selectedSampler, steps], drawPathVisualization)
 
 .recommendation-matrix {
   background: var(--vp-c-bg-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 20px;
 }
 
@@ -492,7 +516,7 @@ watch([selectedSampler, steps], drawPathVisualization)
   flex-direction: column;
   gap: 1px;
   background: var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 

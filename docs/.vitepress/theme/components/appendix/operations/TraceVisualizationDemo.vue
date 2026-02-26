@@ -5,8 +5,12 @@
 <template>
   <div class="trace-demo">
     <div class="header">
-      <div class="title">分布式链路追踪 (Distributed Tracing)</div>
-      <div class="subtitle">一个请求在微服务间流转的完整路径</div>
+      <div class="title">
+        分布式链路追踪 (Distributed Tracing)
+      </div>
+      <div class="subtitle">
+        一个请求在微服务间流转的完整路径
+      </div>
     </div>
 
     <div class="controls">
@@ -58,8 +62,14 @@
       </div>
 
       <div class="spans">
-        <div v-for="(span, index) in spans" :key="span.id" class="span-row">
-          <div class="span-service">{{ span.service }}</div>
+        <div
+          v-for="span in spans"
+          :key="span.id"
+          class="span-row"
+        >
+          <div class="span-service">
+            {{ span.service }}
+          </div>
           <div class="span-timeline">
             <div
               class="span-bar"
@@ -74,24 +84,40 @@
               }"
             >
               <div class="span-details">
-                <div class="span-name">{{ span.name }}</div>
-                <div class="span-time">{{ span.duration }}ms</div>
+                <div class="span-name">
+                  {{ span.name }}
+                </div>
+                <div class="span-time">
+                  {{ span.duration }}ms
+                </div>
               </div>
             </div>
           </div>
           <div class="span-status">
-            <span v-if="span.status === 'error'" class="status-error">✗</span>
-            <span v-else-if="span.duration > 200" class="status-warning"
-              >⚠</span
-            >
-            <span v-else class="status-success">✓</span>
+            <span
+              v-if="span.status === 'error'"
+              class="status-error"
+            >✗</span>
+            <span
+              v-else-if="span.duration > 200"
+              class="status-warning"
+            >⚠</span>
+            <span
+              v-else
+              class="status-success"
+            >✓</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="span-detail" v-if="selectedSpan">
-      <div class="detail-header">Span 详情</div>
+    <div
+      v-if="selectedSpan"
+      class="span-detail"
+    >
+      <div class="detail-header">
+        Span 详情
+      </div>
       <div class="detail-body">
         <div class="detail-row">
           <span class="label">服务名：</span>
@@ -107,11 +133,17 @@
         </div>
         <div class="detail-row">
           <span class="label">状态：</span>
-          <span class="value" :class="selectedSpan.status">{{
+          <span
+            class="value"
+            :class="selectedSpan.status"
+          >{{
             selectedSpan.status
           }}</span>
         </div>
-        <div v-if="selectedSpan.error" class="detail-row">
+        <div
+          v-if="selectedSpan.error"
+          class="detail-row"
+        >
           <span class="label">错误信息：</span>
           <span class="value error">{{ selectedSpan.error }}</span>
         </div>
@@ -120,21 +152,23 @@
 
     <div class="legend">
       <div class="legend-item">
-        <span class="color-box success"></span>
+        <span class="color-box success" />
         <span>正常 (≤200ms)</span>
       </div>
       <div class="legend-item">
-        <span class="color-box warning"></span>
+        <span class="color-box warning" />
         <span>慢调用 (>200ms)</span>
       </div>
       <div class="legend-item">
-        <span class="color-box error"></span>
+        <span class="color-box error" />
         <span>错误</span>
       </div>
     </div>
 
     <div class="tips">
-      <div class="tip-title">💡 观察要点</div>
+      <div class="tip-title">
+        💡 观察要点
+      </div>
       <ul class="tip-list">
         <li>点击"性能瓶颈"查看数据库查询慢导致的延迟</li>
         <li>点击"错误追踪"查看库存服务异常如何影响整个链路</li>
@@ -387,9 +421,9 @@ const setScenario = (s) => {
   display: flex;
   gap: 2rem;
   margin-bottom: 1.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   flex-wrap: wrap;
 }
 
@@ -524,7 +558,7 @@ const setScenario = (s) => {
 .span-detail {
   background: var(--vp-c-bg);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid var(--vp-c-divider);
 }
@@ -568,9 +602,9 @@ const setScenario = (s) => {
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.85rem;
 }
 
@@ -600,8 +634,8 @@ const setScenario = (s) => {
 
 .tips {
   background: rgba(var(--vp-c-brand-rgb), 0.05);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-brand);
 }
 

@@ -15,17 +15,26 @@
     <div class="control-panel">
       <div class="toggle-group">
         <label class="toggle-option">
-          <input type="checkbox" v-model="showGrid" />
+          <input
+            v-model="showGrid"
+            type="checkbox"
+          >
           <span>Show Grid / 显示网格</span>
         </label>
 
         <label class="toggle-option">
-          <input type="checkbox" v-model="showAxis" />
+          <input
+            v-model="showAxis"
+            type="checkbox"
+          >
           <span>Show Axis / 显示坐标轴</span>
         </label>
 
         <label class="toggle-option">
-          <input type="checkbox" v-model="showCoordinates" />
+          <input
+            v-model="showCoordinates"
+            type="checkbox"
+          >
           <span>Show Coordinates / 显示坐标</span>
         </label>
       </div>
@@ -43,11 +52,12 @@
           <span class="label">Mouse Position:</span>
           <span class="value">({{ mouseX }}, {{ mouseY }})</span>
         </div>
-        <div class="info-item" v-if="selectedPoint">
+        <div
+          v-if="selectedPoint"
+          class="info-item"
+        >
           <span class="label">Selected Point:</span>
-          <span class="value"
-            >({{ selectedPoint.x }}, {{ selectedPoint.y }})</span
-          >
+          <span class="value">({{ selectedPoint.x }}, {{ selectedPoint.y }})</span>
         </div>
       </div>
     </div>
@@ -61,59 +71,14 @@
         @mousedown="handleMouseDown"
         @mouseup="handleMouseUp"
         @mouseleave="handleMouseUp"
-      ></canvas>
+      />
     </div>
 
-    <div class="explanation">
-      <h4>Canvas Coordinate System / Canvas 坐标系统</h4>
-      <ul>
-        <li><strong>Origin / 原点：</strong>在左上角，坐标为 (0, 0)</li>
-        <li>
-          <strong>X Axis / X 轴：</strong>向右为正方向，从 0 到 canvas.width
-        </li>
-        <li>
-          <strong>Y Axis / Y 轴：</strong>向下为正方向，从 0 到 canvas.height
-        </li>
-        <li><strong>Unit / 单位：</strong>像素 (px)，与 CSS 像素 1:1 对应</li>
-      </ul>
-    </div>
+    
 
-    <div class="code-display">
-      <h4>Example Code / 示例代码</h4>
-      <pre><code>// 绘制坐标轴
-const canvas = document.getElementById('myCanvas')
-const ctx = canvas.getContext('2d')
+    
 
-// X 轴（红色）
-ctx.strokeStyle = '#e74c3c'
-ctx.lineWidth = 2
-ctx.beginPath()
-ctx.moveTo(0, 0)
-ctx.lineTo(canvas.width, 0)
-ctx.stroke()
-
-// Y 轴（蓝色）
-ctx.strokeStyle = '#3498db'
-ctx.beginPath()
-ctx.moveTo(0, 0)
-ctx.lineTo(0, canvas.height)
-ctx.stroke()
-
-// 绘制点
-ctx.fillStyle = '#2ecc71'
-ctx.beginPath()
-ctx.arc({{ Math.round(selectedPoint?.x || 100) }}, {{ Math.round(selectedPoint?.y || 100) }}, 5, 0, Math.PI * 2)
-ctx.fill()</code></pre>
-    </div>
-
-    <div class="info-box">
-      <p>
-        <span class="icon">💡</span>
-        <strong>提示：</strong>
-        Canvas 的 Y
-        轴方向与传统数学坐标系相反，向下为正。这在处理图形定位时需要特别注意。
-      </p>
-    </div>
+    
   </div>
 </template>
 
@@ -272,149 +237,99 @@ onMounted(() => {
 
 <style scoped>
 .coordinate-demo {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fafafa;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .toggle-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .toggle-option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.toggle-option:hover {
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
 }
 
 .toggle-option input[type='checkbox'] {
   width: 18px;
   height: 18px;
   cursor: pointer;
+  accent-color: var(--vp-c-brand);
 }
 
 .info-display {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-  padding: 12px;
-  background: white;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
   border-radius: 6px;
+  border: 1px solid var(--vp-c-divider);
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 0.875rem;
 }
 
 .info-item .label {
   font-weight: 600;
-  color: #555;
+  color: var(--vp-c-text-2);
 }
 
 .info-item .value {
-  font-family: 'Courier New', monospace;
-  color: #2c3e50;
-  background: #f0f0f0;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-family: var(--vp-font-family-mono);
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
 .canvas-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-canvas {
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  cursor: crosshair;
-}
-
-.explanation {
-  margin: 20px 0;
-  padding: 15px;
-  background: white;
-  border-radius: 6px;
-}
-
-.explanation h4 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.explanation ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.explanation li {
-  margin-bottom: 8px;
-  color: #555;
-  font-size: 14px;
-}
-
-.code-display {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2c3e50;
-  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  border: 2px solid var(--vp-c-divider);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
 }
 
-.code-display h4 {
-  color: #ecf0f1;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.code-display pre {
-  margin: 0;
-}
-
-.code-display code {
-  color: #ecf0f1;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.info-box {
-  margin-top: 15px;
-  padding: 12px;
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  border-radius: 4px;
-}
-
-.info-box p {
-  margin: 0;
-  font-size: 14px;
-  color: #856404;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.info-box .icon {
-  font-size: 16px;
+canvas {
+  border: 3px solid var(--vp-c-divider);
+  border-radius: 6px;
+  cursor: crosshair;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
+
 </style>

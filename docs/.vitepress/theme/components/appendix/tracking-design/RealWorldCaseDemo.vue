@@ -5,8 +5,12 @@
 <template>
   <div class="real-world-case-demo">
     <div class="header">
-      <div class="title">实战案例</div>
-      <div class="subtitle">真实场景下的埋点设计最佳实践</div>
+      <div class="title">
+        实战案例
+      </div>
+      <div class="subtitle">
+        真实场景下的埋点设计最佳实践
+      </div>
     </div>
 
     <div class="case-tabs">
@@ -23,17 +27,28 @@
 
     <div class="case-content">
       <!-- 电商系统 -->
-      <div v-if="selectedCase === 'ecommerce'" class="case-detail">
+      <div
+        v-if="selectedCase === 'ecommerce'"
+        class="case-detail"
+      >
         <div class="case-intro">
-          <div class="intro-icon">🛒</div>
+          <div class="intro-icon">
+            🛒
+          </div>
           <div class="intro-text">
-            <div class="intro-title">电商系统埋点设计</div>
-            <div class="intro-desc">分析购买转化漏斗，优化用户体验</div>
+            <div class="intro-title">
+              电商系统埋点设计
+            </div>
+            <div class="intro-desc">
+              分析购买转化漏斗，优化用户体验
+            </div>
           </div>
         </div>
 
         <div class="funnel-visualization">
-          <div class="funnel-title">购买转化漏斗</div>
+          <div class="funnel-title">
+            购买转化漏斗
+          </div>
           <div class="funnel-steps">
             <div
               v-for="(step, index) in ecommerceFunnel"
@@ -41,15 +56,23 @@
               class="funnel-step"
               :style="{ width: step.width }"
             >
-              <div class="step-name">{{ step.name }}</div>
-              <div class="step-count">{{ formatNumber(step.count) }}</div>
-              <div class="step-rate">{{ step.rate }}%</div>
+              <div class="step-name">
+                {{ step.name }}
+              </div>
+              <div class="step-count">
+                {{ formatNumber(step.count) }}
+              </div>
+              <div class="step-rate">
+                {{ step.rate }}%
+              </div>
             </div>
           </div>
         </div>
 
         <div class="tracking-events">
-          <div class="events-title">关键埋点</div>
+          <div class="events-title">
+            关键埋点
+          </div>
           <div class="events-list">
             <div
               v-for="(event, index) in ecommerceEvents"
@@ -60,7 +83,9 @@
                 <code>{{ event.name }}</code>
               </div>
               <div class="event-details">
-                <div class="event-trigger">{{ event.trigger }}</div>
+                <div class="event-trigger">
+                  {{ event.trigger }}
+                </div>
                 <div class="event-props">
                   <span
                     v-for="(prop, i) in event.props"
@@ -77,55 +102,74 @@
       </div>
 
       <!-- 推荐系统 -->
-      <div v-if="selectedCase === 'recommendation'" class="case-detail">
+      <div
+        v-if="selectedCase === 'recommendation'"
+        class="case-detail"
+      >
         <div class="case-intro">
-          <div class="intro-icon">🎯</div>
+          <div class="intro-icon">
+            🎯
+          </div>
           <div class="intro-text">
-            <div class="intro-title">内容推荐埋点设计</div>
-            <div class="intro-desc">优化推荐算法，提高点击率</div>
+            <div class="intro-title">
+              内容推荐埋点设计
+            </div>
+            <div class="intro-desc">
+              优化推荐算法，提高点击率
+            </div>
           </div>
         </div>
 
         <div class="ab-test-demo">
-          <div class="ab-title">A/B 测试效果对比</div>
+          <div class="ab-title">
+            A/B 测试效果对比
+          </div>
           <div class="ab-metrics">
             <div class="metric-group">
-              <div class="metric-label">算法 A</div>
-              <div class="metric-value">{{ abTest.algorithmA }}%</div>
+              <div class="metric-label">
+                算法 A
+              </div>
+              <div class="metric-value">
+                {{ abTest.algorithmA }}%
+              </div>
               <div class="metric-bar">
                 <div
                   class="bar-fill"
                   :style="{ width: abTest.algorithmA + '%' }"
-                ></div>
+                />
               </div>
             </div>
             <div class="metric-group">
-              <div class="metric-label">算法 B</div>
-              <div class="metric-value">{{ abTest.algorithmB }}%</div>
+              <div class="metric-label">
+                算法 B
+              </div>
+              <div class="metric-value">
+                {{ abTest.algorithmB }}%
+              </div>
               <div class="metric-bar">
                 <div
                   class="bar-fill better"
                   :style="{ width: abTest.algorithmB + '%' }"
-                ></div>
+                />
               </div>
             </div>
           </div>
           <div class="ab-conclusion">
             ✨ 算法 B 点击率提升
-            <span class="highlight"
-              >{{
-                (
-                  ((abTest.algorithmB - abTest.algorithmA) /
-                    abTest.algorithmA) *
-                  100
-                ).toFixed(1)
-              }}%</span
-            >
+            <span class="highlight">{{
+              (
+                ((abTest.algorithmB - abTest.algorithmA) /
+                  abTest.algorithmA) *
+                100
+              ).toFixed(1)
+            }}%</span>
           </div>
         </div>
 
         <div class="tracking-events">
-          <div class="events-title">关键埋点</div>
+          <div class="events-title">
+            关键埋点
+          </div>
           <div class="events-list">
             <div
               v-for="(event, index) in recommendationEvents"
@@ -136,7 +180,9 @@
                 <code>{{ event.name }}</code>
               </div>
               <div class="event-details">
-                <div class="event-trigger">{{ event.trigger }}</div>
+                <div class="event-trigger">
+                  {{ event.trigger }}
+                </div>
                 <div class="event-props">
                   <span
                     v-for="(prop, i) in event.props"
@@ -153,17 +199,28 @@
       </div>
 
       <!-- 用户行为分析 -->
-      <div v-if="selectedCase === 'userbehavior'" class="case-detail">
+      <div
+        v-if="selectedCase === 'userbehavior'"
+        class="case-detail"
+      >
         <div class="case-intro">
-          <div class="intro-icon">👤</div>
+          <div class="intro-icon">
+            👤
+          </div>
           <div class="intro-text">
-            <div class="intro-title">用户行为分析埋点</div>
-            <div class="intro-desc">分析用户粘性，识别流失风险</div>
+            <div class="intro-title">
+              用户行为分析埋点
+            </div>
+            <div class="intro-desc">
+              分析用户粘性，识别流失风险
+            </div>
           </div>
         </div>
 
         <div class="rfm-segments">
-          <div class="segments-title">RFM 用户分群</div>
+          <div class="segments-title">
+            RFM 用户分群
+          </div>
           <div class="segments-grid">
             <div
               v-for="(segment, index) in rfmSegments"
@@ -171,37 +228,49 @@
               class="segment-card"
               :class="segment.type"
             >
-              <div class="segment-name">{{ segment.name }}</div>
+              <div class="segment-name">
+                {{ segment.name }}
+              </div>
               <div class="segment-users">
                 {{ formatNumber(segment.users) }} 用户
               </div>
-              <div class="segment-desc">{{ segment.desc }}</div>
+              <div class="segment-desc">
+                {{ segment.desc }}
+              </div>
             </div>
           </div>
         </div>
 
         <div class="retention-chart">
-          <div class="chart-title">用户留存率</div>
+          <div class="chart-title">
+            用户留存率
+          </div>
           <div class="chart-bars">
             <div
               v-for="(data, index) in retentionData"
               :key="index"
               class="chart-bar"
             >
-              <div class="bar-label">{{ data.label }}</div>
+              <div class="bar-label">
+                {{ data.label }}
+              </div>
               <div class="bar-container">
                 <div
                   class="bar-fill"
                   :style="{ height: data.rate + '%' }"
-                ></div>
+                />
               </div>
-              <div class="bar-value">{{ data.rate }}%</div>
+              <div class="bar-value">
+                {{ data.rate }}%
+              </div>
             </div>
           </div>
         </div>
 
         <div class="tracking-events">
-          <div class="events-title">关键埋点</div>
+          <div class="events-title">
+            关键埋点
+          </div>
           <div class="events-list">
             <div
               v-for="(event, index) in userBehaviorEvents"
@@ -212,7 +281,9 @@
                 <code>{{ event.name }}</code>
               </div>
               <div class="event-details">
-                <div class="event-trigger">{{ event.trigger }}</div>
+                <div class="event-trigger">
+                  {{ event.trigger }}
+                </div>
                 <div class="event-props">
                   <span
                     v-for="(prop, i) in event.props"
@@ -380,7 +451,7 @@ const formatNumber = (num) => {
   padding: 0.75rem 2rem;
   background: var(--vp-c-bg);
   border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -456,7 +527,7 @@ const formatNumber = (num) => {
   background: linear-gradient(90deg, var(--vp-c-brand), #3b82f6);
   color: white;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -473,7 +544,7 @@ const formatNumber = (num) => {
 
 .ab-metrics {
   background: var(--vp-c-bg-soft);
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 10px;
   margin-bottom: 1rem;
 }
@@ -514,9 +585,9 @@ const formatNumber = (num) => {
 
 .ab-conclusion {
   text-align: center;
-  padding: 1rem;
+  padding: 0.75rem;
   background: #dcfce7;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
 }
 
@@ -533,7 +604,7 @@ const formatNumber = (num) => {
 }
 
 .segment-card {
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 10px;
   text-align: center;
 }
@@ -581,7 +652,7 @@ const formatNumber = (num) => {
   align-items: flex-end;
   height: 200px;
   background: var(--vp-c-bg-soft);
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 10px;
 }
 
@@ -632,7 +703,7 @@ const formatNumber = (num) => {
 .event-item {
   display: flex;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: var(--vp-c-bg-soft);
   border-radius: 10px;
 }

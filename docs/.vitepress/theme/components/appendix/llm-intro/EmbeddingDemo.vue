@@ -29,9 +29,15 @@
       </div>
     </div>
 
-    <div class="canvas-container" ref="canvasContainer">
+    <div
+      ref="canvasContainer"
+      class="canvas-container"
+    >
       <!-- 简单的 SVG 坐标系 -->
-      <svg viewBox="0 0 400 300" class="vector-canvas">
+      <svg
+        viewBox="0 0 400 300"
+        class="vector-canvas"
+      >
         <!-- Grid lines -->
         <g class="grid">
           <line
@@ -59,7 +65,10 @@
             :class="{ highlight: point.highlight }"
             :transform="`translate(${point.x}, ${point.y})`"
           >
-            <circle r="4" :fill="point.color" />
+            <circle
+              r="4"
+              :fill="point.color"
+            />
             <text
               y="-8"
               text-anchor="middle"
@@ -72,7 +81,10 @@
         </g>
 
         <!-- Calculation Arrows (for King/Queen demo) -->
-        <g v-if="currentMode === 'analogy'" class="arrows">
+        <g
+          v-if="currentMode === 'analogy'"
+          class="arrows"
+        >
           <!-- King -> Man -->
           <line
             :x1="getPoint('king').x"
@@ -113,7 +125,10 @@
             refY="3.5"
             orient="auto"
           >
-            <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,0,0,0.2)" />
+            <polygon
+              points="0 0, 10 3.5, 0 7"
+              fill="rgba(0,0,0,0.2)"
+            />
           </marker>
           <marker
             id="arrowhead-brand"
@@ -123,7 +138,10 @@
             refY="3.5"
             orient="auto"
           >
-            <polygon points="0 0, 10 3.5, 0 7" fill="var(--vp-c-brand)" />
+            <polygon
+              points="0 0, 10 3.5, 0 7"
+              fill="var(--vp-c-brand)"
+            />
           </marker>
         </defs>
       </svg>
@@ -223,14 +241,14 @@ const setMode = (mode) => {
 <style scoped>
 .embedding-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
 }
 
 .demo-controls {
-  padding: 1rem;
+  padding: 0.75rem;
   border-bottom: 1px solid var(--vp-c-divider);
   display: flex;
   flex-direction: column;
@@ -264,7 +282,7 @@ button.active {
 }
 
 .canvas-container {
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: var(--vp-c-bg);
   display: flex;
   justify-content: center;

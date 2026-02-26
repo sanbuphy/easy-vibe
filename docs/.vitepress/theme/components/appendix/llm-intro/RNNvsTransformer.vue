@@ -16,7 +16,10 @@
 <template>
   <div class="arch-demo">
     <div class="control-tabs">
-      <button :class="{ active: mode === 'rnn' }" @click="mode = 'rnn'">
+      <button
+        :class="{ active: mode === 'rnn' }"
+        @click="mode = 'rnn'"
+      >
         🐌 RNN (Sequential)
       </button>
       <button
@@ -29,7 +32,10 @@
 
     <div class="visualization-area">
       <!-- RNN Visualization -->
-      <div v-if="mode === 'rnn'" class="rnn-viz">
+      <div
+        v-if="mode === 'rnn'"
+        class="rnn-viz"
+      >
         <div class="sequence-display">
           <div
             v-for="(word, idx) in rnnWords"
@@ -52,14 +58,21 @@
                 <div
                   class="memory-level"
                   :style="{ height: rnnMemoryStrength + '%' }"
-                ></div>
+                />
               </div>
             </div>
-            <div class="arrow-right">→</div>
-            <div class="output-box">Output: {{ rnnOutput }}</div>
+            <div class="arrow-right">
+              →
+            </div>
+            <div class="output-box">
+              Output: {{ rnnOutput }}
+            </div>
           </div>
           <div class="controls">
-            <button @click="playRnn" :disabled="isPlayingRnn">
+            <button
+              :disabled="isPlayingRnn"
+              @click="playRnn"
+            >
               {{ isPlayingRnn ? 'Processing...' : '▶ Play Sequence' }}
             </button>
           </div>
@@ -71,7 +84,10 @@
       </div>
 
       <!-- Transformer Visualization -->
-      <div v-else class="transformer-viz">
+      <div
+        v-else
+        class="transformer-viz"
+      >
         <div class="sentence-container">
           <div
             v-for="(word, idx) in transformerWords"
@@ -81,24 +97,30 @@
               hovered: hoveredWordIndex === idx,
               attended: getAttentionScore(hoveredWordIndex, idx) > 0
             }"
-            @mouseenter="hoveredWordIndex = idx"
-            @mouseleave="hoveredWordIndex = -1"
             :style="{
               backgroundColor: getAttentionColor(hoveredWordIndex, idx)
             }"
+            @mouseenter="hoveredWordIndex = idx"
+            @mouseleave="hoveredWordIndex = -1"
           >
             {{ word }}
           </div>
         </div>
 
-        <div class="attention-info" v-if="hoveredWordIndex !== -1">
+        <div
+          v-if="hoveredWordIndex !== -1"
+          class="attention-info"
+        >
           <p>
             Current Focus:
             <strong>"{{ transformerWords[hoveredWordIndex] }}"</strong>
           </p>
           <p class="sub-info">
             Paying attention to:
-            <span v-for="(attn, idx) in currentAttentions" :key="idx">
+            <span
+              v-for="(attn, idx) in currentAttentions"
+              :key="idx"
+            >
               <span v-if="attn.score > 0.01">
                 "{{ transformerWords[attn.idx] }}" ({{
                   Math.round(attn.score * 100)
@@ -107,14 +129,17 @@
             </span>
           </p>
         </div>
-        <div class="attention-info" v-else>
+        <div
+          v-else
+          class="attention-info"
+        >
           <p>👆 鼠标悬停在任意单词上，查看它在“关注”谁。</p>
         </div>
 
         <p class="desc-text">
           Transformer 一眼看完整个句子（并行）。Self-Attention
           机制让每个词都能直接“看见”其他词，无论距离多远。
-          <br />例如：悬停在 <strong>"it"</strong> 上，你会发现它强烈关注
+          <br>例如：悬停在 <strong>"it"</strong> 上，你会发现它强烈关注
           <strong>"animal"</strong>，因为它指代的就是 animal。
         </p>
       </div>
@@ -249,9 +274,9 @@ const getAttentionColor = (sourceIdx, targetIdx) => {
 <style scoped>
 .arch-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--vp-c-bg-soft);
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   font-family: var(--vp-font-family-mono);
   overflow: hidden;
 }
@@ -323,7 +348,7 @@ const getAttentionColor = (sourceIdx, targetIdx) => {
   width: 100px;
   height: 80px;
   border: 2px solid var(--vp-c-text-2);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,7 +406,7 @@ const getAttentionColor = (sourceIdx, targetIdx) => {
 .attention-info {
   text-align: center;
   min-height: 3rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: var(--vp-c-bg);
   border-radius: 6px;
   border: 1px solid var(--vp-c-divider);

@@ -20,7 +20,7 @@ const localeMap = {
     lang: 'zh-CN',
     hreflang: 'zh-CN'
   },
-  'en-us': {
+  'en': {
     ogLocale: 'en_US',
     twitterSite: '@datawhale',
     lang: 'en-US',
@@ -203,14 +203,717 @@ const commonThemeConfig = {
   }
 }
 
+const productManagerSidebarEn = [
+  {
+    text: 'Getting Started',
+    collapsed: false,
+    items: [
+      { text: 'Learning Map', link: '/en/stage-0/0.1-learning-map/' },
+      {
+        text: 'AI Era: If You Can Speak, You Can Code',
+        link: '/en/stage-0/0.2-ai-capabilities-through-games/'
+      }
+    ]
+  },
+  {
+    text: 'Product Prototype Skills',
+    collapsed: false,
+    items: [
+      {
+        text: 'Master AI Programming Tools',
+        link: '/en/stage-1/1.1-introduction-to-ai-ide/'
+      },
+      {
+        text: 'Find Great Ideas',
+        link: '/en/stage-1/1.0-finding-great-idea/'
+      },
+      {
+        text: 'Build Product Prototypes',
+        link: '/en/stage-1/1.2-building-prototype/'
+      },
+      {
+        text: 'Integrate AI Capabilities',
+        link: '/en/stage-1/1.3-integrating-ai-capabilities/'
+      },
+      {
+        text: 'Complete Project Practice',
+        link: '/en/stage-1/1.4-complete-project-practice/'
+      }
+    ]
+  },
+  {
+    text: 'Appendix: Business Thinking',
+    collapsed: false,
+    items: [
+      {
+        text: 'Product Thinking and Solution Design',
+        link: '/en/stage-1/appendix-a-product-thinking/'
+      },
+      {
+        text: 'AI Industry Application Scenarios (B-end)',
+        link: '/en/stage-1/appendix-industry-scenarios/'
+      },
+      {
+        text: 'AI Consumer Scenarios Inspiration (C-end)',
+        link: '/en/stage-1/appendix-c-consumer-scenarios/'
+      }
+    ]
+  },
+  {
+    text: 'Appendix: Technical Solutions',
+    collapsed: false,
+    items: [
+      {
+        text: 'What to do if you encounter errors',
+        link: '/en/stage-1/appendix-b-common-errors/'
+      },
+      {
+        text: 'Comparison of Seven AI Programming Tools',
+        link: '/zh-cn/stage-1/appendix-articles/example0-1/vibe-coding-tools-snake-game-tutorial'
+      },
+      {
+        text: 'Design Websites with Agents',
+        link: '/zh-cn/stage-1/appendix-articles/example0-2/vibe-coding-tools-build-website-with-ai-coding-and-design-agents'
+      }
+    ]
+  }
+]
+
+const stage2SidebarEn = [
+  {
+    text: 'Frontend Development',
+    collapsed: false,
+    items: [
+      {
+        text: 'Frontend 0: Lovart Assets',
+        link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
+      },
+      {
+        text: 'Frontend 1: Figma & MasterGo',
+        link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
+      },
+      {
+        text: 'Frontend 2: UI Design',
+        link: '/zh-cn/stage-2/frontend/2.2-ui-design/'
+      },
+      {
+        text: 'Frontend 3: UI Design Specs',
+        link: '/zh-cn/stage-2/frontend/2.3-multi-product-ui/'
+      },
+      {
+        text: 'Frontend 4: Hogwarts Portraits',
+        link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
+      }
+    ]
+  },
+  {
+    text: 'Backend & Full-Stack',
+    collapsed: false,
+    items: [
+      {
+        text: 'Backend 1: What is API',
+        link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
+      },
+      {
+        text: 'Backend 2: Database & Supabase',
+        link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+      },
+      {
+        text: 'Backend 3: AI-Assisted API Code',
+        link: '/zh-cn/stage-2/backend/2.3-ai-interface-code/'
+      },
+      {
+        text: 'Backend 4: Git Workflow',
+        link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
+      },
+      {
+        text: 'Backend 5: Deployment',
+        link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+      },
+      {
+        text: 'Backend 6: Modern CLI Tools',
+        link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
+      },
+      {
+        text: 'Backend 7: Stripe Payment',
+        link: '/zh-cn/stage-2/backend/2.7-stripe-payment/'
+      }
+    ]
+  },
+  {
+    text: 'Assignments',
+    collapsed: false,
+    items: [
+      {
+        text: 'Assignment 1: Full-Stack App',
+        link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+      },
+      {
+        text: 'Assignment 2: UI Library & Trae',
+        link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
+      }
+    ]
+  },
+  {
+    text: 'AI Capabilities Appendix',
+    collapsed: false,
+    items: [
+      {
+        text: 'AI 1: Dify & Knowledge Base',
+        link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
+      },
+      {
+        text: 'AI 2: AI Dictionary & Multimodal API',
+        link: '/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/'
+      }
+    ]
+  }
+]
+
+const stage3SidebarEn = [
+  {
+    text: 'Core Skills',
+    collapsed: false,
+    items: [
+      {
+        text: 'Advanced 1: MCP & Claude Code Skills',
+        link: '/zh-cn/stage-3/core-skills/3.1-mcp-claude-code-skills/'
+      },
+      {
+        text: 'Advanced 2: Long Running Tasks',
+        link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+      }
+    ]
+  },
+  {
+    text: 'Multi-Platform',
+    collapsed: false,
+    items: [
+      {
+        text: 'Advanced 3: WeChat Mini Program',
+        link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
+      },
+      {
+        text: 'Advanced 4: WeChat Mini Program (Backend)',
+        link: '/zh-cn/stage-3/cross-platform/3.4-wechat-miniprogram-backend/'
+      },
+      {
+        text: 'Advanced 5: Android App - Compose',
+        link: '/zh-cn/stage-3/cross-platform/3.5-android-app/'
+      },
+      {
+        text: 'Advanced 6: iOS App - SwiftUI',
+        link: '/zh-cn/stage-3/cross-platform/3.6-ios-app/'
+      }
+    ]
+  },
+  {
+    text: 'Personal Brand',
+    collapsed: false,
+    items: [
+      {
+        text: 'Advanced 7: Personal Website & Blog',
+        link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
+      }
+    ]
+  },
+  {
+    text: 'AI Advanced Appendix',
+    collapsed: false,
+    items: [
+      {
+        text: 'AI Advanced 1: RAG Introduction',
+        link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
+      },
+      {
+        text: 'AI Advanced 2: LangGraph & Advanced RAG',
+        link: '/zh-cn/stage-3/ai-advanced/3.a2-langgraph-advanced-rag/'
+      }
+    ]
+  }
+]
+
+const appendixSidebarEn = [
+  {
+    text: 'I. Computer Fundamentals',
+    collapsed: false,
+    items: [
+      {
+        text: 'Full-Stack in Vibe Coding Era',
+        link: '/zh-cn/appendix/1-computer-fundamentals/vibe-coding-fullstack'
+      },
+      {
+        text: 'Power On to Web Visit',
+        link: '/zh-cn/appendix/1-computer-fundamentals/power-on-to-web'
+      },
+      {
+        text: 'Transistor to CPU',
+        link: '/zh-cn/appendix/1-computer-fundamentals/transistor-to-cpu'
+      },
+      {
+        text: 'Computer Organization',
+        link: '/zh-cn/appendix/1-computer-fundamentals/computer-organization'
+      },
+      {
+        text: 'Operating Systems',
+        link: '/zh-cn/appendix/1-computer-fundamentals/operating-systems'
+      },
+      {
+        text: 'Data Encoding & Storage',
+        link: '/zh-cn/appendix/1-computer-fundamentals/data-encoding-storage'
+      },
+      {
+        text: 'Computer Networks',
+        link: '/zh-cn/appendix/1-computer-fundamentals/computer-networks'
+      },
+      {
+        text: 'Data Structures',
+        link: '/zh-cn/appendix/1-computer-fundamentals/data-structures'
+      },
+      {
+        text: 'Algorithm Thinking',
+        link: '/zh-cn/appendix/1-computer-fundamentals/algorithm-thinking'
+      },
+      {
+        text: 'Programming Languages',
+        link: '/zh-cn/appendix/1-computer-fundamentals/programming-languages'
+      },
+      {
+        text: 'Compilers Intro',
+        link: '/zh-cn/appendix/1-computer-fundamentals/compilers'
+      },
+      {
+        text: 'Type Systems Intro',
+        link: '/zh-cn/appendix/1-computer-fundamentals/type-systems'
+      }
+    ]
+  },
+  {
+    text: 'II. Tools & Environment',
+    collapsed: false,
+    items: [
+      {
+        text: 'IDE Basics',
+        link: '/zh-cn/appendix/2-development-tools/ide-basics'
+      },
+      {
+        text: 'Command Line & Shell',
+        link: '/zh-cn/appendix/2-development-tools/command-line-shell'
+      },
+      {
+        text: 'Git: Code Time Machine',
+        link: '/zh-cn/appendix/2-development-tools/git-version-control'
+      },
+      {
+        text: 'Env Vars & PATH',
+        link: '/zh-cn/appendix/2-development-tools/environment-path'
+      },
+      {
+        text: 'Ports & Localhost',
+        link: '/zh-cn/appendix/2-development-tools/ports-localhost'
+      },
+      {
+        text: 'SSH & Key Auth',
+        link: '/zh-cn/appendix/2-development-tools/ssh-authentication'
+      },
+      {
+        text: 'Package Managers',
+        link: '/zh-cn/appendix/2-development-tools/package-managers'
+      },
+      {
+        text: 'Art of Debugging',
+        link: '/zh-cn/appendix/2-development-tools/debugging-art/'
+      },
+      {
+        text: 'Regex',
+        link: '/zh-cn/appendix/2-development-tools/regex'
+      }
+    ]
+  },
+  {
+    text: 'III. Browser & Frontend',
+    collapsed: false,
+    items: [
+      {
+        text: 'JavaScript Deep Dive',
+        link: '/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive'
+      },
+      {
+        text: 'TypeScript Intro',
+        link: '/zh-cn/appendix/3-browser-and-frontend/typescript'
+      },
+      {
+        text: 'Frontend Frameworks',
+        link: '/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks'
+      },
+      {
+        text: 'Browser as OS',
+        link: '/zh-cn/appendix/3-browser-and-frontend/browser-as-os'
+      },
+      {
+        text: 'Rendering Pipeline',
+        link: '/zh-cn/appendix/3-browser-and-frontend/browser-as-os-rendering'
+      },
+      {
+        text: 'HTML / CSS Layout',
+        link: '/zh-cn/appendix/3-browser-and-frontend/html-css-layout'
+      },
+      {
+        text: 'JS Runtime',
+        link: '/zh-cn/appendix/3-browser-and-frontend/javascript-runtime'
+      },
+      {
+        text: 'Nature of Frameworks',
+        link: '/zh-cn/appendix/3-browser-and-frontend/frontend-framework-nature'
+      },
+      {
+        text: 'State Management',
+        link: '/zh-cn/appendix/3-browser-and-frontend/state-management'
+      },
+      {
+        text: 'Routing & Navigation',
+        link: '/zh-cn/appendix/3-browser-and-frontend/routing-navigation'
+      },
+      {
+        text: 'Graphics & Animation',
+        link: '/zh-cn/appendix/3-browser-and-frontend/graphics-animation'
+      },
+      {
+        text: 'Real-time Comm',
+        link: '/zh-cn/appendix/3-browser-and-frontend/realtime-communication'
+      },
+      {
+        text: 'Web Performance',
+        link: '/zh-cn/appendix/3-browser-and-frontend/web-performance'
+      },
+      {
+        text: 'Frontend Engineering',
+        link: '/zh-cn/appendix/3-browser-and-frontend/frontend-engineering'
+      },
+      {
+        text: 'Project Architecture',
+        link: '/zh-cn/appendix/3-browser-and-frontend/frontend-project-architecture'
+      },
+      {
+        text: 'A11y & i18n',
+        link: '/zh-cn/appendix/3-browser-and-frontend/a11n-i18n'
+      }
+    ]
+  },
+  {
+    text: 'IV. Server & Backend',
+    collapsed: false,
+    items: [
+      {
+        text: 'Backend Languages',
+        link: '/zh-cn/appendix/4-server-and-backend/backend-languages'
+      },
+      {
+        text: 'Client Languages',
+        link: '/zh-cn/appendix/4-server-and-backend/client-languages'
+      },
+      {
+        text: 'Cross-platform Solutions',
+        link: '/zh-cn/appendix/4-server-and-backend/cross-platform'
+      },
+      {
+        text: 'HTTP Protocol',
+        link: '/zh-cn/appendix/4-server-and-backend/http-protocol'
+      },
+      {
+        text: 'Request Journey',
+        link: '/zh-cn/appendix/4-server-and-backend/request-journey'
+      },
+      {
+        text: 'Web Frameworks',
+        link: '/zh-cn/appendix/4-server-and-backend/web-frameworks'
+      },
+      {
+        text: 'API Intro',
+        link: '/zh-cn/appendix/4-server-and-backend/api-intro'
+      },
+      {
+        text: 'API Design Philosophy',
+        link: '/zh-cn/appendix/4-server-and-backend/api-design'
+      },
+      {
+        text: 'Serialization',
+        link: '/zh-cn/appendix/4-server-and-backend/serialization'
+      },
+      {
+        text: 'Auth & Authorization',
+        link: '/zh-cn/appendix/4-server-and-backend/auth-authorization'
+      },
+      {
+        text: 'Concurrency & Async',
+        link: '/zh-cn/appendix/4-server-and-backend/concurrency-async'
+      },
+      {
+        text: 'Caching Strategies',
+        link: '/zh-cn/appendix/4-server-and-backend/caching'
+      },
+      {
+        text: 'Message Queues',
+        link: '/zh-cn/appendix/4-server-and-backend/message-queues'
+      },
+      {
+        text: 'Async Task Queues',
+        link: '/zh-cn/appendix/4-server-and-backend/async-task-queues'
+      },
+      {
+        text: 'Rate Limiting',
+        link: '/zh-cn/appendix/4-server-and-backend/rate-limiting-backpressure'
+      },
+      {
+        text: 'Search Engine Principles',
+        link: '/zh-cn/appendix/4-server-and-backend/search-engines'
+      },
+      {
+        text: 'File Storage',
+        link: '/zh-cn/appendix/4-server-and-backend/file-storage'
+      },
+      {
+        text: 'Backend Architecture',
+        link: '/zh-cn/appendix/4-server-and-backend/backend-layered-architecture'
+      },
+      {
+        text: 'Project Architecture',
+        link: '/zh-cn/appendix/4-server-and-backend/backend-project-architecture'
+      },
+      {
+        text: 'DSL Intro',
+        link: '/zh-cn/appendix/4-server-and-backend/domain-specific-languages'
+      }
+    ]
+  },
+  {
+    text: 'V. Data',
+    collapsed: false,
+    items: [
+      {
+        text: 'Database Fundamentals',
+        link: '/zh-cn/appendix/5-data/database-fundamentals'
+      },
+      {
+        text: 'Data Models Panorama',
+        link: '/zh-cn/appendix/5-data/data-models'
+      },
+      {
+        text: 'Data Tracking',
+        link: '/zh-cn/appendix/5-data/data-tracking'
+      },
+      {
+        text: 'Data Analysis',
+        link: '/zh-cn/appendix/5-data/data-analysis'
+      },
+      {
+        text: 'A/B Testing',
+        link: '/zh-cn/appendix/5-data/ab-testing'
+      },
+      {
+        text: 'Data Visualization',
+        link: '/zh-cn/appendix/5-data/data-visualization'
+      },
+      {
+        text: 'Data Governance',
+        link: '/zh-cn/appendix/5-data/data-governance'
+      }
+    ]
+  },
+  {
+    text: 'VI. Architecture',
+    collapsed: false,
+    items: [
+      {
+        text: 'Monolith to Microservices',
+        link: '/zh-cn/appendix/6-architecture-and-system-design/monolith-to-microservices'
+      },
+      {
+        text: 'Distributed Systems',
+        link: '/zh-cn/appendix/6-architecture-and-system-design/distributed-systems'
+      },
+      {
+        text: 'HA & Disaster Recovery',
+        link: '/zh-cn/appendix/6-architecture-and-system-design/high-availability'
+      },
+      {
+        text: 'System Design',
+        link: '/zh-cn/appendix/6-architecture-and-system-design/system-design-methodology'
+      }
+    ]
+  },
+  {
+    text: 'VII. Infrastructure',
+    collapsed: false,
+    items: [
+      {
+        text: 'Linux Basics',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/linux-basics'
+      },
+      {
+        text: 'Docker Containers',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/docker-containers'
+      },
+      {
+        text: 'Kubernetes',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/kubernetes'
+      },
+      {
+        text: 'CI / CD',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/ci-cd'
+      },
+      {
+        text: 'Domain, DNS & HTTPS',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/dns-https'
+      },
+      {
+        text: 'Load Balancing',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/load-balancing-gateway'
+      },
+      {
+        text: 'Gateway & Reverse Proxy',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/gateway-proxy'
+      },
+      {
+        text: 'Cloud Platforms',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-platforms'
+      },
+      {
+        text: 'IAM',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-iam'
+      },
+      {
+        text: 'Storage & CDN',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-storage-cdn'
+      },
+      {
+        text: 'IaC',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/infrastructure-as-code'
+      },
+      {
+        text: 'Monitoring & Logging',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/monitoring-logging'
+      },
+      {
+        text: 'Incident Response',
+        link: '/zh-cn/appendix/7-infrastructure-and-operations/incident-response'
+      }
+    ]
+  },
+  {
+    text: 'VIII. Artificial Intelligence',
+    collapsed: false,
+    items: [
+      {
+        text: 'AI History & Concepts',
+        link: '/en/appendix/8-artificial-intelligence/ai-history'
+      },
+      {
+        text: 'Neural Networks',
+        link: '/zh-cn/appendix/8-artificial-intelligence/neural-networks'
+      },
+      {
+        text: 'Transformer & Attention',
+        link: '/zh-cn/appendix/8-artificial-intelligence/transformer-attention'
+      },
+      {
+        text: 'LLM Principles',
+        link: '/zh-cn/appendix/8-artificial-intelligence/llm-principles'
+      },
+      {
+        text: 'Prompt Engineering',
+        link: '/zh-cn/appendix/8-artificial-intelligence/prompt-engineering'
+      },
+      {
+        text: 'Context Engineering',
+        link: '/zh-cn/appendix/8-artificial-intelligence/context-engineering'
+      },
+      {
+        text: 'Multimodal Models',
+        link: '/zh-cn/appendix/8-artificial-intelligence/multimodal-models'
+      },
+      {
+        text: 'Image Generation',
+        link: '/zh-cn/appendix/8-artificial-intelligence/image-generation'
+      },
+      {
+        text: 'Speech Synthesis',
+        link: '/zh-cn/appendix/8-artificial-intelligence/speech-synthesis-recognition'
+      },
+      {
+        text: 'Embedding & Vector Search',
+        link: '/zh-cn/appendix/8-artificial-intelligence/embedding-vector-retrieval'
+      },
+      {
+        text: 'RAG Architecture',
+        link: '/zh-cn/appendix/8-artificial-intelligence/rag'
+      },
+      {
+        text: 'AI Agent & Tools',
+        link: '/zh-cn/appendix/8-artificial-intelligence/ai-agents'
+      },
+      {
+        text: 'AI Protocols (MCP)',
+        link: '/zh-cn/appendix/8-artificial-intelligence/ai-protocols'
+      },
+      {
+        text: 'Fine-tuning & Deployment',
+        link: '/zh-cn/appendix/8-artificial-intelligence/model-finetuning-deployment'
+      },
+      {
+        text: 'AI Native Design',
+        link: '/zh-cn/appendix/8-artificial-intelligence/ai-native-app-design'
+      },
+      {
+        text: 'AI Dictionary',
+        link: '/zh-cn/appendix/8-artificial-intelligence/ai-capability-dictionary'
+      }
+    ]
+  },
+  {
+    text: 'IX. Engineering Excellence',
+    collapsed: false,
+    items: [
+      {
+        text: 'Code Quality',
+        link: '/zh-cn/appendix/9-engineering-excellence/code-quality-refactoring'
+      },
+      {
+        text: 'Testing Strategies',
+        link: '/zh-cn/appendix/9-engineering-excellence/testing-strategies'
+      },
+      {
+        text: 'Design Patterns',
+        link: '/zh-cn/appendix/9-engineering-excellence/design-patterns'
+      },
+      {
+        text: 'Security Thinking',
+        link: '/zh-cn/appendix/9-engineering-excellence/security-thinking'
+      },
+      {
+        text: 'Technical Writing',
+        link: '/zh-cn/appendix/9-engineering-excellence/technical-writing'
+      },
+      {
+        text: 'Open Source',
+        link: '/zh-cn/appendix/9-engineering-excellence/open-source-collaboration'
+      },
+      {
+        text: 'Tech Selection',
+        link: '/zh-cn/appendix/9-engineering-excellence/technology-selection'
+      }
+    ]
+  }
+]
+
 const productManagerSidebar = [
   {
     text: '新手入门',
     collapsed: false,
     items: [
-      { text: '1. 学习地图', link: '/zh-cn/stage-0/0.1-learning-map/' },
+      { text: '学习地图', link: '/zh-cn/stage-0/0.1-learning-map/' },
       {
-        text: '2. AI 时代，会说话就会编程',
+        text: 'AI 时代，会说话就会编程',
         link: '/zh-cn/stage-0/0.2-ai-capabilities-through-games/'
       }
     ]
@@ -220,23 +923,23 @@ const productManagerSidebar = [
     collapsed: false,
     items: [
       {
-        text: '1. 学会 AI 编程工具',
+        text: '学会 AI 编程工具',
         link: '/zh-cn/stage-1/1.1-introduction-to-ai-ide/'
       },
       {
-        text: '2. 找到好点子',
+        text: '找到好点子',
         link: '/zh-cn/stage-1/1.0-finding-great-idea/'
       },
       {
-        text: '3. 搭建产品原型',
+        text: '搭建产品原型',
         link: '/zh-cn/stage-1/1.2-building-prototype/'
       },
       {
-        text: '4. 接入 AI 能力',
+        text: '接入 AI 能力',
         link: '/zh-cn/stage-1/1.3-integrating-ai-capabilities/'
       },
       {
-        text: '5. 完整项目实战',
+        text: '完整项目实战',
         link: '/zh-cn/stage-1/1.4-complete-project-practice/'
       }
     ]
@@ -288,6 +991,15 @@ export default defineConfig({
   base: base,
   ignoreDeadLinks: true,
 
+  // Vite 配置
+  vite: {
+    server: {
+      watch: {
+        ignored: ['**/docs/.vitepress/dist/**']
+      }
+    }
+  },
+
   // Sitemap 配置
   sitemap: {
     hostname: 'https://datawhalechina.github.io/easy-vibe',
@@ -311,6 +1023,21 @@ export default defineConfig({
 
   // 多语言配置 - 使用 cn/en-us/ja 结构
   locales: {
+    // 根路径 — 仅用于 404 页面兜底，实际首页由 docs/index.md 自动重定向
+    root: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      link: '/zh-cn/',
+      themeConfig: {
+        ...commonThemeConfig,
+        notFound: {
+          title: '页面未找到',
+          quote: '你访问的页面不存在，可能已被移动或删除。',
+          linkText: '返回首页',
+          linkUrl: '/zh-cn/'
+        }
+      }
+    },
     // 中文
     'zh-cn': {
       label: '简体中文',
@@ -326,6 +1053,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: '页面未找到',
+          quote: '你访问的页面不存在，可能已被移动或删除。',
+          linkText: '返回首页',
+          linkUrl: '/zh-cn/'
+        },
         outline: {
           level: [1, 6],
           label: '页面导航'
@@ -338,13 +1071,13 @@ export default defineConfig({
           },
           {
             text: '初中级开发',
-            link: '/zh-cn/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: '高级开发',
-            link: '/zh-cn/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: '附录', link: '/zh-cn/appendix/intro' }
+          { text: '附录', link: '/zh-cn/appendix/index' }
         ],
         sidebar: {
           '/zh-cn/stage-0/': productManagerSidebar,
@@ -372,7 +1105,7 @@ export default defineConfig({
                 },
                 {
                   text: '前端四：一起做霍格沃茨画像',
-                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/chapter4-lets-build-hogwarts-portraits'
+                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
                 }
               ]
             },
@@ -382,11 +1115,11 @@ export default defineConfig({
               items: [
                 {
                   text: '后端一：什么是 API',
-                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/extra2-what-is-api'
+                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
                 },
                 {
                   text: '后端二：从数据库到 Supabase',
-                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/chapter5-from-database-to-supabase'
+                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
                 },
                 {
                   text: '后端三：大模型辅助编写接口代码与接口文档',
@@ -394,15 +1127,15 @@ export default defineConfig({
                 },
                 {
                   text: '后端四：Git 工作流',
-                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/extra1-what-is-git-and-what-is-github'
+                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
                 },
                 {
                   text: '后端五：如何部署 Web 应用',
-                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/extra6-zeabur-what-is-it-and-how-to-deploy-web-applications'
+                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
                 },
                 {
                   text: '后端六：现代 CLI 开发工具',
-                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/extra7-cli-ai-coding-tools-and-the-principles-of-test-driven-development'
+                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
                 },
                 {
                   text: '后端七：如何集成 Stripe 等收费系统',
@@ -430,11 +1163,11 @@ export default defineConfig({
               items: [
                 {
                   text: 'AI 一：Dify 入门与知识库集成',
-                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/chapter3-getting-started-with-dify-and-its-knowledge-base-integration'
+                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
                 },
                 {
                   text: 'AI 二：学会查询 AI 词典与集成多模态 API',
-                  link: '/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/extra3-ai-capability-starter-handbook'
+                  link: '/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/'
                 }
               ]
             }
@@ -445,8 +1178,8 @@ export default defineConfig({
               collapsed: false,
               items: [
                 {
-                  text: '高级一：MCP 与 ClaudeCode Skills',
-                  link: '/zh-cn/stage-3/core-skills/3.1-mcp-claudecode-skills/'
+                  text: '高级一：MCP 与 Claude Code Skills',
+                  link: '/zh-cn/stage-3/core-skills/3.1-mcp-claude-code-skills/'
                 },
                 {
                   text: '高级二：如何让 Coding Tools 长时间工作',
@@ -492,7 +1225,7 @@ export default defineConfig({
               items: [
                 {
                   text: '高级 AI 一：什么是 RAG 以及它如何工作',
-                  link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/extra5-what-is-rag-and-how-does-it-work-and-future'
+                  link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
                 },
                 {
                   text: '高级 AI 二：中高级 RAG 与工作流编排 - 以 LangGraph 为例',
@@ -513,23 +1246,23 @@ export default defineConfig({
               items: [
                 {
                   text: 'Extra 1: Git & GitHub',
-                  link: '/zh-cn/extra/extra1/extra1-what-is-git-and-what-is-github'
+                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
                 },
                 {
                   text: 'Extra 2: What is API',
-                  link: '/zh-cn/extra/extra2/extra2-what-is-api'
+                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
                 },
                 {
                   text: 'Extra 5: What is RAG',
-                  link: '/zh-cn/extra/extra5/extra5-what-is-rag-and-how-does-it-work-and-future'
+                  link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
                 },
                 {
                   text: 'Extra 6: Zeabur Deployment',
-                  link: '/zh-cn/extra/extra6/extra6-zeabur-what-is-it-and-how-to-deploy-web-applications'
+                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
                 },
                 {
                   text: 'Extra 7: CLI AI Tools & TDD',
-                  link: '/zh-cn/extra/extra7/extra7-cli-ai-coding-tools-and-the-principles-of-test-driven-development'
+                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
                 }
               ]
             }
@@ -555,161 +1288,488 @@ export default defineConfig({
               items: [
                 {
                   text: '前端四：霍格沃茨画像',
-                  link: '/zh-cn/project/chapter4/chapter4-lets-build-hogwarts-portraits'
+                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
                 },
                 {
                   text: '后端二：Supabase 数据库',
-                  link: '/zh-cn/project/chapter5/chapter5-from-database-to-supabase'
+                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
                 },
                 {
                   text: 'AI 一：Dify & Knowledge Base',
-                  link: '/zh-cn/project/chapter3/chapter3-getting-started-with-dify-and-its-knowledge-base-integration'
+                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
                 }
               ]
             }
           ],
           '/zh-cn/appendix/': [
             {
-              text: '人工智能基础',
+              text: '一、计算机是怎么回事',
               collapsed: false,
               items: [
                 {
-                  text: '提示词工程',
-                  link: '/zh-cn/appendix/prompt-engineering'
+                  text: 'Vibe Coding 时代下的全栈开发',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/vibe-coding-fullstack'
                 },
                 {
-                  text: '人工智能进化史',
-                  link: '/zh-cn/appendix/ai-evolution'
+                  text: '从按下电源到访问网站发生了什么',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/power-on-to-web'
                 },
-                { text: '大语言模型', link: '/zh-cn/appendix/llm-intro' },
-                { text: '多模态大模型', link: '/zh-cn/appendix/vlm-intro' },
                 {
-                  text: 'AI 绘画原理',
-                  link: '/zh-cn/appendix/image-gen-intro'
+                  text: '从晶体管到 CPU',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/transistor-to-cpu'
                 },
-                { text: 'AI 音频模型', link: '/zh-cn/appendix/audio-intro' },
                 {
-                  text: '上下文工程',
-                  link: '/zh-cn/appendix/context-engineering'
+                  text: '计算机组成原理',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/computer-organization'
                 },
-                { text: 'Agent 智能体', link: '/zh-cn/appendix/agent-intro' },
                 {
-                  text: 'AI 能力词典',
-                  link: '/zh-cn/appendix/ai-capability-dictionary'
+                  text: '操作系统（进程 / 内存 / 文件系统）',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/operating-systems'
+                },
+                {
+                  text: '数据的编码、存储与传输',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/data-encoding-storage'
+                },
+                {
+                  text: '网络：从输入网址到返回结果的过程',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/computer-networks'
+                },
+                {
+                  text: '数据结构',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/data-structures'
+                },
+                {
+                  text: '算法思维入门',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/algorithm-thinking'
+                },
+                {
+                  text: '编程语言图谱',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/programming-languages'
+                },
+                {
+                  text: '编译原理入门',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/compilers'
+                },
+                {
+                  text: '类型系统入门',
+                  link: '/zh-cn/appendix/1-computer-fundamentals/type-systems'
                 }
               ]
             },
             {
-              text: '前端开发',
+              text: '二、开发环境与工具',
               collapsed: false,
               items: [
                 {
-                  text: 'HTML/CSS/JS 基础',
-                  link: '/zh-cn/appendix/web-basics'
+                  text: '集成开发环境 (IDE) 基础',
+                  link: '/zh-cn/appendix/2-development-tools/ide-basics'
                 },
                 {
-                  text: '前端进化史',
-                  link: '/zh-cn/appendix/frontend-evolution'
+                  text: '命令行与 Shell 脚本',
+                  link: '/zh-cn/appendix/2-development-tools/command-line-shell'
                 },
                 {
-                  text: '前端性能优化',
-                  link: '/zh-cn/appendix/frontend-performance'
+                  text: 'Git：代码的时光机',
+                  link: '/zh-cn/appendix/2-development-tools/git-version-control'
                 },
                 {
-                  text: 'Canvas 2D 入门',
-                  link: '/zh-cn/appendix/canvas-intro'
+                  text: '环境变量与 PATH',
+                  link: '/zh-cn/appendix/2-development-tools/environment-path'
                 },
                 {
-                  text: 'URL 到浏览器显示',
-                  link: '/zh-cn/appendix/url-to-browser'
+                  text: '端口与 localhost',
+                  link: '/zh-cn/appendix/2-development-tools/ports-localhost'
                 },
                 {
-                  text: '浏览器调试器',
-                  link: '/zh-cn/appendix/browser-devtools'
+                  text: 'SSH 与密钥认证',
+                  link: '/zh-cn/appendix/2-development-tools/ssh-authentication'
                 },
                 {
-                  text: '浏览器渲染原理',
-                  link: '/zh-cn/appendix/browser-rendering-pipeline'
+                  text: '包管理器（npm / pip / cargo）',
+                  link: '/zh-cn/appendix/2-development-tools/package-managers'
                 },
                 {
-                  text: '前端路由原理',
-                  link: '/zh-cn/appendix/frontend-routing'
+                  text: '调试的艺术',
+                  link: '/zh-cn/appendix/2-development-tools/debugging-art/'
                 },
                 {
-                  text: '组件状态管理',
-                  link: '/zh-cn/appendix/component-state-management'
-                },
-                {
-                  text: '前端工程化',
-                  link: '/zh-cn/appendix/frontend-engineering'
+                  text: '正则表达式',
+                  link: '/zh-cn/appendix/2-development-tools/regex'
                 }
               ]
             },
             {
-              text: '后端开发',
+              text: '三、浏览器与前端',
               collapsed: false,
               items: [
                 {
-                  text: '后端进化史',
-                  link: '/zh-cn/appendix/backend-evolution'
+                  text: 'JavaScript 语言深入',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive'
+                },
+                {
+                  text: 'TypeScript：给 JS 加上类型系统',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/typescript'
+                },
+                {
+                  text: '前端框架对比（React / Vue / Svelte / Angular）',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks'
+                },
+                {
+                  text: '浏览器是一个操作系统',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/browser-as-os'
+                },
+                {
+                  text: '浏览器渲染管道',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/browser-as-os-rendering'
+                },
+                {
+                  text: 'HTML / CSS 布局体系',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/html-css-layout'
+                },
+                {
+                  text: 'JavaScript 运行时',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/javascript-runtime'
+                },
+                {
+                  text: '前端框架的本质',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/frontend-framework-nature'
+                },
+                {
+                  text: '状态管理哲学',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/state-management'
+                },
+                {
+                  text: '路由与导航',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/routing-navigation'
+                },
+                {
+                  text: '图形与动画（Canvas / SVG / WebGL）',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/graphics-animation'
+                },
+                {
+                  text: '实时通信（WebSocket / SSE）',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/realtime-communication'
+                },
+                {
+                  text: '网页性能的度量与优化',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/web-performance'
+                },
+                {
+                  text: '前端工程化全貌',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/frontend-engineering'
+                },
+                {
+                  text: '前端项目文件目录设计',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/frontend-project-architecture'
+                },
+                {
+                  text: '无障碍与国际化',
+                  link: '/zh-cn/appendix/3-browser-and-frontend/a11n-i18n'
+                }
+              ]
+            },
+            {
+              text: '四、服务器与后端',
+              collapsed: false,
+              items: [
+                {
+                  text: '后端语言对比（Node.js / Go / Java / Rust）',
+                  link: '/zh-cn/appendix/4-server-and-backend/backend-languages'
+                },
+                {
+                  text: '客户端语言对比（Swift / Kotlin / Dart）',
+                  link: '/zh-cn/appendix/4-server-and-backend/client-languages'
+                },
+                {
+                  text: '跨平台方案对比（React Native / Flutter / Electron / Tauri）',
+                  link: '/zh-cn/appendix/4-server-and-backend/cross-platform'
+                },
+                {
+                  text: 'HTTP 协议',
+                  link: '/zh-cn/appendix/4-server-and-backend/http-protocol'
+                },
+                {
+                  text: '一个请求的完整旅程',
+                  link: '/zh-cn/appendix/4-server-and-backend/request-journey'
+                },
+                {
+                  text: 'Web 框架的本质',
+                  link: '/zh-cn/appendix/4-server-and-backend/web-frameworks'
+                },
+                {
+                  text: 'API 入门',
+                  link: '/zh-cn/appendix/4-server-and-backend/api-intro'
+                },
+                {
+                  text: 'API 设计哲学（REST / GraphQL / gRPC）',
+                  link: '/zh-cn/appendix/4-server-and-backend/api-design'
+                },
+                {
+                  text: '序列化与数据格式',
+                  link: '/zh-cn/appendix/4-server-and-backend/serialization'
+                },
+                {
+                  text: '认证与授权体系',
+                  link: '/zh-cn/appendix/4-server-and-backend/auth-authorization'
+                },
+                {
+                  text: '并发、异步与多线程',
+                  link: '/zh-cn/appendix/4-server-and-backend/concurrency-async'
+                },
+                {
+                  text: '缓存的层次与策略',
+                  link: '/zh-cn/appendix/4-server-and-backend/caching'
+                },
+                {
+                  text: '消息队列与事件驱动',
+                  link: '/zh-cn/appendix/4-server-and-backend/message-queues'
+                },
+                {
+                  text: '异步任务队列与生产消费模型',
+                  link: '/zh-cn/appendix/4-server-and-backend/async-task-queues'
+                },
+                {
+                  text: '限流与背压控制',
+                  link: '/zh-cn/appendix/4-server-and-backend/rate-limiting-backpressure'
+                },
+                {
+                  text: '搜索引擎原理',
+                  link: '/zh-cn/appendix/4-server-and-backend/search-engines'
+                },
+                {
+                  text: '文件存储与对象存储',
+                  link: '/zh-cn/appendix/4-server-and-backend/file-storage'
                 },
                 {
                   text: '后端分层架构',
-                  link: '/zh-cn/appendix/backend-layered-architecture'
+                  link: '/zh-cn/appendix/4-server-and-backend/backend-layered-architecture'
                 },
                 {
-                  text: '后端编程语言',
-                  link: '/zh-cn/appendix/backend-languages'
+                  text: '后端项目文件目录设计',
+                  link: '/zh-cn/appendix/4-server-and-backend/backend-project-architecture'
                 },
                 {
-                  text: '并发编程模型',
-                  link: '/zh-cn/appendix/concurrency-models'
-                },
-                {
-                  text: '接口设计规范',
-                  link: '/zh-cn/appendix/api-design'
-                },
-                { text: '数据库原理', link: '/zh-cn/appendix/database-intro' },
-                { text: '系统缓存设计', link: '/zh-cn/appendix/cache-design' },
-                { text: '消息队列设计', link: '/zh-cn/appendix/queue-design' },
-                { text: '鉴权原理与实战', link: '/zh-cn/appendix/auth-design' },
-                { text: '网关与反向代理', link: '/zh-cn/appendix/gateway-proxy' },
-                { text: '负载均衡策略', link: '/zh-cn/appendix/load-balancing' },
-                { text: '埋点设计', link: '/zh-cn/appendix/tracking-design' },
-                { text: '线上运维', link: '/zh-cn/appendix/operations' }
-              ]
-            },
-            {
-              text: '云计算与服务',
-              collapsed: false,
-              items: [
-                {
-                  text: '云服务基础',
-                  link: '/zh-cn/appendix/cloud-services'
-                },
-                {
-                  text: 'IAM 权限管理',
-                  link: '/zh-cn/appendix/cloud-iam'
-                },
-                {
-                  text: '对象存储与 CDN',
-                  link: '/zh-cn/appendix/cloud-storage-cdn'
+                  text: '领域特定语言（DSL）',
+                  link: '/zh-cn/appendix/4-server-and-backend/domain-specific-languages'
                 }
               ]
             },
             {
-              text: '通用技能',
+              text: '五、数据',
               collapsed: false,
               items: [
-                { text: 'API 入门', link: '/zh-cn/appendix/api-intro' },
-                { text: 'IDE 原理', link: '/zh-cn/appendix/ide-intro' },
-                { text: '终端入门', link: '/zh-cn/appendix/terminal-intro' },
-                { text: 'Git 详细介绍', link: '/zh-cn/appendix/git-intro' },
                 {
-                  text: '计算机网络',
-                  link: '/zh-cn/appendix/computer-networks'
+                  text: '数据库原理（索引 / 事务 / 查询优化）',
+                  link: '/zh-cn/appendix/5-data/database-fundamentals'
                 },
-                { text: '部署与上线', link: '/zh-cn/appendix/deployment' }
+                {
+                  text: '数据模型全景（文档 / 图 / 时序 / 向量）',
+                  link: '/zh-cn/appendix/5-data/data-models'
+                },
+                {
+                  text: '数据埋点与用户行为采集',
+                  link: '/zh-cn/appendix/5-data/data-tracking'
+                },
+                {
+                  text: '数据分析基础（统计 / 指标 / 漏斗）',
+                  link: '/zh-cn/appendix/5-data/data-analysis'
+                },
+                {
+                  text: 'A/B 测试与实验驱动',
+                  link: '/zh-cn/appendix/5-data/ab-testing'
+                },
+                {
+                  text: '数据可视化与仪表盘',
+                  link: '/zh-cn/appendix/5-data/data-visualization'
+                },
+                {
+                  text: '数据治理与数据质量',
+                  link: '/zh-cn/appendix/5-data/data-governance'
+                }
+              ]
+            },
+            {
+              text: '六、架构与系统设计',
+              collapsed: false,
+              items: [
+                {
+                  text: '从单体到微服务的演进',
+                  link: '/zh-cn/appendix/6-architecture-and-system-design/monolith-to-microservices'
+                },
+                {
+                  text: '分布式系统的挑战',
+                  link: '/zh-cn/appendix/6-architecture-and-system-design/distributed-systems'
+                },
+                {
+                  text: '高可用与容灾',
+                  link: '/zh-cn/appendix/6-architecture-and-system-design/high-availability'
+                },
+                {
+                  text: '系统设计方法论',
+                  link: '/zh-cn/appendix/6-architecture-and-system-design/system-design-methodology'
+                }
+              ]
+            },
+            {
+              text: '七、基础设施与运维',
+              collapsed: false,
+              items: [
+                {
+                  text: 'Linux 基础',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/linux-basics'
+                },
+                {
+                  text: 'Docker 容器化',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/docker-containers'
+                },
+                {
+                  text: 'Kubernetes 编排',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/kubernetes'
+                },
+                {
+                  text: 'CI / CD 自动化',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/ci-cd'
+                },
+                {
+                  text: '域名、DNS 与 HTTPS',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/dns-https'
+                },
+                {
+                  text: '负载均衡与网关',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/load-balancing-gateway'
+                },
+                {
+                  text: '网关与反向代理',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/gateway-proxy'
+                },
+                {
+                  text: '云平台实战',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-platforms'
+                },
+                {
+                  text: 'IAM 权限管理',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-iam'
+                },
+                {
+                  text: '对象存储与 CDN',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/cloud-storage-cdn'
+                },
+                {
+                  text: '基础设施即代码',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/infrastructure-as-code'
+                },
+                {
+                  text: '监控、日志与告警',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/monitoring-logging'
+                },
+                {
+                  text: '故障排查与应急响应',
+                  link: '/zh-cn/appendix/7-infrastructure-and-operations/incident-response'
+                }
+              ]
+            },
+            {
+              text: '八、人工智能',
+              collapsed: false,
+              items: [
+                {
+                  text: 'AI 简史与核心概念',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/ai-history'
+                },
+                {
+                  text: '神经网络与深度学习',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/neural-networks'
+                },
+                {
+                  text: 'Transformer 与注意力机制',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/transformer-attention'
+                },
+                {
+                  text: '大语言模型的工作原理',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/llm-principles'
+                },
+                {
+                  text: '提示词工程',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/prompt-engineering'
+                },
+                {
+                  text: '上下文工程',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/context-engineering'
+                },
+                {
+                  text: '多模态模型（视觉 / 音频 / 视频）',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/multimodal-models'
+                },
+                {
+                  text: '图像生成原理',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/image-generation'
+                },
+                {
+                  text: '语音合成与识别',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/speech-synthesis-recognition'
+                },
+                {
+                  text: 'Embedding 与向量检索',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/embedding-vector-retrieval'
+                },
+                {
+                  text: 'RAG 架构',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/rag'
+                },
+                {
+                  text: 'AI Agent 与工具调用',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/ai-agents'
+                },
+                {
+                  text: 'AI 协议（MCP & A2A）',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/ai-protocols'
+                },
+                {
+                  text: '模型微调与部署',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/model-finetuning-deployment'
+                },
+                {
+                  text: 'AI 原生应用设计',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/ai-native-app-design'
+                },
+                {
+                  text: 'AI 能力词典',
+                  link: '/zh-cn/appendix/8-artificial-intelligence/ai-capability-dictionary'
+                }
+              ]
+            },
+            {
+              text: '九、工程素养',
+              collapsed: false,
+              items: [
+                {
+                  text: '代码质量与重构',
+                  link: '/zh-cn/appendix/9-engineering-excellence/code-quality-refactoring'
+                },
+                {
+                  text: '测试策略',
+                  link: '/zh-cn/appendix/9-engineering-excellence/testing-strategies'
+                },
+                {
+                  text: '设计模式',
+                  link: '/zh-cn/appendix/9-engineering-excellence/design-patterns'
+                },
+                {
+                  text: '安全思维与攻防基础',
+                  link: '/zh-cn/appendix/9-engineering-excellence/security-thinking'
+                },
+                {
+                  text: '技术文档写作',
+                  link: '/zh-cn/appendix/9-engineering-excellence/technical-writing'
+                },
+                {
+                  text: '开源协作',
+                  link: '/zh-cn/appendix/9-engineering-excellence/open-source-collaboration'
+                },
+                {
+                  text: '技术选型方法论',
+                  link: '/zh-cn/appendix/9-engineering-excellence/technology-selection'
+                }
               ]
             }
           ]
@@ -718,42 +1778,53 @@ export default defineConfig({
     },
 
     // 英文
-    'en-us': {
-      label: 'English (US)',
+    'en': {
+      label: 'English',
       lang: 'en-US',
-      link: '/en-us/',
+      link: '/en/',
       title: 'Easy-Vibe Tutorial',
       description:
         'Learn Vibe Coding from Zero to Advanced - Master AI programming with Claude Code, Cursor, and other AI IDE tools',
       head: getSeoHead(
-        'en-us',
+        'en',
         'Easy-Vibe Tutorial',
         'Learn Vibe Coding from Zero to Advanced - Master AI programming with Claude Code, Cursor, and other AI IDE tools'
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'Page Not Found',
+          quote: 'The page you are looking for does not exist or has been moved.',
+          linkText: 'Take me home',
+          linkUrl: '/en/'
+        },
         outline: {
           level: [1, 6],
           label: 'On this page'
         },
         nav: [
-          { text: 'Home', link: '/en-us/' },
+          { text: 'Home', link: '/en/' },
           {
             text: 'Novice & PM',
-            link: '/en-us/stage-0/'
+            link: '/en/stage-0/'
           },
           {
             text: 'Full-Stack Development',
-            link: '/en-us/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'Advanced Development',
-            link: '/en-us/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'Appendix', link: '/en-us/appendix/intro' }
+          { text: 'Appendix', link: '/zh-cn/appendix/index' }
         ],
-        // TODO: Add English sidebar when content is ready
-        sidebar: {}
+        sidebar: {
+          '/en/stage-0/': productManagerSidebarEn,
+          '/en/stage-1/': productManagerSidebarEn,
+          '/en/stage-2/': stage2SidebarEn,
+          '/en/stage-3/': stage3SidebarEn,
+          '/en/appendix/': appendixSidebarEn
+        }
       }
     },
 
@@ -772,6 +1843,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'ページが見つかりません',
+          quote: 'お探しのページは存在しないか、移動された可能性があります。',
+          linkText: 'ホームに戻る',
+          linkUrl: '/ja-jp/'
+        },
         outline: {
           level: [1, 6],
           label: 'このページの目次'
@@ -780,17 +1857,17 @@ export default defineConfig({
           { text: 'ホーム', link: '/ja-jp/' },
           {
             text: '初心者とPM',
-            link: '/ja-jp/stage-0/'
+            link: '/zh-cn/stage-0/'
           },
           {
             text: 'フルスタック開発',
-            link: '/ja-jp/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: '上級開発',
-            link: '/ja-jp/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: '付録', link: '/ja-jp/appendix/intro' }
+          { text: '付録', link: '/zh-cn/appendix/' }
         ],
         // TODO: Add Japanese sidebar when content is ready
         sidebar: {}
@@ -810,6 +1887,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: '頁面未找到',
+          quote: '你訪問的頁面不存在，可能已被移動或刪除。',
+          linkText: '返回首頁',
+          linkUrl: '/zh-tw/'
+        },
         outline: {
           level: [1, 6],
           label: '頁面導航'
@@ -818,17 +1901,17 @@ export default defineConfig({
           { text: '首頁', link: '/zh-tw/' },
           {
             text: '新手與產品原型',
-            link: '/zh-tw/stage-0/'
+            link: '/zh-cn/stage-0/'
           },
           {
             text: '初中級開發',
-            link: '/zh-tw/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: '高級開發',
-            link: '/zh-tw/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: '附錄', link: '/zh-tw/appendix/intro' }
+          { text: '附錄', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -847,22 +1930,28 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: '페이지를 찾을 수 없습니다',
+          quote: '찾고 있는 페이지가 존재하지 않거나 이동되었을 수 있습니다.',
+          linkText: '홈으로 돌아가기',
+          linkUrl: '/ko-kr/'
+        },
         outline: {
           level: [1, 6],
           label: '페이지 탐색'
         },
         nav: [
           { text: '홈', link: '/ko-kr/' },
-          { text: '초보자 & PM', link: '/ko-kr/stage-0/' },
+          { text: '초보자 & PM', link: '/zh-cn/stage-0/' },
           {
             text: '풀스택 개발',
-            link: '/ko-kr/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: '고급 개발',
-            link: '/ko-kr/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: '부록', link: '/ko-kr/appendix/intro' }
+          { text: '부록', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -881,6 +1970,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'Página no encontrada',
+          quote: 'La página que buscas no existe o ha sido movida.',
+          linkText: 'Volver al inicio',
+          linkUrl: '/es-es/'
+        },
         outline: {
           level: [1, 6],
           label: 'Navegación de página'
@@ -889,17 +1984,17 @@ export default defineConfig({
           { text: 'Inicio', link: '/es-es/' },
           {
             text: 'Principiante y PM',
-            link: '/es-es/stage-0/'
+            link: '/zh-cn/stage-0/'
           },
           {
             text: 'Desarrollo Full Stack',
-            link: '/es-es/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'Desarrollo Avanzado',
-            link: '/es-es/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'Apéndice', link: '/es-es/appendix/intro' }
+          { text: 'Apéndice', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -918,22 +2013,28 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'Page non trouvée',
+          quote: 'La page que vous recherchez n\'existe pas ou a été déplacée.',
+          linkText: 'Retour à l\'accueil',
+          linkUrl: '/fr-fr/'
+        },
         outline: {
           level: [1, 6],
           label: 'Navigation de page'
         },
         nav: [
           { text: 'Accueil', link: '/fr-fr/' },
-          { text: 'Débutant & PM', link: '/fr-fr/stage-0/' },
+          { text: 'Débutant & PM', link: '/zh-cn/stage-0/' },
           {
             text: 'Développement Full Stack',
-            link: '/fr-fr/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'Développement Avancé',
-            link: '/fr-fr/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'Annexe', link: '/fr-fr/appendix/intro' }
+          { text: 'Annexe', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -952,22 +2053,28 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'Seite nicht gefunden',
+          quote: 'Die gesuchte Seite existiert nicht oder wurde verschoben.',
+          linkText: 'Zurück zur Startseite',
+          linkUrl: '/de-de/'
+        },
         outline: {
           level: [1, 6],
           label: 'Seitennavigation'
         },
         nav: [
           { text: 'Start', link: '/de-de/' },
-          { text: 'Anfänger & PM', link: '/de-de/stage-0/' },
+          { text: 'Anfänger & PM', link: '/zh-cn/stage-0/' },
           {
             text: 'Full Stack Entwicklung',
-            link: '/de-de/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'Fortgeschrittene Entwicklung',
-            link: '/de-de/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'Anhang', link: '/de-de/appendix/intro' }
+          { text: 'Anhang', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -986,6 +2093,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'الصفحة غير موجودة',
+          quote: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+          linkText: 'العودة إلى الرئيسية',
+          linkUrl: '/ar-sa/'
+        },
         outline: {
           level: [1, 6],
           label: 'تنقل الصفحة'
@@ -994,17 +2107,17 @@ export default defineConfig({
           { text: 'الرئيسية', link: '/ar-sa/' },
           {
             text: 'مبتدأ & PM',
-            link: '/ar-sa/stage-0/'
+            link: '/zh-cn/stage-0/'
           },
           {
             text: 'تطوير Full Stack',
-            link: '/ar-sa/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'تطوير متقدم',
-            link: '/ar-sa/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'ملحق', link: '/ar-sa/appendix/intro' }
+          { text: 'ملحق', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -1023,6 +2136,12 @@ export default defineConfig({
       ),
       themeConfig: {
         ...commonThemeConfig,
+        notFound: {
+          title: 'Không tìm thấy trang',
+          quote: 'Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.',
+          linkText: 'Về trang chủ',
+          linkUrl: '/vi-vn/'
+        },
         outline: {
           level: [1, 6],
           label: 'Điều hướng trang'
@@ -1031,17 +2150,17 @@ export default defineConfig({
           { text: 'Trang chủ', link: '/vi-vn/' },
           {
             text: 'Người mới & PM',
-            link: '/vi-vn/stage-0/'
+            link: '/zh-cn/stage-0/'
           },
           {
             text: 'Phát triển Full Stack',
-            link: '/vi-vn/stage-2/intro'
+            link: '/zh-cn/stage-2/'
           },
           {
             text: 'Phát triển Nâng cao',
-            link: '/vi-vn/stage-3/intro'
+            link: '/zh-cn/stage-3/'
           },
-          { text: 'Phụ lục', link: '/vi-vn/appendix/intro' }
+          { text: 'Phụ lục', link: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }

@@ -2,12 +2,16 @@
   <div class="service-layer-demo">
     <div class="demo-header">
       <h4>⚙️ Service 层：业务逻辑的"指挥家"</h4>
-      <p class="subtitle">Service 层编排业务逻辑，协调多个 Repository，管理事务边界</p>
+      <p class="subtitle">
+        Service 层编排业务逻辑，协调多个 Repository，管理事务边界
+      </p>
     </div>
 
     <!-- 场景选择器 -->
     <div class="scenario-selector">
-      <div class="selector-label">选择业务场景：</div>
+      <div class="selector-label">
+        选择业务场景：
+      </div>
       <div class="scenario-buttons">
         <button
           v-for="scenario in scenarios"
@@ -36,34 +40,57 @@
           @click="toggleStep(index)"
         >
           <div class="step-header">
-            <div class="step-number">{{ index + 1 }}</div>
-            <div class="step-info">
-              <div class="step-name">{{ step.name }}</div>
-              <div class="step-layer">{{ step.layer }}</div>
+            <div class="step-number">
+              {{ index + 1 }}
             </div>
-            <div v-if="step.subSteps" class="expand-icon">
+            <div class="step-info">
+              <div class="step-name">
+                {{ step.name }}
+              </div>
+              <div class="step-layer">
+                {{ step.layer }}
+              </div>
+            </div>
+            <div
+              v-if="step.subSteps"
+              class="expand-icon"
+            >
               {{ expandedSteps.includes(index) ? '▼' : '▶' }}
             </div>
           </div>
 
-          <div v-if="step.code" class="step-code">
+          <div
+            v-if="step.code"
+            class="step-code"
+          >
             <pre><code>{{ step.code }}</code></pre>
           </div>
 
           <!-- 子步骤（事务管理） -->
-          <div v-if="step.subSteps && expandedSteps.includes(index)" class="sub-steps">
+          <div
+            v-if="step.subSteps && expandedSteps.includes(index)"
+            class="sub-steps"
+          >
             <div
               v-for="(subStep, subIndex) in step.subSteps"
               :key="subIndex"
               class="sub-step"
               :class="subStep.status"
             >
-              <div class="sub-step-icon">{{ subStep.icon }}</div>
-              <div class="sub-step-content">
-                <div class="sub-step-name">{{ subStep.name }}</div>
-                <div class="sub-step-desc">{{ subStep.desc }}</div>
+              <div class="sub-step-icon">
+                {{ subStep.icon }}
               </div>
-              <div class="sub-step-status">{{ subStep.statusText }}</div>
+              <div class="sub-step-content">
+                <div class="sub-step-name">
+                  {{ subStep.name }}
+                </div>
+                <div class="sub-step-desc">
+                  {{ subStep.desc }}
+                </div>
+              </div>
+              <div class="sub-step-status">
+                {{ subStep.statusText }}
+              </div>
             </div>
           </div>
         </div>
@@ -79,9 +106,15 @@
           :key="principle.id"
           class="principle-card"
         >
-          <div class="principle-icon">{{ principle.icon }}</div>
-          <div class="principle-title">{{ principle.title }}</div>
-          <div class="principle-desc">{{ principle.desc }}</div>
+          <div class="principle-icon">
+            {{ principle.icon }}
+          </div>
+          <div class="principle-title">
+            {{ principle.title }}
+          </div>
+          <div class="principle-desc">
+            {{ principle.desc }}
+          </div>
           <div class="principle-example">
             <code>{{ principle.example }}</code>
           </div>
@@ -422,7 +455,7 @@ const principles = [
   margin-bottom: 20px;
   padding: 16px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -496,7 +529,7 @@ const principles = [
 
 .flow-step {
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -644,7 +677,7 @@ const principles = [
 .principle-card {
   padding: 14px;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 3px solid #e6a23c;
 }
 

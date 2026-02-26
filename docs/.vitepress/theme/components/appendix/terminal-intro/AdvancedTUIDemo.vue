@@ -15,14 +15,23 @@
     <div class="tui-window">
       <div class="tui-header">
         <div class="tabs">
-          <div class="tab active">Continuous</div>
-          <div class="tab">Integration</div>
-          <div class="tab">Logging</div>
+          <div class="tab active">
+            Continuous
+          </div>
+          <div class="tab">
+            Integration
+          </div>
+          <div class="tab">
+            Logging
+          </div>
         </div>
       </div>
 
       <div class="tui-body">
-        <div class="sidebar" :style="{ width: sidebarWidth + '%' }">
+        <div
+          class="sidebar"
+          :style="{ width: sidebarWidth + '%' }"
+        >
           <div class="list-item success">
             <span class="icon">✓</span> ci-fe-be-rules
           </div>
@@ -48,7 +57,9 @@
             <div class="status-row">
               Status: <span class="text-success">success</span>
             </div>
-            <div class="info-row">Updated: 2024-01-15 14:32:00 UTC</div>
+            <div class="info-row">
+              Updated: 2024-01-15 14:32:00 UTC
+            </div>
           </div>
         </div>
       </div>
@@ -56,12 +67,17 @@
 
     <div class="tui-controls">
       <div class="control-group">
-        <button @click="toggleCoordinates" :class="{ active: showCoordinates }">
+        <button
+          :class="{ active: showCoordinates }"
+          @click="toggleCoordinates"
+        >
           Show Coordinates
         </button>
       </div>
       <div class="control-group">
-        <button @click="simulateResize">Simulate Resize</button>
+        <button @click="simulateResize">
+          Simulate Resize
+        </button>
         <span class="size-label">Size: {{ sizeDisplay }}</span>
       </div>
     </div>
@@ -101,7 +117,7 @@ const simulateResize = () => {
 .advanced-tui {
   background: #0a0a0a;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #333;
   font-family: 'Menlo', monospace;
 }

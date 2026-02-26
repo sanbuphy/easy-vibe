@@ -1,7 +1,9 @@
 <template>
   <div class="planning-demo">
     <div class="header">
-      <div class="title">📋 Agent 的规划能力</div>
+      <div class="title">
+        📋 Agent 的规划能力
+      </div>
     </div>
 
     <!-- 任务选择 -->
@@ -14,7 +16,10 @@
       >
         <span>{{ task.icon }}</span>
         <span>{{ task.name }}</span>
-        <span class="complexity" :class="task.complexity">{{ task.complexityLabel }}</span>
+        <span
+          class="complexity"
+          :class="task.complexity"
+        >{{ task.complexityLabel }}</span>
       </button>
     </div>
 
@@ -34,9 +39,16 @@
           class="step-node"
           :class="{ completed: stepStatus[index] === 'completed', running: stepStatus[index] === 'running' }"
         >
-          <div class="node-circle">{{ index + 1 }}</div>
-          <div class="node-name">{{ step.name }}</div>
-          <div v-if="index < currentTaskData.steps.length - 1" class="node-line"></div>
+          <div class="node-circle">
+            {{ index + 1 }}
+          </div>
+          <div class="node-name">
+            {{ step.name }}
+          </div>
+          <div
+            v-if="index < currentTaskData.steps.length - 1"
+            class="node-line"
+          />
         </div>
       </div>
 
@@ -45,46 +57,91 @@
         <div class="log-box">
           <div class="box-header">
             <span>📝 执行日志</span>
-            <span v-if="executionStatus === 'running'" class="status running">执行中</span>
-            <span v-else-if="executionStatus === 'completed'" class="status completed">已完成</span>
+            <span
+              v-if="executionStatus === 'running'"
+              class="status running"
+            >执行中</span>
+            <span
+              v-else-if="executionStatus === 'completed'"
+              class="status completed"
+            >已完成</span>
           </div>
           <div class="log-content">
-            <div v-if="logs.length === 0" class="empty">点击"开始执行"查看过程</div>
-            <div v-for="(log, i) in logs.slice(-4)" :key="i" class="log-line" :class="log.type">
+            <div
+              v-if="logs.length === 0"
+              class="empty"
+            >
+              点击"开始执行"查看过程
+            </div>
+            <div
+              v-for="(log, i) in logs.slice(-4)"
+              :key="i"
+              class="log-line"
+              :class="log.type"
+            >
               <span class="time">{{ log.time }}</span>
               <span class="icon">{{ log.icon }}</span>
-              <span class="msg" v-html="log.message"></span>
+              <span
+                class="msg"
+                v-html="log.message"
+              />
             </div>
           </div>
         </div>
 
-        <div v-if="currentThought" class="thought-box">
-          <div class="box-header">🧠 正在思考</div>
-          <div class="thought-content">{{ currentThought }}</div>
+        <div
+          v-if="currentThought"
+          class="thought-box"
+        >
+          <div class="box-header">
+            🧠 正在思考
+          </div>
+          <div class="thought-content">
+            {{ currentThought }}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 控制栏 -->
     <div class="control-bar">
-      <button v-if="executionStatus === 'idle'" class="ctrl-btn primary" @click="startExecution">
+      <button
+        v-if="executionStatus === 'idle'"
+        class="ctrl-btn primary"
+        @click="startExecution"
+      >
         ▶ 开始执行
       </button>
-      <button v-else-if="executionStatus === 'running'" class="ctrl-btn" disabled>
+      <button
+        v-else-if="executionStatus === 'running'"
+        class="ctrl-btn"
+        disabled
+      >
         ⏳ 执行中...
       </button>
-      <button v-else class="ctrl-btn" @click="reset">
+      <button
+        v-else
+        class="ctrl-btn"
+        @click="reset"
+      >
         🔄 重置
       </button>
 
-      <div v-if="executionStatus === 'completed'" class="stats">
+      <div
+        v-if="executionStatus === 'completed'"
+        class="stats"
+      >
         <span class="stat">{{ currentTaskData.steps.length }} 步骤</span>
         <span class="stat">{{ executionTime }}s</span>
         <span class="stat">{{ toolCalls }} 调用</span>
       </div>
 
       <div class="step-dots">
-        <span v-for="n in currentTaskData.steps.length" :key="n" :class="['dot', { active: stepStatus[n-1] === 'completed' }]"></span>
+        <span
+          v-for="n in currentTaskData.steps.length"
+          :key="n"
+          :class="['dot', { active: stepStatus[n-1] === 'completed' }]"
+        />
       </div>
     </div>
 
@@ -304,7 +361,7 @@ reset()
 .goal-bar {
   background: var(--vp-c-brand-soft);
   border-left: 3px solid var(--vp-c-brand);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 14px;
   margin-bottom: 16px;
   font-size: 14px;
@@ -403,7 +460,7 @@ reset()
 .log-box, .thought-box {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -431,7 +488,7 @@ reset()
   padding: 10px 12px;
   min-height: 100px;
   max-height: 140px;
-  overflow-y: auto;
+  
 }
 
 .empty {
@@ -534,7 +591,7 @@ reset()
   gap: 8px;
   padding: 10px 14px;
   background: var(--vp-c-brand-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 12px;
   color: var(--vp-c-text-1);
 }

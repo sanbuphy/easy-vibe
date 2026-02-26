@@ -1,11 +1,16 @@
 <template>
   <div class="nested-routes-demo">
     <div class="demo-header">
-      <h4>嵌套路由可视化</h4>
-      <p class="demo-desc">点击不同层级，观察嵌套路由的渲染位置和层级关系</p>
+      <span class="icon">🪆</span>
+      <span class="title">嵌套路由</span>
+      <span class="subtitle">层层嵌套的视图容器</span>
     </div>
 
-    <div class="demo-container">
+    <div class="intro-text">
+      想象<span class="highlight">俄罗斯套娃</span>：每个大娃娃里都有小娃娃，小娃娃里还有更小的。嵌套路由就是这样，父组件的<span class="highlight">RouterView</span>里可以渲染子组件，一层套一层。
+    </div>
+
+    <div class="demo-content">
       <!-- 路由层级可视化 -->
       <div class="routes-hierarchy">
         <div class="tree-view">
@@ -13,19 +18,17 @@
             v-for="node in treeData"
             :key="node.path"
             class="tree-node"
-            :style="{ paddingLeft: `${node.level * 24}px` }"
+            :style="{ paddingLeft: `${node.level * 20}px` }"
             @click="selectNode(node)"
           >
             <div
               :class="[
                 'node-content',
-                { active: currentPath === node.path },
-                { 'has-children': node.children?.length }
+                { active: currentPath === node.path }
               ]"
             >
               <span class="node-icon">{{ node.children?.length ? '📁' : '📄' }}</span>
-              <span class="node-path">{{ node.name }}</span>
-              <code class="node-route">{{ node.path || '/' }}</code>
+              <span class="node-name">{{ node.name }}</span>
             </div>
           </div>
         </div>
@@ -34,7 +37,7 @@
       <!-- 渲染区域预览 -->
       <div class="render-preview">
         <div class="preview-header">
-          <h5>渲染视图</h5>
+          <h5>🔲 渲染视图</h5>
           <span class="current-path">{{ currentPath || '/' }}</span>
         </div>
 
@@ -43,14 +46,16 @@
             v-for="(route, index) in activeRouteChain"
             :key="route.path"
             class="router-view-level"
-            :style="{ marginLeft: `${index * 20}px` }"
+            :style="{ marginLeft: `${index * 16}px` }"
           >
             <div class="router-view-box">
               <div class="view-label">
-                <span class="view-icon">🔲</span>
+                <span class="view-icon">📦</span>
                 <span class="view-name">{{ route.name }}</span>
               </div>
-              <div class="view-path">{{ route.path }}</div>
+              <div class="view-path">
+                {{ route.path || '/' }}
+              </div>
             </div>
           </div>
         </div>
@@ -63,16 +68,18 @@
             @click="navigateTo(crumb.path)"
           >
             {{ crumb.name }}
-            <span v-if="index < breadcrumbs.length - 1" class="separator">/</span>
+            <span
+              v-if="index < breadcrumbs.length - 1"
+              class="separator"
+            >/</span>
           </span>
         </div>
       </div>
     </div>
 
-    <!-- 代码示例 -->
-    <div class="code-section">
-      <h5>路由配置示例</h5>
-      <pre class="code-block"><code>{{ routeConfigCode }}</code></pre>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心概念：</strong>嵌套路由通过在父组件中放置 RouterView 来实现子路由的渲染。每个路由层级都有自己的 RouterView，就像套娃一样一层层展示。
     </div>
   </div>
 </template>
@@ -112,45 +119,6 @@ const routeConfig = [
             path: ':id',
             name: 'UserDetail',
             component: 'UserDetail'
-          },
-          {
-            path: ':id/edit',
-            name: 'UserEdit',
-            component: 'UserEdit'
-          }
-        ]
-      },
-      {
-        path: 'products',
-        name: 'Products',
-        component: 'ProductLayout',
-        children: [
-          {
-            path: '',
-            name: 'ProductList',
-            component: 'ProductList'
-          },
-          {
-            path: 'category/:categoryId',
-            name: 'ProductCategory',
-            component: 'ProductCategory'
-          }
-        ]
-      },
-      {
-        path: 'settings',
-        name: 'Settings',
-        component: 'Settings',
-        children: [
-          {
-            path: 'profile',
-            name: 'ProfileSettings',
-            component: 'ProfileSettings'
-          },
-          {
-            path: 'security',
-            name: 'SecuritySettings',
-            component: 'SecuritySettings'
           }
         ]
       }
@@ -158,36 +126,29 @@ const routeConfig = [
   }
 ]
 
-// 扁平化路由，添加层级信息
 const flattenRoutes = (routes, level = 0, parentPath = '') => {
   const result = []
-
   routes.forEach(route => {
     const fullPath = route.path
       ? `${parentPath}/${route.path}`.replace(/\/+/g, '/')
       : parentPath || '/'
-
     const node = {
       ...route,
       fullPath,
       level,
       children: []
     }
-
     if (route.children?.length) {
       node.children = flattenRoutes(route.children, level + 1, fullPath)
     }
-
     result.push(node)
   })
-
   return result
 }
 
 const treeData = computed(() => {
   const flatten = (routes, level = 0) => {
     const result = []
-
     routes.forEach(route => {
       const node = {
         name: route.name,
@@ -199,10 +160,8 @@ const treeData = computed(() => {
       }
       result.push(node)
     })
-
     return result
   }
-
   return flatten(flattenRoutes(routeConfig))
 })
 
@@ -210,11 +169,9 @@ const activeRouteChain = computed(() => {
   const findChain = (routes, target, chain = []) => {
     for (const route of routes) {
       const currentChain = [...chain, route]
-
       if (route.path === target || route.fullPath === target) {
         return currentChain
       }
-
       if (route.children?.length) {
         const found = findChain(route.children, target, currentChain)
         if (found) return found
@@ -222,7 +179,6 @@ const activeRouteChain = computed(() => {
     }
     return null
   }
-
   return findChain(flattenRoutes(routeConfig), currentPath.value) || []
 })
 
@@ -232,33 +188,6 @@ const breadcrumbs = computed(() => {
     path: route.fullPath || route.path
   }))
 })
-
-const routeConfigCode = computed(() => `const routes = [
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      { path: 'dashboard', component: Dashboard },
-      {
-        path: 'users',
-        component: UserLayout,
-        children: [
-          { path: '', component: UserList },
-          { path: ':id', component: UserDetail },
-          { path: ':id/edit', component: UserEdit }
-        ]
-      },
-      {
-        path: 'settings',
-        component: Settings,
-        children: [
-          { path: 'profile', component: ProfileSettings },
-          { path: 'security', component: SecuritySettings }
-        ]
-      }
-    ]
-  }
-]`)
 
 const selectNode = (node) => {
   currentPath.value = node.fullPath || node.path
@@ -271,45 +200,58 @@ const navigateTo = (path) => {
 
 <style scoped>
 .nested-routes-demo {
-  padding: 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  margin: 20px 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  
+  
 }
 
 .demo-header {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.demo-header h4 {
-  margin: 0 0 8px 0;
-  color: var(--vp-c-text-1);
-}
+.demo-header .icon { font-size: 1.25rem; }
+.demo-header .title { font-weight: bold; font-size: 1rem; }
+.demo-header .subtitle { color: var(--vp-c-text-2); font-size: 0.85rem; margin-left: 0.5rem; }
 
-.demo-desc {
-  margin: 0;
+.intro-text {
+  font-size: 0.9rem;
   color: var(--vp-c-text-2);
-  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
 }
 
-.demo-container {
+.intro-text .highlight {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.demo-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .routes-hierarchy {
   background: var(--vp-c-bg);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 6px;
+  padding: 0.75rem;
   border: 1px solid var(--vp-c-divider);
 }
 
 .tree-view {
-  max-height: 350px;
-  overflow-y: auto;
+  max-height: 280px;
+  
 }
 
 .tree-node {
@@ -319,8 +261,8 @@ const navigateTo = (path) => {
 .node-content {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
@@ -336,28 +278,18 @@ const navigateTo = (path) => {
 }
 
 .node-icon {
-  font-size: 14px;
+  font-size: 0.85rem;
 }
 
-.node-path {
-  font-size: 13px;
+.node-name {
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--vp-c-text-1);
 }
 
-.node-route {
-  margin-left: auto;
-  font-size: 11px;
-  color: var(--vp-c-text-3);
-  font-family: monospace;
-  background: var(--vp-c-bg-soft);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
 .render-preview {
   background: var(--vp-c-bg);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--vp-c-divider);
   overflow: hidden;
 }
@@ -366,61 +298,61 @@ const navigateTo = (path) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 0.75rem 1rem;
   background: var(--vp-c-bg-soft);
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .preview-header h5 {
   margin: 0;
-  font-size: 13px;
+  font-size: 0.85rem;
   color: var(--vp-c-text-1);
 }
 
 .current-path {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--vp-c-text-3);
   font-family: monospace;
   background: var(--vp-c-bg);
-  padding: 2px 8px;
+  padding: 0.125rem 0.5rem;
   border-radius: 4px;
 }
 
 .router-view-hierarchy {
-  padding: 16px;
-  min-height: 200px;
+  padding: 0.75rem;
+  min-height: 180px;
 }
 
 .router-view-level {
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .router-view-box {
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
   border-radius: 6px;
-  padding: 12px;
+  padding: 0.5rem 0.75rem;
 }
 
 .view-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 0.375rem;
+  margin-bottom: 0.25rem;
 }
 
 .view-icon {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .view-name {
-  font-size: 13px;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--vp-c-text-1);
 }
 
 .view-path {
-  font-size: 11px;
+  font-size: 0.7rem;
   color: var(--vp-c-text-3);
   font-family: monospace;
 }
@@ -428,8 +360,8 @@ const navigateTo = (path) => {
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 12px 16px;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
   background: var(--vp-c-bg-soft);
   border-top: 1px solid var(--vp-c-divider);
   overflow-x: auto;
@@ -438,8 +370,8 @@ const navigateTo = (path) => {
 .breadcrumb-item {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 0.25rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-2);
   cursor: pointer;
   white-space: nowrap;
@@ -451,37 +383,22 @@ const navigateTo = (path) => {
 
 .separator {
   color: var(--vp-c-text-3);
-  margin: 0 2px;
+  margin: 0 0.125rem;
 }
 
-.code-section {
-  margin-top: 20px;
-  padding: 20px;
-  background: var(--vp-c-bg);
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.code-section h5 {
-  margin: 0 0 16px 0;
-  font-size: 14px;
-  color: var(--vp-c-text-1);
-}
-
-.code-block {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 16px;
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.75rem;
   border-radius: 6px;
-  overflow-x: auto;
-  font-family: 'Monaco', 'Menlo', monospace;
-  font-size: 13px;
-  line-height: 1.5;
-  margin: 0;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  margin-top: 1rem;
 }
+
+.info-box .icon { margin-right: 0.25rem; }
 
 @media (max-width: 768px) {
-  .demo-container {
+  .demo-content {
     grid-template-columns: 1fr;
   }
 

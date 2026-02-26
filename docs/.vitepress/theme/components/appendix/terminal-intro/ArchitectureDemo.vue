@@ -15,35 +15,56 @@
   <div class="arch-demo">
     <div class="analogy-header">
       <div class="analogy-item">
-        <div class="icon">🖥️</div>
+        <div class="icon">
+          🖥️
+        </div>
         <div class="text">
-          <div class="role">Terminal (终端)</div>
-          <div class="desc">传声筒 / 窗口</div>
+          <div class="role">
+            Terminal (终端)
+          </div>
+          <div class="desc">
+            传声筒 / 窗口
+          </div>
         </div>
       </div>
       <div class="analogy-item">
-        <div class="icon">🗣️</div>
+        <div class="icon">
+          🗣️
+        </div>
         <div class="text">
-          <div class="role">Shell (壳)</div>
-          <div class="desc">翻译官 / 助手</div>
+          <div class="role">
+            Shell (壳)
+          </div>
+          <div class="desc">
+            翻译官 / 助手
+          </div>
         </div>
       </div>
       <div class="analogy-item">
-        <div class="icon">⚙️</div>
+        <div class="icon">
+          ⚙️
+        </div>
         <div class="text">
-          <div class="role">Kernel (内核)</div>
-          <div class="desc">大管家 / 芯片</div>
+          <div class="role">
+            Kernel (内核)
+          </div>
+          <div class="desc">
+            大管家 / 芯片
+          </div>
         </div>
       </div>
     </div>
 
     <div
       class="diagram-container"
-      @click="nextStep"
       :class="{ clickable: currentStep < totalSteps }"
+      @click="nextStep"
     >
       <!-- Click Overlay Hint -->
-      <div class="click-overlay" v-if="currentStep === 0">
+      <div
+        v-if="currentStep === 0"
+        class="click-overlay"
+      >
         <div class="click-hint">
           <span class="icon">👆</span>
           <span class="text">不断点击屏幕演示 / Keep Clicking</span>
@@ -51,8 +72,14 @@
       </div>
 
       <!-- Completed Overlay -->
-      <div class="completed-overlay" v-if="currentStep >= totalSteps">
-        <div class="completed-hint" @click.stop="reset">
+      <div
+        v-if="currentStep >= totalSteps"
+        class="completed-overlay"
+      >
+        <div
+          class="completed-hint"
+          @click.stop="reset"
+        >
           <span class="icon">✅</span>
           <span class="text">演示结束，点击重置 / Finished (Reset)</span>
         </div>
@@ -61,30 +88,48 @@
       <!-- Spaces Background -->
       <div class="spaces-bg">
         <div class="space user-space">
-          <div class="space-header">User Space (用户空间)</div>
+          <div class="space-header">
+            User Space (用户空间)
+          </div>
         </div>
         <div class="barrier">
-          <div class="barrier-line"></div>
+          <div class="barrier-line" />
         </div>
         <div class="space kernel-space">
-          <div class="space-header">Kernel Space (内核空间)</div>
+          <div class="space-header">
+            Kernel Space (内核空间)
+          </div>
         </div>
       </div>
 
       <!-- Terminal Node -->
-      <div class="node terminal" :class="{ active: activeNode === 'terminal' }">
-        <div class="node-title">TERMINAL (终端)</div>
+      <div
+        class="node terminal"
+        :class="{ active: activeNode === 'terminal' }"
+      >
+        <div class="node-title">
+          TERMINAL (终端)
+        </div>
         <div class="screen">
-          <div v-for="(line, i) in terminalLines" :key="i" class="line">
+          <div
+            v-for="(line, i) in terminalLines"
+            :key="i"
+            class="line"
+          >
             {{ line }}
           </div>
           <div class="line input-line">
             <span class="prompt">$</span>
             <span class="typing">{{ currentInput }}</span>
-            <span class="cursor" v-if="activeNode === 'terminal'"></span>
+            <span
+              v-if="activeNode === 'terminal'"
+              class="cursor"
+            />
           </div>
         </div>
-        <div class="node-label">/dev/tty</div>
+        <div class="node-label">
+          /dev/tty
+        </div>
       </div>
 
       <!-- Connections -->
@@ -94,24 +139,43 @@
           active: packetState === 't-to-s' || packetState === 's-to-t'
         }"
       >
-        <div class="line-path"></div>
-        <div class="data-label" v-if="packetState === 't-to-s'">
+        <div class="line-path" />
+        <div
+          v-if="packetState === 't-to-s'"
+          class="data-label"
+        >
           <span class="icon">➡️</span> Bytes
         </div>
-        <div class="data-label" v-if="packetState === 's-to-t'">
+        <div
+          v-if="packetState === 's-to-t'"
+          class="data-label"
+        >
           <span class="icon">⬅️</span> Text
         </div>
-        <div class="conn-label">stdin / stdout</div>
+        <div class="conn-label">
+          stdin / stdout
+        </div>
       </div>
 
       <!-- Shell Node -->
-      <div class="node shell" :class="{ active: activeNode === 'shell' }">
-        <div class="node-title">SHELL (壳)</div>
-        <div class="process-box">
-          <div class="status-icon">{{ shellIcon }}</div>
-          <div class="status">{{ shellStatus }}</div>
+      <div
+        class="node shell"
+        :class="{ active: activeNode === 'shell' }"
+      >
+        <div class="node-title">
+          SHELL (壳)
         </div>
-        <div class="node-label">/bin/zsh</div>
+        <div class="process-box">
+          <div class="status-icon">
+            {{ shellIcon }}
+          </div>
+          <div class="status">
+            {{ shellStatus }}
+          </div>
+        </div>
+        <div class="node-label">
+          /bin/zsh
+        </div>
       </div>
 
       <!-- Connections -->
@@ -121,24 +185,43 @@
           active: packetState === 's-to-k' || packetState === 'k-to-s'
         }"
       >
-        <div class="line-path"></div>
-        <div class="data-label" v-if="packetState === 's-to-k'">
+        <div class="line-path" />
+        <div
+          v-if="packetState === 's-to-k'"
+          class="data-label"
+        >
           <span class="icon">➡️</span> Syscall
         </div>
-        <div class="data-label" v-if="packetState === 'k-to-s'">
+        <div
+          v-if="packetState === 'k-to-s'"
+          class="data-label"
+        >
           <span class="icon">⬅️</span> Raw Data
         </div>
-        <div class="conn-label">System Calls</div>
+        <div class="conn-label">
+          System Calls
+        </div>
       </div>
 
       <!-- Kernel Node -->
-      <div class="node kernel" :class="{ active: activeNode === 'kernel' }">
-        <div class="node-title">KERNEL (内核)</div>
-        <div class="process-box">
-          <div class="status-icon">{{ kernelIcon }}</div>
-          <div class="status">{{ kernelStatus }}</div>
+      <div
+        class="node kernel"
+        :class="{ active: activeNode === 'kernel' }"
+      >
+        <div class="node-title">
+          KERNEL (内核)
         </div>
-        <div class="node-label">macOS / Linux</div>
+        <div class="process-box">
+          <div class="status-icon">
+            {{ kernelIcon }}
+          </div>
+          <div class="status">
+            {{ kernelStatus }}
+          </div>
+        </div>
+        <div class="node-label">
+          macOS / Linux
+        </div>
       </div>
     </div>
 
@@ -146,45 +229,63 @@
       <div class="btn-group">
         <button
           class="btn primary"
-          @click="nextStep"
           :disabled="currentStep >= totalSteps"
+          @click="nextStep"
         >
           <span v-if="currentStep === 0">▶️ Start Simulation / 开始演示</span>
-          <span v-else-if="currentStep < totalSteps"
-            >Next Step / 下一步 ({{ currentStep }}/{{ totalSteps }}) ➡️</span
-          >
+          <span v-else-if="currentStep < totalSteps">Next Step / 下一步 ({{ currentStep }}/{{ totalSteps }}) ➡️</span>
           <span v-else>✅ Done / 完成 (Reset)</span>
         </button>
-        <button class="btn secondary" @click="reset" v-if="currentStep > 0">
+        <button
+          v-if="currentStep > 0"
+          class="btn secondary"
+          @click="reset"
+        >
           Reset / 重置
         </button>
       </div>
 
-      <div class="step-info" v-if="currentStep > 0">
+      <div
+        v-if="currentStep > 0"
+        class="step-info"
+      >
         <div class="step-title">
           {{ steps[currentStep - 1].titleEn }}
           <span class="divider">|</span>
           {{ steps[currentStep - 1].titleZh }}
         </div>
         <div class="step-desc">
-          <div class="en">{{ steps[currentStep - 1].descEn }}</div>
-          <div class="zh">{{ steps[currentStep - 1].descZh }}</div>
+          <div class="en">
+            {{ steps[currentStep - 1].descEn }}
+          </div>
+          <div class="zh">
+            {{ steps[currentStep - 1].descZh }}
+          </div>
         </div>
         <div class="step-tech">
           <span class="tech-label">Technical / 技术原理:</span>
           <div class="tech-content">
-            <div class="en">{{ steps[currentStep - 1].techEn }}</div>
-            <div class="zh">{{ steps[currentStep - 1].techZh }}</div>
+            <div class="en">
+              {{ steps[currentStep - 1].techEn }}
+            </div>
+            <div class="zh">
+              {{ steps[currentStep - 1].techZh }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="step-info placeholder" v-else>
+      <div
+        v-else
+        class="step-info placeholder"
+      >
         <div class="step-desc">
           <div class="en">
             Click "Start Simulation" to see how the command 'ls' travels through
             the system.
           </div>
-          <div class="zh">点击“开始演示”查看 'ls' 命令如何在系统中流转。</div>
+          <div class="zh">
+            点击“开始演示”查看 'ls' 命令如何在系统中流转。
+          </div>
         </div>
       </div>
     </div>
@@ -596,7 +697,7 @@ const reset = () => {
 .node {
   background: #18181b;
   border: 2px solid #27272a;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 140px;
   height: 130px;
   display: flex;
@@ -757,7 +858,7 @@ const reset = () => {
   gap: 20px;
   background: #18181b;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #27272a;
 }
 

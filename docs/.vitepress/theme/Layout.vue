@@ -3,7 +3,7 @@ import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
 import TextType from './components/TextType.vue'
 import GitHubStars from './components/GitHubStars.vue'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import { Setting } from '@element-plus/icons-vue'
 
@@ -75,6 +75,18 @@ const resetLineHeight = () => {
   lineHeight.value = DEFAULT_LINE_HEIGHT
 }
 
+// ============================================
+// 目录栏（左侧 VPSidebar）收起/展开功能
+// ============================================
+const SIDEBAR_COLLAPSED_KEY = 'ev-sidebar-collapsed'
+const sidebarCollapsed = ref(false)
+
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+}
+
+const isHomePage = computed(() => frontmatter.value.layout === 'home')
+
 onMounted(() => {
   const saved = clampFontSize(localStorage.getItem(FONT_SIZE_STORAGE_KEY))
   const savedLineHeight = clampLineHeight(
@@ -86,7 +98,13 @@ onMounted(() => {
   applyLineHeight(savedLineHeight)
   isHydrated.value = true
 
-  // 初始化 outline 自动滚动功能
+  // 恢复目录栏收起状态
+  const savedCollapsed = localStorage.getItem(SIDEBAR_COLLAPSED_KEY)
+  if (savedCollapsed === 'true') {
+    sidebarCollapsed.value = true
+    document.body.classList.add('ev-sidebar-collapsed')
+  }
+
   initOutlineAutoScroll()
 })
 
@@ -95,7 +113,34 @@ onMounted(() => {
 // 当页面滚动时，自动滚动 outline 让当前激活项保持在可视区域
 // ============================================
 function initOutlineAutoScroll() {
-  // 使用 MutationObserver 监听 outline 的变化
+  const outlineSelectors = [
+    '.VPDocAsideOutline',
+    '.VPTableOfContents',
+    '.vitepress-doc-sidebar',
+    '.sidebar-outline',
+    'aside'
+  ]
+
+  const sidebarSelectors = [
+    '.VPSidebar',
+    '.VPDocSidebar',
+    '.vitepress-doc-sidebar'
+  ]
+
+  let outlineContainer = null
+  for (const selector of outlineSelectors) {
+    outlineContainer = document.querySelector(selector)
+    if (outlineContainer) break
+  }
+
+  if (!outlineContainer) return
+
+  let sidebarContainer = null
+  for (const selector of sidebarSelectors) {
+    sidebarContainer = document.querySelector(selector)
+    if (sidebarContainer) break
+  }
+
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -107,7 +152,17 @@ function initOutlineAutoScroll() {
     }
   })
 
-  // 开始监听
+  const sidebarObserver = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        const target = mutation.target
+        if (target.classList.contains('is-active')) {
+          scrollSidebarToActiveItem(target)
+        }
+      }
+    }
+  })
+
   const startObserving = () => {
     const outlineContainer = document.querySelector('.VPDocAsideOutline')
     if (outlineContainer) {
@@ -116,32 +171,48 @@ function initOutlineAutoScroll() {
         subtree: true,
         attributeFilter: ['class']
       })
+
+      const existingActive = outlineContainer.querySelector('.active')
+      if (existingActive) {
+        scrollOutlineToActiveItem(existingActive)
+      }
+    }
+
+    if (sidebarContainer) {
+      sidebarObserver.observe(sidebarContainer, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ['class']
+      })
+
+      const existingSidebarActive = sidebarContainer.querySelector('.is-active')
+      if (existingSidebarActive) {
+        scrollSidebarToActiveItem(existingSidebarActive)
+      }
     }
   }
 
-  // 页面加载完成后开始监听
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startObserving)
   } else {
     startObserving()
   }
 
-  // 同时监听路由变化（VitePress 是 SPA）
   const originalPushState = history.pushState
   const originalReplaceState = history.replaceState
 
   history.pushState = function (...args) {
     originalPushState.apply(this, args)
-    setTimeout(startObserving, 100)
+    setTimeout(startObserving, 300)
   }
 
   history.replaceState = function (...args) {
     originalReplaceState.apply(this, args)
-    setTimeout(startObserving, 100)
+    setTimeout(startObserving, 300)
   }
 
   window.addEventListener('popstate', () => {
-    setTimeout(startObserving, 100)
+    setTimeout(startObserving, 300)
   })
 }
 
@@ -172,6 +243,32 @@ function scrollOutlineToActiveItem(activeLink) {
   }
 }
 
+// 滚动侧边栏让当前激活项保持在可视区域中心
+function scrollSidebarToActiveItem(activeItem) {
+  const sidebarContainer = document.querySelector('.VPSidebar') || document.querySelector('.VPDocSidebar')
+  if (!sidebarContainer || !activeItem) return
+
+  const targetElement = activeItem.querySelector('.item') || activeItem.querySelector('a') || activeItem
+
+  const containerRect = sidebarContainer.getBoundingClientRect()
+  const targetRect = targetElement.getBoundingClientRect()
+
+  const targetTop = targetRect.top - containerRect.top + sidebarContainer.scrollTop
+  const targetHeight = targetRect.height
+  const targetCenterY = targetTop + targetHeight / 2
+
+  const isInside = targetRect.top >= containerRect.top - 20 &&
+                     targetRect.bottom <= containerRect.bottom + 20
+
+  if (!isInside) {
+    const targetScrollTop = targetCenterY - containerRect.height / 2
+    sidebarContainer.scrollTo({
+      top: targetScrollTop,
+      behavior: 'smooth'
+    })
+  }
+}
+
 watch(fontSize, (next) => {
   if (!isHydrated.value) return
   const normalized = clampFontSize(next)
@@ -185,14 +282,38 @@ watch(lineHeight, (next) => {
   applyLineHeight(normalized)
   localStorage.setItem(LINE_HEIGHT_STORAGE_KEY, String(normalized))
 })
+
+watch(sidebarCollapsed, (collapsed) => {
+  if (typeof document === 'undefined') return
+  document.body.classList.toggle('ev-sidebar-collapsed', collapsed)
+  localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(collapsed))
+})
 </script>
 
 <template>
   <DefaultTheme.Layout>
+    <template v-if="!isHomePage" #nav-bar-title-before>
+      <button
+        class="ev-sidebar-nav-btn"
+        type="button"
+        :aria-label="sidebarCollapsed ? '展开目录' : '收起目录'"
+        @click.stop.prevent="toggleSidebar"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <rect x="1" y="2" width="14" height="1.5" rx="0.75" />
+          <rect x="1" y="7.25" width="14" height="1.5" rx="0.75" />
+          <rect x="1" y="12.5" width="14" height="1.5" rx="0.75" />
+        </svg>
+      </button>
+    </template>
     <template #nav-bar-content-after>
       <GitHubStars />
       <ClientOnly>
-        <el-popover placement="bottom-end" trigger="click" :width="260">
+        <el-popover
+          placement="bottom-end"
+          trigger="click"
+          :width="260"
+        >
           <template #reference>
             <button
               class="ev-fontsize-button"
@@ -200,14 +321,20 @@ watch(lineHeight, (next) => {
               aria-label="阅读设置"
               style="margin-left: 16px; padding: 0; width: 32px"
             >
-              <el-icon :size="16"><Setting /></el-icon>
+              <el-icon :size="16">
+                <Setting />
+              </el-icon>
             </button>
           </template>
           <div class="ev-fontsize-panel">
             <div class="ev-setting-group">
               <div class="ev-setting-header">
-                <div class="ev-setting-title">字号</div>
-                <div class="ev-setting-value">{{ fontSize }}px</div>
+                <div class="ev-setting-title">
+                  字号
+                </div>
+                <div class="ev-setting-value">
+                  {{ fontSize }}px
+                </div>
               </div>
               <div class="ev-fontsize-actions">
                 <button
@@ -242,8 +369,12 @@ watch(lineHeight, (next) => {
 
             <div class="ev-setting-group">
               <div class="ev-setting-header">
-                <div class="ev-setting-title">行距</div>
-                <div class="ev-setting-value">{{ lineHeight.toFixed(2) }}</div>
+                <div class="ev-setting-title">
+                  行距
+                </div>
+                <div class="ev-setting-value">
+                  {{ lineHeight.toFixed(2) }}
+                </div>
               </div>
               <div class="ev-fontsize-actions">
                 <button
@@ -283,7 +414,7 @@ watch(lineHeight, (next) => {
       <div
         v-if="
           frontmatter.layout === 'home' &&
-          (frontmatter.hero?.tagline || frontmatter.hero?.typingTagline)
+            (frontmatter.hero?.tagline || frontmatter.hero?.typingTagline)
         "
         class="vp-typed-tagline"
       >
@@ -297,6 +428,26 @@ watch(lineHeight, (next) => {
       </div>
     </template>
   </DefaultTheme.Layout>
+  <ClientOnly>
+    <div
+      v-if="!isHomePage"
+      class="ev-sidebar-hover-area"
+      :class="{ collapsed: sidebarCollapsed }"
+    >
+      <button
+        class="ev-sidebar-toggle-btn"
+        :class="{ collapsed: sidebarCollapsed }"
+        type="button"
+        :aria-label="sidebarCollapsed ? '展开目录' : '收起目录'"
+        @click="toggleSidebar"
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+          <path v-if="!sidebarCollapsed" d="M8 1L3 6l5 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <path v-else d="M4 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </ClientOnly>
   <ClientOnly>
     <ReadingProgress />
   </ClientOnly>  
@@ -315,7 +466,7 @@ watch(lineHeight, (next) => {
   font-size: 18px;
   font-weight: 500;
   white-space: pre-wrap;
-  color: #000000;
+  color: var(--vp-c-text-2);
   min-height: 28px;
   display: flex;
   /* 居中对齐 */
@@ -337,7 +488,7 @@ watch(lineHeight, (next) => {
   margin-right: auto;
 }
 .VPHomeHero .text {
-  color: #000000 !important;
+  color: var(--vp-c-text-1) !important;
 }
 .VPHomeHero .actions {
   justify-content: center;
@@ -426,5 +577,144 @@ watch(lineHeight, (next) => {
 .ev-fontsize-action:hover {
   border-color: var(--vp-c-brand);
   color: var(--vp-c-brand);
+}
+
+/* ============================================
+   目录栏收起/展开
+   ============================================ */
+
+/* 导航栏左侧的收起按钮 */
+.ev-sidebar-nav-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+.ev-sidebar-nav-btn:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
+}
+
+/* 左侧边缘悬停区域 */
+.ev-sidebar-hover-area {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: calc(var(--vp-sidebar-width, 272px) - 16px);
+  width: 24px;
+  height: 100vh;
+  z-index: 30;
+}
+.ev-sidebar-hover-area.collapsed {
+  left: 0;
+}
+
+/* 分界线上的收起按钮 */
+.ev-sidebar-toggle-btn {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 6px;
+  width: 18px;
+  height: 36px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0 4px 4px 0;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+  animation: ev-sidebar-btn-flash 2.5s ease-out 0.5s;
+}
+@keyframes ev-sidebar-btn-flash {
+  0% { opacity: 0; }
+  20% { opacity: 0.7; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+.ev-sidebar-toggle-btn:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg);
+  opacity: 1;
+  animation: none;
+}
+.ev-sidebar-hover-area:hover .ev-sidebar-toggle-btn {
+  opacity: 0.7;
+  animation: none;
+}
+
+/* 桌面端才显示按钮 */
+@media (min-width: 960px) {
+  .ev-sidebar-nav-btn {
+    display: inline-flex;
+  }
+  .ev-sidebar-hover-area {
+    display: block;
+  }
+}
+
+/* @1440px 时分界线按钮跟随侧边栏实际宽度 */
+@media (min-width: 1440px) {
+  .ev-sidebar-hover-area:not(.collapsed) {
+    left: calc((100% - (var(--vp-layout-max-width, 1440px) - 64px)) / 2 + var(--vp-sidebar-width, 272px) - 32px - 16px);
+  }
+}
+
+/* ---- 收起状态下的 CSS 覆盖 ---- */
+
+/* 隐藏侧边栏 — 仅桌面端，避免覆盖移动端的汉堡菜单 */
+@media (min-width: 960px) {
+  .ev-sidebar-collapsed .VPSidebar {
+    display: none !important;
+  }
+}
+
+/* 修复侧边栏收起后导航栏标题 border-bottom 重叠问题 */
+.ev-sidebar-collapsed .VPNavBar.has-sidebar .VPNavBarTitle .title {
+  border-bottom-color: transparent !important;
+}
+
+/* 内容区域填满页面 */
+@media (min-width: 960px) {
+  .ev-sidebar-collapsed .VPContent.has-sidebar {
+    padding-left: 0 !important;
+  }
+  .ev-sidebar-collapsed .VPNavBar.has-sidebar .content {
+    padding-left: 0 !important;
+  }
+  .ev-sidebar-collapsed .VPNavBar.has-sidebar .divider {
+    padding-left: 0 !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .ev-sidebar-collapsed .VPContent.has-sidebar {
+    padding-left: calc((100% - var(--vp-layout-max-width, 1440px)) / 2) !important;
+  }
+  .ev-sidebar-collapsed .VPNavBar.has-sidebar .content {
+    padding-left: calc((100% - var(--vp-layout-max-width, 1440px)) / 2) !important;
+  }
+  .ev-sidebar-collapsed .VPNavBar.has-sidebar .divider {
+    padding-left: calc((100% - var(--vp-layout-max-width, 1440px)) / 2) !important;
+  }
+}
+
+/* 收起/展开过渡动画 */
+.VPSidebar,
+.VPContent.has-sidebar,
+.VPNavBar.has-sidebar .content,
+.VPNavBar.has-sidebar .divider {
+  transition: padding-left 0.3s ease, transform 0.3s ease;
 }
 </style>

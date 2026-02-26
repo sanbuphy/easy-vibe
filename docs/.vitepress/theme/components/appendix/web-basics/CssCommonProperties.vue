@@ -6,35 +6,57 @@
     </div>
 
     <div class="categories">
-      <div v-for="(cat, index) in categories" :key="index" class="category">
-        <div class="cat-title">{{ cat.title }}</div>
+      <div
+        v-for="(cat, index) in categories"
+        :key="index"
+        class="category"
+      >
+        <div class="cat-title">
+          {{ cat.title }}
+        </div>
         <div class="props-grid">
           <div
             v-for="prop in cat.props"
             :key="prop.name"
             class="prop-item"
-            @click="activeProp = prop"
             :class="{ active: activeProp && activeProp.name === prop.name }"
+            @click="activeProp = prop"
           >
-            <div class="prop-name">{{ prop.name }}</div>
-            <div class="prop-desc">{{ prop.desc }}</div>
+            <div class="prop-name">
+              {{ prop.name }}
+            </div>
+            <div class="prop-desc">
+              {{ prop.desc }}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="activeProp" class="prop-detail">
+    <div
+      v-if="activeProp"
+      class="prop-detail"
+    >
       <div class="detail-header">
         <span class="detail-name">{{ activeProp.name }}</span>
         <span class="detail-cat-badge">{{ activeProp.categoryLabel }}</span>
       </div>
-      <div class="detail-desc">{{ activeProp.fullDesc }}</div>
+      <div class="detail-desc">
+        {{ activeProp.fullDesc }}
+      </div>
       <div class="detail-code">
-        <div class="code-label">示例代码：</div>
+        <div class="code-label">
+          示例代码：
+        </div>
         <pre><code>{{ activeProp.example }}</code></pre>
       </div>
     </div>
-    <div v-else class="prop-detail empty">点击上面的属性看看它能做什么 👆</div>
+    <div
+      v-else
+      class="prop-detail empty"
+    >
+      点击上面的属性看看它能做什么 👆
+    </div>
   </div>
 </template>
 
@@ -135,7 +157,7 @@ const categories = [
         desc: '圆角',
         categoryLabel: '边框',
         fullDesc: '让盒子的角变圆润。现在的按钮通常都有点圆角。',
-        example: 'border-radius: 8px;'
+        example: 'border-radius: 6px;'
       },
       {
         name: 'box-shadow',
@@ -194,7 +216,7 @@ const categories = [
 <style scoped>
 .css-props-ref {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
   padding: 20px;
   margin: 20px 0;
@@ -264,7 +286,7 @@ const categories = [
   margin-top: 20px;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   animation: fadeIn 0.3s ease;
 }

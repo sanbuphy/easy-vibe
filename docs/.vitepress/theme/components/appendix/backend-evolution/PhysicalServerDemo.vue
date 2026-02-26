@@ -1,13 +1,16 @@
 <template>
   <div class="physical-server-demo">
     <div class="demo-header">
-      <h4>🖥️ 物理服务器时代演示</h4>
-      <p>点击"发送请求"，观察早期 CGI 服务器的处理瓶颈</p>
+      <span class="icon">🖥️</span>
+      <span class="title">物理服务器时代演示</span>
+      <span class="subtitle">观察早期 CGI 服务器的处理瓶颈</span>
     </div>
 
     <div class="demo-stage">
       <div class="client-zone">
-        <div class="zone-title">👤 用户浏览器</div>
+        <div class="zone-title">
+          👤 用户浏览器
+        </div>
         <div class="request-queue">
           <div
             v-for="(req, idx) in pendingRequests"
@@ -29,7 +32,10 @@
       </div>
 
       <div class="connection-zone">
-        <div class="network-line" :class="{ busy: isProcessing }">
+        <div
+          class="network-line"
+          :class="{ busy: isProcessing }"
+        >
           <div class="packets">
             <div
               v-for="pkt in packets"
@@ -42,27 +48,35 @@
             </div>
           </div>
         </div>
-        <div class="latency-display" v-if="currentLatency > 0">
+        <div
+          v-if="currentLatency > 0"
+          class="latency-display"
+        >
           ⏱️ {{ currentLatency }}ms
         </div>
       </div>
 
       <div class="server-zone">
-        <div class="zone-title">🖥️ CGI 服务器</div>
+        <div class="zone-title">
+          🖥️ CGI 服务器
+        </div>
         <div class="server-status">
           <div
             class="status-indicator"
             :class="{ processing: isProcessing }"
           >
-            <span class="status-dot"></span>
+            <span class="status-dot" />
             <span class="status-text">{{ serverStatus }}</span>
           </div>
-          <div class="cpu-usage" v-if="isProcessing">
+          <div
+            v-if="isProcessing"
+            class="cpu-usage"
+          >
             <div class="cpu-bar">
               <div
                 class="cpu-fill"
                 :style="{ width: cpuUsage + '%' }"
-              ></div>
+              />
             </div>
             <span class="cpu-text">CPU: {{ cpuUsage }}%</span>
           </div>
@@ -78,34 +92,16 @@
               <div
                 class="proc-bar"
                 :style="{ width: proc.progress + '%' }"
-              ></div>
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="demo-explanation">
-      <h5>💡 早期的痛点在哪里？</h5>
-      <ul>
-        <li>
-          <strong>进程启动开销</strong>：每个请求都要启动新的 CGI
-          进程，就像每来一个客人都要重新搭一个厨房
-        </li>
-        <li>
-          <strong>资源无法复用</strong>：数据库连接每次都要重新建立，CPU
-          频繁在进程间切换
-        </li>
-        <li>
-          <strong>扩展困难</strong>：只能买更强的单机（垂直扩展），无法通过增加机器分担压力
-        </li>
-      </ul>
-      <p class="demo-conclusion">
-        这就是<strong>物理服务器 + CGI</strong>时代的核心问题：<span
-          class="highlight"
-          >进程级隔离带来了稳定性，但也带来了巨大的性能开销</span
-        >。
-      </p>
+    <div class="info-box">
+      <span class="icon">💡</span>
+      <strong>核心思想：</strong>进程级隔离带来了稳定性，但也带来了巨大的性能开销。
     </div>
   </div>
 </template>
@@ -190,77 +186,86 @@ const sendRequest = async () => {
 <style scoped>
 .physical-server-demo {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg-soft);
-  padding: 1.5rem;
-  margin: 1rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 }
 
 .demo-header {
-  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.demo-header h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+.demo-header .icon {
+  font-size: 1rem;
+}
+
+.demo-header .title {
+  font-weight: bold;
+  font-size: 0.9rem;
   color: var(--vp-c-text-1);
 }
 
-.demo-header p {
-  margin: 0;
-  font-size: 0.9rem;
+.demo-header .subtitle {
   color: var(--vp-c-text-2);
+  font-size: 0.75rem;
+  margin-left: 0.4rem;
 }
 
 .demo-stage {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .client-zone,
 .server-zone {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 6px;
+  padding: 0.5rem;
 }
 
 .zone-title {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--vp-c-brand);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
   text-align: center;
 }
 
 .request-queue {
-  min-height: 60px;
+  min-height: 40px;
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 0.5rem;
-  margin-bottom: 0.75rem;
+  border-radius: 4px;
+  padding: 0.3rem;
+  margin-bottom: 0.4rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.15rem;
 }
 
 .request-card {
   background: var(--vp-c-brand);
   color: white;
-  border-radius: 4px;
-  padding: 0.4rem 0.5rem;
+  border-radius: 3px;
+  padding: 0.25rem 0.3rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
+  gap: 0.3rem;
+  font-size: 0.6rem;
 }
 
 .req-method {
   background: rgba(255, 255, 255, 0.2);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
+  padding: 0.05rem 0.2rem;
+  border-radius: 2px;
   font-weight: 600;
 }
 
@@ -269,9 +274,9 @@ const sendRequest = async () => {
   background: var(--vp-c-brand);
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.6rem;
-  font-size: 0.85rem;
+  border-radius: 4px;
+  padding: 0.4rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -290,12 +295,12 @@ const sendRequest = async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 60px;
+  min-width: 40px;
 }
 
 .network-line {
-  width: 3px;
-  height: 120px;
+  width: 2px;
+  height: 80px;
   background: var(--vp-c-divider);
   border-radius: 2px;
   position: relative;
@@ -309,29 +314,29 @@ const sendRequest = async () => {
 }
 
 .latency-display {
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  font-size: 0.6rem;
   color: var(--vp-c-brand);
   font-weight: 600;
 }
 
 .server-status {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .status-indicator {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.3rem;
+  padding: 0.3rem;
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.3rem;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--vp-c-success);
 }
@@ -347,59 +352,59 @@ const sendRequest = async () => {
 }
 
 .status-text {
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: var(--vp-c-text-2);
 }
 
 .cpu-usage {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .cpu-bar {
   flex: 1;
-  height: 6px;
+  height: 4px;
   background: var(--vp-c-bg-soft);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .cpu-fill {
   height: 100%;
   background: var(--vp-c-danger);
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.1s ease;
 }
 
 .cpu-text {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--vp-c-text-2);
-  min-width: 60px;
+  min-width: 50px;
   text-align: right;
 }
 
 .process-queue {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .process-item {
   background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-  padding: 0.5rem;
+  border-radius: 4px;
+  padding: 0.3rem;
 }
 
 .proc-name {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--vp-c-text-2);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
 }
 
 .proc-progress {
-  height: 4px;
+  height: 3px;
   background: var(--vp-c-bg);
   border-radius: 2px;
   overflow: hidden;
@@ -412,64 +417,39 @@ const sendRequest = async () => {
   transition: width 0.1s linear;
 }
 
-.demo-explanation {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--vp-c-divider);
-}
-
-.demo-explanation h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  margin: 0 0 0.75rem 0;
-}
-
-.demo-explanation ul {
-  margin: 0 0 1rem 0;
-  padding-left: 1.25rem;
-}
-
-.demo-explanation li {
-  font-size: 0.9rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-  margin-bottom: 0.4rem;
-}
-
-.demo-explanation li strong {
-  color: var(--vp-c-text-1);
-}
-
-.demo-conclusion {
-  font-size: 0.9rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-  margin: 0;
-  padding: 0.75rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 6px;
-}
-
-.highlight {
-  color: var(--vp-c-brand);
-  font-weight: 600;
-}
-
 @media (max-width: 768px) {
   .demo-stage {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .connection-zone {
     flex-direction: row;
-    height: 60px;
+    height: 40px;
   }
 
   .network-line {
     width: 100%;
-    height: 3px;
+    height: 2px;
   }
+}
+
+.info-box {
+  background: var(--vp-c-bg-alt);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-2);
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.2rem;
+}
+
+.info-box .icon {
+  flex-shrink: 0;
+}
+
+.info-box strong {
+  color: var(--vp-c-text-1);
 }
 </style>
