@@ -12,6 +12,22 @@ const isEdgeOne = !!process.env.EDGEONE || process.env.EDGEONE === '1'
 // 3. 否则（如 GitHub Pages），使用 '/easy-vibe/'
 const base = process.env.BASE || (isVercel || isEdgeOne ? '/' : '/easy-vibe/')
 
+// 站点 URL 配置 - 根据部署环境动态确定
+const getSiteUrl = () => {
+  if (isVercel && process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  if (isEdgeOne && process.env.EDGEONE_URL) {
+    return `https://${process.env.EDGEONE_URL}`
+  }
+  if (process.env.SITE_URL) {
+    return process.env.SITE_URL
+  }
+  return 'https://datawhalechina.github.io/easy-vibe'
+}
+
+const siteUrl = getSiteUrl()
+
 // 语言映射配置
 const localeMap = {
   'zh-cn': {
@@ -20,7 +36,7 @@ const localeMap = {
     lang: 'zh-CN',
     hreflang: 'zh-CN'
   },
-  'en': {
+  en: {
     ogLocale: 'en_US',
     twitterSite: '@datawhale',
     lang: 'en-US',
@@ -79,9 +95,6 @@ const localeMap = {
 // SEO 相关配置
 const getSeoHead = (locale, title, description, path = '') => {
   const seoConfig = localeMap[locale] || localeMap['zh-cn']
-  const siteUrl = isVercel
-    ? 'https://your-project.vercel.app'
-    : 'https://datawhalechina.github.io/easy-vibe'
   const canonicalUrl = path ? `${siteUrl}${path}` : `${siteUrl}/${locale}/`
   const ogImageUrl = `${siteUrl}${base}logo.png`
 
@@ -172,9 +185,40 @@ const getSeoHead = (locale, title, description, path = '') => {
         '@type': 'ImageObject',
         url: ogImageUrl
       }
+    },
+    mainEntity: {
+      '@type': 'Course',
+      name: title,
+      description: description,
+      provider: {
+        '@type': 'Organization',
+        name: 'Datawhale',
+        sameAs: 'https://github.com/datawhalechina/easy-vibe'
+      }
     }
   }
   head.push(['script', { type: 'application/ld+json' }, JSON.stringify(jsonLd)])
+
+  // 添加 BreadcrumbList 结构化数据
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '首页',
+        item: siteUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: locale === 'zh-cn' ? '教程' : 'Tutorial',
+        item: `${siteUrl}/${locale}/`
+      }
+    ]
+  }
+  head.push(['script', { type: 'application/ld+json', class: 'breadcrumb-jsonld' }, JSON.stringify(breadcrumbJsonLd)])
 
   return head
 }
@@ -285,24 +329,20 @@ const stage2SidebarEn = [
     collapsed: false,
     items: [
       {
-        text: 'Frontend 0: Lovart Assets',
+        text: 'Using Lovart for Assets',
         link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
       },
       {
-        text: 'Frontend 1: Figma & MasterGo',
+        text: 'Figma & MasterGo Basics',
         link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
       },
       {
-        text: 'Frontend 2: UI Design',
+        text: 'UI Design for Modern Apps',
         link: '/zh-cn/stage-2/frontend/2.2-ui-design/'
       },
       {
-        text: 'Frontend 3: UI Design Specs',
+        text: 'UI Design Specs & Multi-Product',
         link: '/zh-cn/stage-2/frontend/2.3-multi-product-ui/'
-      },
-      {
-        text: 'Frontend 4: Hogwarts Portraits',
-        link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
       }
     ]
   },
@@ -312,11 +352,11 @@ const stage2SidebarEn = [
     items: [
       {
         text: 'Backend 1: What is API',
-        link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
+        link: '/zh-cn/stage-2/backend/2.1-what-is-api/'
       },
       {
         text: 'Backend 2: Database & Supabase',
-        link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+        link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
       },
       {
         text: 'Backend 3: AI-Assisted API Code',
@@ -324,33 +364,19 @@ const stage2SidebarEn = [
       },
       {
         text: 'Backend 4: Git Workflow',
-        link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
+        link: '/zh-cn/stage-2/backend/2.4-git-workflow/'
       },
       {
         text: 'Backend 5: Deployment',
-        link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+        link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
       },
       {
         text: 'Backend 6: Modern CLI Tools',
-        link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
+        link: '/zh-cn/stage-2/backend/2.6-modern-cli/'
       },
       {
         text: 'Backend 7: Stripe Payment',
         link: '/zh-cn/stage-2/backend/2.7-stripe-payment/'
-      }
-    ]
-  },
-  {
-    text: 'Assignments',
-    collapsed: false,
-    items: [
-      {
-        text: 'Assignment 1: Full-Stack App',
-        link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
-      },
-      {
-        text: 'Assignment 2: UI Library & Trae',
-        link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
       }
     ]
   },
@@ -360,11 +386,25 @@ const stage2SidebarEn = [
     items: [
       {
         text: 'AI 1: Dify & Knowledge Base',
-        link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
+        link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
+      }
+    ]
+  },
+  {
+    text: 'Comprehensive Projects',
+    collapsed: false,
+    items: [
+      {
+        text: 'Hogwarts Portraits Project',
+        link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
       },
       {
-        text: 'AI 2: AI Dictionary & Multimodal API',
-        link: '/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/'
+        text: 'Assignment 1: Full-Stack App',
+        link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+      },
+      {
+        text: 'Assignment 2: UI Library & Trae',
+        link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
       }
     ]
   }
@@ -372,16 +412,50 @@ const stage2SidebarEn = [
 
 const stage3SidebarEn = [
   {
-    text: 'Core Skills',
+    text: 'Claude Code In-Depth',
     collapsed: false,
     items: [
       {
-        text: 'Advanced 1: MCP & Claude Code Skills',
-        link: '/zh-cn/stage-3/core-skills/3.1-mcp-claude-code-skills/'
+        text: 'Claude Code 快速上手核心指南',
+        link: '/zh-cn/stage-3/core-skills/basics/'
       },
       {
-        text: 'Advanced 2: Long Running Tasks',
-        link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+        text: 'Claude Code MCP 完全指南',
+        link: '/zh-cn/stage-3/core-skills/mcp/'
+      },
+      {
+        text: 'Claude Code Skills 完全指南',
+        link: '/zh-cn/stage-3/core-skills/skills/'
+      },
+      {
+        text: 'Long Running Tasks',
+        link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
+      },
+      {
+        text: 'Claude Agent Teams 完全指南',
+        link: '/zh-cn/stage-3/core-skills/agent-teams/'
+      },
+      {
+        text: 'Claude Code Superpowers 工程级开发',
+        link: '/zh-cn/stage-3/core-skills/superpowers/'
+      },
+      {
+        text: 'Claude Code 工作流最佳实践',
+        link: '/zh-cn/stage-3/core-skills/workflow/'
+      },
+      {
+        text: 'Claude Code 手机远程开发',
+        link: '/zh-cn/stage-3/core-skills/mobile-development/'
+      },
+      {
+        text: 'Claude Agent SDK 完全指南',
+        link: '/zh-cn/stage-3/core-skills/claude-agent-sdk/',
+        items: [
+          {
+            text: 'Spec Coding：规范驱动开发',
+            link: '/zh-cn/stage-3/core-skills/claude-agent-sdk/spec-coding'
+          }
+        ]
       }
     ]
   },
@@ -404,13 +478,7 @@ const stage3SidebarEn = [
       {
         text: 'Advanced 6: iOS App - SwiftUI',
         link: '/zh-cn/stage-3/cross-platform/3.6-ios-app/'
-      }
-    ]
-  },
-  {
-    text: 'Personal Brand',
-    collapsed: false,
-    items: [
+      },
       {
         text: 'Advanced 7: Personal Website & Blog',
         link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
@@ -418,7 +486,7 @@ const stage3SidebarEn = [
     ]
   },
   {
-    text: 'AI Advanced Appendix',
+    text: 'AI Advanced',
     collapsed: false,
     items: [
       {
@@ -485,6 +553,30 @@ const appendixSidebarEn = [
       {
         text: 'Type Systems Intro',
         link: '/zh-cn/appendix/1-computer-fundamentals/type-systems'
+      },
+      {
+        text: 'Linking & Loading',
+        link: '/zh-cn/appendix/1-computer-fundamentals/linking-loading'
+      },
+      {
+        text: 'Assembly Basics',
+        link: '/zh-cn/appendix/1-computer-fundamentals/assembly-basics'
+      },
+      {
+        text: 'Memory Hierarchy',
+        link: '/zh-cn/appendix/1-computer-fundamentals/memory-hierarchy'
+      },
+      {
+        text: 'Processor Architecture',
+        link: '/zh-cn/appendix/1-computer-fundamentals/processor-architecture'
+      },
+      {
+        text: 'System I/O',
+        link: '/zh-cn/appendix/1-computer-fundamentals/system-io'
+      },
+      {
+        text: 'Socket Programming',
+        link: '/zh-cn/appendix/1-computer-fundamentals/socket-programming'
       }
     ]
   },
@@ -997,17 +1089,28 @@ export default defineConfig({
       watch: {
         ignored: ['**/docs/.vitepress/dist/**']
       }
+    },
+    build: {
+      chunkSizeWarningLimit: 2000
     }
   },
 
   // Sitemap 配置
   sitemap: {
-    hostname: 'https://datawhalechina.github.io/easy-vibe',
+    hostname: siteUrl,
+    changefreq: 'weekly',
+    priority: {
+      '/': 1.0,
+      '/zh-cn/': 0.9,
+      '/zh-cn/stage-0/': 0.9,
+      '/zh-cn/stage-1/': 0.8,
+      '/zh-cn/stage-2/': 0.8,
+      '/zh-cn/stage-3/': 0.8,
+      '/zh-cn/appendix/': 0.7
+    },
     transformItems(items) {
-      // 过滤掉旧版内容和未完成的语言版本
       return items.filter((item) => {
         const url = item.url
-        // 排除旧版内容目录
         if (
           url.includes('/extra/') ||
           url.includes('/examples/') ||
@@ -1015,17 +1118,48 @@ export default defineConfig({
         ) {
           return false
         }
-        // 包含所有语言版本
         return true
       })
     }
+  },
+
+  // 构建结束时动态生成 robots.txt
+  async buildEnd(siteConfig) {
+    const fs = await import('fs')
+    const path = await import('path')
+    
+    const robotsTxt = `# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# 禁止搜索引擎抓取旧版内容（已迁移到新目录结构）
+Disallow: /zh-cn/extra/
+Disallow: /zh-cn/examples/
+Disallow: /zh-cn/project/
+Disallow: /en/extra/
+Disallow: /en/examples/
+Disallow: /en/project/
+
+# 禁止抓取 VitePress 缓存和构建文件
+Disallow: /.vitepress/
+Disallow: /@fs/
+
+# Sitemap 位置
+Sitemap: ${siteUrl}/sitemap.xml
+`
+    
+    const outDir = siteConfig.outDir || path.resolve(__dirname, '.vitepress/dist')
+    const robotsPath = path.join(outDir, 'robots.txt')
+    
+    fs.writeFileSync(robotsPath, robotsTxt, 'utf-8')
+    console.log('✓ Generated robots.txt with sitemap URL:', `${siteUrl}/sitemap.xml`)
   },
 
   // 多语言配置 - 使用 cn/en-us/ja 结构
   locales: {
     // 根路径 — 仅用于 404 页面兜底，实际首页由 docs/index.md 自动重定向
     root: {
-      label: '简体中文',
+      label: '',
       lang: 'zh-CN',
       link: '/zh-cn/',
       themeConfig: {
@@ -1088,72 +1222,62 @@ export default defineConfig({
               collapsed: false,
               items: [
                 {
-                  text: '前端零：使用 Lovart 生产素材',
+                  text: '使用 Lovart 生产素材',
                   link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
                 },
                 {
-                  text: '前端一：Figma 与 MasterGo 入门',
+                  text: 'Figma 与 MasterGo 入门',
                   link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
                 },
                 {
-                  text: '前端二：构建第一个现代应用程序 - UI 设计',
-                  link: '/zh-cn/stage-2/frontend/2.2-ui-design/'
-                },
-                {
-                  text: '前端三：参考 UI 设计规范与多产品 UI 设计',
+                  text: '参考 UI 设计规范与多产品 UI 设计',
                   link: '/zh-cn/stage-2/frontend/2.3-multi-product-ui/'
                 },
                 {
-                  text: '前端四：一起做霍格沃茨画像',
-                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
+                  text: '用 LLM 和 Skills 让界面变好看',
+                  link: '/zh-cn/stage-2/frontend/2.4-llm-skills-beautiful/'
+                },
+                {
+                  text: '霍格沃茨的画像们：SVG 交互动画',
+                  link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
+                },
+                {
+                  text: '从设计原型到项目代码',
+                  link: '/zh-cn/stage-2/frontend/2.6-design-to-code/'
+                },
+                {
+                  text: '使用现代组件库更新你的界面',
+                  link: '/zh-cn/stage-2/frontend/2.7-modern-component-library/'
                 }
               ]
             },
             {
-              text: '后端与全栈',
+              text: '后端开发',
               collapsed: false,
               items: [
                 {
-                  text: '后端一：什么是 API',
-                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
+                  text: '从数据库到 Supabase',
+                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
                 },
                 {
-                  text: '后端二：从数据库到 Supabase',
-                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
-                },
-                {
-                  text: '后端三：大模型辅助编写接口代码与接口文档',
+                  text: '大模型辅助编写接口代码与接口文档',
                   link: '/zh-cn/stage-2/backend/2.3-ai-interface-code/'
                 },
                 {
-                  text: '后端四：Git 工作流',
-                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
+                  text: 'Git 工作流',
+                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/'
                 },
                 {
-                  text: '后端五：如何部署 Web 应用',
-                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+                  text: '如何部署 Web 应用',
+                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
                 },
                 {
-                  text: '后端六：现代 CLI 开发工具',
-                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
+                  text: '现代 CLI 开发工具',
+                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/'
                 },
                 {
-                  text: '后端七：如何集成 Stripe 等收费系统',
+                  text: '如何集成 Stripe 等收费系统',
                   link: '/zh-cn/stage-2/backend/2.7-stripe-payment/'
-                }
-              ]
-            },
-            {
-              text: '大作业',
-              collapsed: false,
-              items: [
-                {
-                  text: '大作业 1：构建第一个现代应用程序 - 全栈应用',
-                  link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
-                },
-                {
-                  text: '大作业 2：现代前端组件库 + Trae 实战',
-                  link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
                 }
               ]
             },
@@ -1162,28 +1286,74 @@ export default defineConfig({
               collapsed: false,
               items: [
                 {
-                  text: 'AI 一：Dify 入门与知识库集成',
-                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
+                  text: 'Dify 入门与知识库集成',
+                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
+                }
+              ]
+            },
+            {
+              text: '综合项目',
+              collapsed: false,
+              items: [
+                {
+                  text: '一起做霍格沃茨画像',
+                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
                 },
                 {
-                  text: 'AI 二：学会查询 AI 词典与集成多模态 API',
-                  link: '/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/'
+                  text: '构建第一个现代应用程序 - 全栈应用',
+                  link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+                },
+                {
+                  text: '现代前端组件库 + Trae 实战',
+                  link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
                 }
               ]
             }
           ],
           '/zh-cn/stage-3/': [
             {
-              text: '核心技能',
+              text: 'Claude Code 深入浅出',
               collapsed: false,
               items: [
                 {
-                  text: '高级一：MCP 与 Claude Code Skills',
-                  link: '/zh-cn/stage-3/core-skills/3.1-mcp-claude-code-skills/'
+                  text: 'Claude Code 快速上手核心指南',
+                  link: '/zh-cn/stage-3/core-skills/basics/'
                 },
                 {
-                  text: '高级二：如何让 Coding Tools 长时间工作',
-                  link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+                  text: 'Claude Code MCP 完全指南',
+                  link: '/zh-cn/stage-3/core-skills/mcp/'
+                },
+                {
+                  text: 'Claude Code Skills 完全指南',
+                  link: '/zh-cn/stage-3/core-skills/skills/'
+                },
+                {
+                  text: '如何让 Coding Tools 长时间工作',
+                  link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
+                },
+                {
+                  text: 'Claude Agent Teams 完全指南',
+                  link: '/zh-cn/stage-3/core-skills/agent-teams/'
+                },
+                {
+                  text: 'Claude Code Superpowers 工程级开发',
+                  link: '/zh-cn/stage-3/core-skills/superpowers/'
+                },
+                {
+                  text: 'Claude Code 工作流最佳实践',
+                  link: '/zh-cn/stage-3/core-skills/workflow/'
+                },
+                {
+                  text: 'Claude Code 手机远程开发',
+                  link: '/zh-cn/stage-3/core-skills/mobile-development/'
+                },
+                {
+                  text: 'Claude Agent SDK 完全指南',
+                  link: '/zh-cn/stage-3/core-skills/claude-agent-sdk/'
+                },
+                {
+                  text: '从 Vibe Coding 到 Spec Coding',
+                  link: '/zh-cn/stage-3/core-skills/spec-coding/'
                 }
               ]
             },
@@ -1192,43 +1362,61 @@ export default defineConfig({
               collapsed: false,
               items: [
                 {
-                  text: '高级三：如何构建微信小程序',
+                  text: '如何构建微信小程序',
                   link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
                 },
                 {
-                  text: '高级四：如何构建微信小程序（包含后端）',
+                  text: '如何构建微信小程序（包含后端）',
                   link: '/zh-cn/stage-3/cross-platform/3.4-wechat-miniprogram-backend/'
                 },
                 {
-                  text: '高级五：如何构建安卓程序-compose 原生开发',
+                  text: '如何构建安卓程序-compose 原生开发',
                   link: '/zh-cn/stage-3/cross-platform/3.5-android-app/'
                 },
                 {
-                  text: '高级六：如何构建 iOS 程序-swiftUI原生开发',
+                  text: '如何构建 iOS 程序-swiftUI原生开发',
                   link: '/zh-cn/stage-3/cross-platform/3.6-ios-app/'
-                }
-              ]
-            },
-            {
-              text: '个人品牌',
-              collapsed: false,
-              items: [
+                },
                 {
-                  text: '高级七：如何构建属于自己的个人网页与学术博客',
+                  text: '如何开发 PWA 本地应用',
+                  link: '/zh-cn/stage-3/cross-platform/3.8-pwa-local-app/'
+                },
+                {
+                  text: '如何开发浏览器 AI 助手插件',
+                  link: '/zh-cn/stage-3/cross-platform/3.9-browser-ai-extension/'
+                },
+                {
+                  text: '如何开发跨平台 Electron 桌面程序',
+                  link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
+                },
+                {
+                  text: '如何快速开发并铸造 NFT',
+                  link: '/zh-cn/stage-3/cross-platform/3.11-nft-minting/'
+                },
+                {
+                  text: '如何开发 VS Code 插件',
+                  link: '/zh-cn/stage-3/cross-platform/3.12-vscode-extension/'
+                },
+                {
+                  text: '如何开发工业级 Qt 桌面应用',
+                  link: '/zh-cn/stage-3/cross-platform/3.13-qt-industrial-hmi/'
+                },
+                {
+                  text: '如何构建属于自己的个人网页与学术博客',
                   link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
                 }
               ]
             },
             {
-              text: 'AI 能力附录',
+              text: 'AI 能力强化',
               collapsed: false,
               items: [
                 {
-                  text: '高级 AI 一：什么是 RAG 以及它如何工作',
+                  text: '什么是 RAG 以及它如何工作',
                   link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
                 },
                 {
-                  text: '高级 AI 二：中高级 RAG 与工作流编排 - 以 LangGraph 为例',
+                  text: '中高级 RAG 与工作流编排 - 以 LangGraph 为例',
                   link: '/zh-cn/stage-3/ai-advanced/3.a2-langgraph-advanced-rag/'
                 }
               ]
@@ -1246,11 +1434,11 @@ export default defineConfig({
               items: [
                 {
                   text: 'Extra 1: Git & GitHub',
-                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/extra1/'
+                  link: '/zh-cn/stage-2/backend/2.4-git-workflow/'
                 },
                 {
                   text: 'Extra 2: What is API',
-                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/extra2/'
+                  link: '/zh-cn/stage-2/backend/2.1-what-is-api/'
                 },
                 {
                   text: 'Extra 5: What is RAG',
@@ -1258,11 +1446,11 @@ export default defineConfig({
                 },
                 {
                   text: 'Extra 6: Zeabur Deployment',
-                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+                  link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
                 },
                 {
                   text: 'Extra 7: CLI AI Tools & TDD',
-                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/extra7/'
+                  link: '/zh-cn/stage-2/backend/2.6-modern-cli/'
                 }
               ]
             }
@@ -1287,16 +1475,16 @@ export default defineConfig({
               text: 'Project 文档（旧版，已迁移到 Stage 2）',
               items: [
                 {
-                  text: '前端四：霍格沃茨画像',
+                  text: '一起做霍格沃茨画像',
                   link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
                 },
                 {
-                  text: '后端二：Supabase 数据库',
-                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+                  text: 'Supabase 数据库',
+                  link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
                 },
                 {
-                  text: 'AI 一：Dify & Knowledge Base',
-                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/chapter3/'
+                  text: 'Dify & Knowledge Base',
+                  link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
                 }
               ]
             }
@@ -1778,7 +1966,7 @@ export default defineConfig({
     },
 
     // 英文
-    'en': {
+    en: {
       label: 'English',
       lang: 'en-US',
       link: '/en/',
@@ -1794,7 +1982,8 @@ export default defineConfig({
         ...commonThemeConfig,
         notFound: {
           title: 'Page Not Found',
-          quote: 'The page you are looking for does not exist or has been moved.',
+          quote:
+            'The page you are looking for does not exist or has been moved.',
           linkText: 'Take me home',
           linkUrl: '/en/'
         },
@@ -2015,8 +2204,8 @@ export default defineConfig({
         ...commonThemeConfig,
         notFound: {
           title: 'Page non trouvée',
-          quote: 'La page que vous recherchez n\'existe pas ou a été déplacée.',
-          linkText: 'Retour à l\'accueil',
+          quote: "La page que vous recherchez n'existe pas ou a été déplacée.",
+          linkText: "Retour à l'accueil",
           linkUrl: '/fr-fr/'
         },
         outline: {
@@ -2138,7 +2327,8 @@ export default defineConfig({
         ...commonThemeConfig,
         notFound: {
           title: 'Không tìm thấy trang',
-          quote: 'Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.',
+          quote:
+            'Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.',
           linkText: 'Về trang chủ',
           linkUrl: '/vi-vn/'
         },
