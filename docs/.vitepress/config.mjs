@@ -98,6 +98,18 @@ const getSeoHead = (locale, title, description, path = '') => {
   const canonicalUrl = path ? `${siteUrl}${path}` : `${siteUrl}/${locale}/`
   const ogImageUrl = `${siteUrl}${base}logo.png`
 
+  // 从路径中提取页面相对路径（去掉语言前缀）
+  const getRelativePath = (fullPath, currentLocale) => {
+    if (!fullPath) return ''
+    const prefix = `/${currentLocale}/`
+    if (fullPath.startsWith(prefix)) {
+      return fullPath.slice(prefix.length)
+    }
+    return fullPath.replace(/^\//, '')
+  }
+
+  const relativePath = getRelativePath(path, locale)
+
   const head = [
     ['link', { rel: 'icon', href: `${base}logo.png`.replace('//', '/') }],
     [
@@ -143,19 +155,24 @@ const getSeoHead = (locale, title, description, path = '') => {
     ['meta', { name: 'robots', content: 'index,follow' }],
     ['meta', { name: 'googlebot', content: 'index,follow' }],
     ['meta', { name: 'baiduspider', content: 'index,follow' }],
+    ['meta', { name: 'bingbot', content: 'index,follow' }],
     ['meta', { name: 'distribution', content: 'global' }],
     ['meta', { name: 'rating', content: 'general' }],
     ['meta', { name: 'revisit-after', content: '7 days' }]
   ]
 
-  // 添加 hreflang 标签
+  // 添加 hreflang 标签 - 指向相同页面的不同语言版本
   Object.keys(localeMap).forEach((lang) => {
+    let alternateUrl = `${siteUrl}/${lang}/`
+    if (relativePath) {
+      alternateUrl = `${siteUrl}/${lang}/${relativePath}`
+    }
     head.push([
       'link',
       {
         rel: 'alternate',
         hreflang: localeMap[lang].hreflang,
-        href: `${siteUrl}/${lang}/`
+        href: alternateUrl
       }
     ])
   })
@@ -184,7 +201,10 @@ const getSeoHead = (locale, title, description, path = '') => {
       logo: {
         '@type': 'ImageObject',
         url: ogImageUrl
-      }
+      },
+      sameAs: [
+        'https://github.com/datawhalechina/easy-vibe'
+      ]
     },
     mainEntity: {
       '@type': 'Course',
@@ -194,30 +214,85 @@ const getSeoHead = (locale, title, description, path = '') => {
         '@type': 'Organization',
         name: 'Datawhale',
         sameAs: 'https://github.com/datawhalechina/easy-vibe'
-      }
+      },
+      educationalLevel: 'Beginner to Advanced',
+      learningResourceType: 'Course'
     }
   }
   head.push(['script', { type: 'application/ld+json' }, JSON.stringify(jsonLd)])
 
-  // 添加 BreadcrumbList 结构化数据
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
+  // 生成动态 BreadcrumbList 结构化数据
+  const generateBreadcrumbList = () => {
+    const items = [
       {
         '@type': 'ListItem',
         position: 1,
-        name: '首页',
-        item: siteUrl
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: locale === 'zh-cn' ? '教程' : 'Tutorial',
+        name: locale === 'zh-cn' ? '首页' : 'Home',
         item: `${siteUrl}/${locale}/`
       }
     ]
+
+    if (relativePath) {
+      // 解析路径生成面包屑
+      const pathParts = relativePath.split('/').filter(Boolean)
+      let currentPath = ''
+
+      // 路径分段名称映射
+      const segmentNames = {
+        'zh-cn': {
+          'stage-0': '幼儿园',
+          'stage-1': 'AI产品经理',
+          'stage-2': '初中级开发工程师',
+          'stage-3': '高级开发工程师',
+          'appendix': '附录',
+          'guide': '指南',
+          'frontend': '前端',
+          'backend': '后端',
+          'ai-capabilities': 'AI能力',
+          'core-skills': '核心技能',
+          'cross-platform': '跨平台开发',
+          'personal-brand': '个人品牌',
+          'ai-advanced': 'AI进阶'
+        },
+        'en': {
+          'stage-0': 'Kindergarten',
+          'stage-1': 'AI Product Manager',
+          'stage-2': 'Junior Developer',
+          'stage-3': 'Senior Developer',
+          'appendix': 'Appendix',
+          'guide': 'Guide',
+          'frontend': 'Frontend',
+          'backend': 'Backend',
+          'ai-capabilities': 'AI Capabilities',
+          'core-skills': 'Core Skills',
+          'cross-platform': 'Cross-platform',
+          'personal-brand': 'Personal Brand',
+          'ai-advanced': 'AI Advanced'
+        }
+      }
+
+      const names = segmentNames[locale] || segmentNames['zh-cn']
+
+      pathParts.forEach((part, index) => {
+        currentPath += `/${part}`
+        const name = names[part] || part.replace(/-/g, ' ')
+        items.push({
+          '@type': 'ListItem',
+          position: index + 2,
+          name: name,
+          item: `${siteUrl}/${locale}${currentPath}/`
+        })
+      })
+    }
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items
+    }
   }
+
+  const breadcrumbJsonLd = generateBreadcrumbList()
   head.push(['script', { type: 'application/ld+json', class: 'breadcrumb-jsonld' }, JSON.stringify(breadcrumbJsonLd)])
 
   return head
@@ -1201,17 +1276,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: '首页', link: '/zh-cn/' },
           {
             text: '零基础入门',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-[01]/'
           },
           {
             text: '初中级开发',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: '高级开发',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: '附录', link: '/zh-cn/appendix/index' }
+          { text: '附录知识库', link: '/zh-cn/appendix/index', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {
           '/zh-cn/stage-0/': productManagerSidebar,
@@ -1236,10 +1314,6 @@ Sitemap: ${siteUrl}/sitemap.xml
                 {
                   text: '用 LLM 和 Skills 让界面变好看',
                   link: '/zh-cn/stage-2/frontend/2.4-llm-skills-beautiful/'
-                },
-                {
-                  text: '霍格沃茨的画像们：SVG 交互动画',
-                  link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
                 },
                 {
                   text: '从设计原型到项目代码',
@@ -1297,7 +1371,7 @@ Sitemap: ${siteUrl}/sitemap.xml
               items: [
                 {
                   text: '一起做霍格沃茨画像',
-                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
+                  link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
                 },
                 {
                   text: '构建第一个现代应用程序 - 全栈应用',
@@ -1476,7 +1550,7 @@ Sitemap: ${siteUrl}/sitemap.xml
               items: [
                 {
                   text: '一起做霍格沃茨画像',
-                  link: '/zh-cn/stage-2/frontend/2.4-hogwarts-portraits/'
+                  link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
                 },
                 {
                   text: 'Supabase 数据库',
@@ -1995,17 +2069,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: 'Home', link: '/en/' },
           {
             text: 'Novice & PM',
-            link: '/en/stage-0/'
+            link: '/en/stage-0/',
+            activeMatch: '/en/stage-[01]/'
           },
           {
             text: 'Full-Stack Development',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/en/stage-2/'
           },
           {
             text: 'Advanced Development',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/en/stage-3/'
           },
-          { text: 'Appendix', link: '/zh-cn/appendix/index' }
+          { text: 'Appendix', link: '/zh-cn/appendix/index', activeMatch: '/en/appendix/' }
         ],
         sidebar: {
           '/en/stage-0/': productManagerSidebarEn,
@@ -2046,17 +2123,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: 'ホーム', link: '/ja-jp/' },
           {
             text: '初心者とPM',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-0/'
           },
           {
             text: 'フルスタック開発',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: '上級開発',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: '付録', link: '/zh-cn/appendix/' }
+          { text: '付録', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         // TODO: Add Japanese sidebar when content is ready
         sidebar: {}
@@ -2090,17 +2170,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: '首頁', link: '/zh-tw/' },
           {
             text: '新手與產品原型',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-0/'
           },
           {
             text: '初中級開發',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: '高級開發',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: '附錄', link: '/zh-cn/appendix/' }
+          { text: '附錄', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2131,16 +2214,18 @@ Sitemap: ${siteUrl}/sitemap.xml
         },
         nav: [
           { text: '홈', link: '/ko-kr/' },
-          { text: '초보자 & PM', link: '/zh-cn/stage-0/' },
+          { text: '초보자 & PM', link: '/zh-cn/stage-0/', activeMatch: '/zh-cn/stage-0/' },
           {
             text: '풀스택 개발',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: '고급 개발',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: '부록', link: '/zh-cn/appendix/' }
+          { text: '부록', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2173,17 +2258,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: 'Inicio', link: '/es-es/' },
           {
             text: 'Principiante y PM',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-0/'
           },
           {
             text: 'Desarrollo Full Stack',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: 'Desarrollo Avanzado',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: 'Apéndice', link: '/zh-cn/appendix/' }
+          { text: 'Apéndice', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2214,16 +2302,18 @@ Sitemap: ${siteUrl}/sitemap.xml
         },
         nav: [
           { text: 'Accueil', link: '/fr-fr/' },
-          { text: 'Débutant & PM', link: '/zh-cn/stage-0/' },
+          { text: 'Débutant & PM', link: '/zh-cn/stage-0/', activeMatch: '/zh-cn/stage-0/' },
           {
             text: 'Développement Full Stack',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: 'Développement Avancé',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: 'Annexe', link: '/zh-cn/appendix/' }
+          { text: 'Annexe', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2254,16 +2344,18 @@ Sitemap: ${siteUrl}/sitemap.xml
         },
         nav: [
           { text: 'Start', link: '/de-de/' },
-          { text: 'Anfänger & PM', link: '/zh-cn/stage-0/' },
+          { text: 'Anfänger & PM', link: '/zh-cn/stage-0/', activeMatch: '/zh-cn/stage-0/' },
           {
             text: 'Full Stack Entwicklung',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: 'Fortgeschrittene Entwicklung',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: 'Anhang', link: '/zh-cn/appendix/' }
+          { text: 'Anhang', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2296,17 +2388,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: 'الرئيسية', link: '/ar-sa/' },
           {
             text: 'مبتدأ & PM',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-0/'
           },
           {
             text: 'تطوير Full Stack',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: 'تطوير متقدم',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: 'ملحق', link: '/zh-cn/appendix/' }
+          { text: 'ملحق', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
@@ -2340,17 +2435,20 @@ Sitemap: ${siteUrl}/sitemap.xml
           { text: 'Trang chủ', link: '/vi-vn/' },
           {
             text: 'Người mới & PM',
-            link: '/zh-cn/stage-0/'
+            link: '/zh-cn/stage-0/',
+            activeMatch: '/zh-cn/stage-0/'
           },
           {
             text: 'Phát triển Full Stack',
-            link: '/zh-cn/stage-2/'
+            link: '/zh-cn/stage-2/',
+            activeMatch: '/zh-cn/stage-2/'
           },
           {
             text: 'Phát triển Nâng cao',
-            link: '/zh-cn/stage-3/'
+            link: '/zh-cn/stage-3/',
+            activeMatch: '/zh-cn/stage-3/'
           },
-          { text: 'Phụ lục', link: '/zh-cn/appendix/' }
+          { text: 'Phụ lục', link: '/zh-cn/appendix/', activeMatch: '/zh-cn/appendix/' }
         ],
         sidebar: {}
       }
