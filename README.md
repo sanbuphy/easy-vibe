@@ -6,21 +6,29 @@
 # Easy-Vibe
 
 <p align="center" style="font-size: 1.2em; color: #666; margin: 20px 0;">
-  <strong>把想法变成现实，就是这么简单</strong>
+  <strong>把想法变成现实，就是这么简单</strong><br>
+  <span style="font-size: 0.9em; color: #888;">Turn ideas into reality. It's that simple.</span>
 </p>
 
 <p align="center" style="font-size: 1.1em; margin: 20px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-  不需要学编程，只要会说话，就能做出你的第一个 AI 应用
+  不需要学编程，只要会说话，就能做出你的第一个 AI 应用<br>
+  <span style="font-size: 0.9em; color: #888;">No coding required. Just speak, and build your first AI app.</span>
 </p>
 
 <p align="center">
-  � <a href="https://datawhalechina.github.io/easy-vibe/">开始体验</a> · ✨ <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/">交互式教程</a>
+  🚀 <a href="https://datawhalechina.github.io/easy-vibe/">开始体验</a> · ✨ <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/">交互式教程</a> · 🦞 <a href="https://github.com/datawhalechina/hello-claw">还想学 OpenClaw</a><br>
+  <span style="font-size: 0.85em; color: #888;"><a href="https://datawhalechina.github.io/easy-vibe/">Start Experience</a> · <a href="https://datawhalechina.github.io/easy-vibe/en/appendix/">Interactive Tutorial</a> · <a href="https://github.com/datawhalechina/hello-claw">Learn OpenClaw</a></span>
 </p>
 
 <p align="center">
   <a href="https://datawhalechina.github.io/easy-vibe/">在线阅读</a> ·
   <a href="#-内容导航">学习地图</a> ·
-  <a href="#contact">社区交流</a>
+  <a href="#contact">社区交流</a><br>
+  <span style="font-size: 0.85em; color: #888;">
+    <a href="https://datawhalechina.github.io/easy-vibe/">Read Online</a> ·
+    <a href="#-content-navigation">Learning Map</a> ·
+    <a href="#contact">Community</a>
+  </span>
 </p>
 
 <p align="center">
@@ -39,13 +47,10 @@
   <a href="docs-readme/ja-JP/README.md"><img alt="日本語" src="https://img.shields.io/badge/日本語-d9d9d9"></a>
   <a href="docs-readme/es-ES/README.md"><img alt="Español" src="https://img.shields.io/badge/Español-d9d9d9"></a>
   <a href="docs-readme/fr-FR/README.md"><img alt="Français" src="https://img.shields.io/badge/Français-d9d9d9"></a>
-  <a href="docs-readme/tlh/README.md"><img alt="Klingon" src="https://img.shields.io/badge/Klingon-d9d9d9"></a>
   <a href="docs-readme/ko-KR/README.md"><img alt="한국어" src="https://img.shields.io/badge/한국어-d9d9d9"></a>
   <a href="docs-readme/ar-SA/README.md"><img alt="العربية" src="https://img.shields.io/badge/العربية-d9d9d9"></a>
-  <a href="docs-readme/tr-TR/README.md"><img alt="Türkçe" src="https://img.shields.io/badge/Türkçe-d9d9d9"></a>
   <a href="docs-readme/vi-VN/README.md"><img alt="Tiếng_Việt" src="https://img.shields.io/badge/Tiếng_Việt-d9d9d9"></a>
   <a href="docs-readme/de-DE/README.md"><img alt="Deutsch" src="https://img.shields.io/badge/Deutsch-d9d9d9"></a>
-  <a href="docs-readme/bn-BD/README.md"><img alt="বাংলা" src="https://img.shields.io/badge/বাংলা-d9d9d9"></a>
 </p>
 
 </div>
@@ -145,6 +150,13 @@
 
 [开始学习](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/)
 
+### 🦞 我想构建 AI Agent
+**适合人群**：对 AI Agent 感兴趣的开发者
+**学习内容**：从零构建 OpenClaw AI 助理、Skills 系统、自动化工作流
+**产出**：属于你的智能命令行 AI 助理
+
+[开始学习](https://github.com/datawhalechina/hello-claw)
+
 ### 📚 我想查资料
 **适合人群**：所有人
 **学习内容**：计算机基础、AI 原理、9 大知识领域
@@ -157,6 +169,7 @@
 - 零基础/产品经理从 [第一阶段](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/) 开始
 - 开发者从 [第二阶段](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/) 开始
 - 进阶开发者可直接进入 [第三阶段](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/)
+- 对 AI Agent 感兴趣？学习 [Hello Claw](https://github.com/datawhalechina/hello-claw) 构建你的 AI 龙虾助理 🦞
 
 ## 🔥 News
 
@@ -240,8 +253,7 @@
 
 | 章节                                                                                                     | 关键内容                                                       |
 | :------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------- |
-| [Dify 入门与知识库集成](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/)             | 用 Dify Workflow 与基础 RAG 搭建工具类产品，为后续应用升级打样 |
-| [学会查询 AI 词典与集成多模态 API](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ai-capabilities/2.2-multimodal-api/extra3/) | 学会查找合适的模型与 API，并把文本、图像等多模态能力接入产品   |
+| [Dify 入门与知识库集成](https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/) | 用 Dify Workflow 与基础 RAG 搭建工具类产品，为后续应用升级打样 |
 
 ### 三、高级开发工程师
 
@@ -328,7 +340,7 @@
     </td>
     <td valign="top" width="33%">
       <strong>📊 数据</strong><br><br>
-      • <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/sql.html">SQL</a><br>
+      • <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/database-fundamentals.html">数据库原理与 SQL</a><br>
       • <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/database-fundamentals.html">数据库原理</a><br>
       • <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-tracking.html">数据埋点与用户行为采集</a><br>
       • <a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-analysis.html">数据分析基础</a><br>
@@ -405,7 +417,7 @@
 - [散步-项目负责人](https://github.com/sanbuphy) (Datawhale成员)
 - 方可-指导老师（Datawhale成员, 清华大学）
 - [Yerim Kang](https://github.com/yerim25)（实践项目部分-清华大学）
-- 赵芷霖（实践项目部分-清华大学）
+- [赵芷霖](https://github.com/ChileenZ)（实践项目部分-清华大学）
 - [李亦萱](https://yixuan20.github.io/)（页面美术设计-清华大学）
 - 刘思怡（实践项目部分-清华大学）
 - [刘丽欣](https://github.com/liulx25xx)（实践项目部分-清华大学）
