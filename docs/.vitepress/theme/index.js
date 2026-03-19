@@ -9,10 +9,12 @@ import { useRoute, useData } from 'vitepress'
 import './style.css'
 import Layout from './Layout.vue'
 import HomeFeatures from './components/HomeFeatures.vue'
+import WelcomeScreen from './components/WelcomeScreen.vue'
 import NavGrid from './components/NavGrid.vue'
 import NavCard from './components/NavCard.vue'
 import CategoryIndex from './components/CategoryIndex.vue'
 import ArticleGrid from './components/ArticleGrid.vue'
+import RelatedArticlesSection from './components/RelatedArticlesSection.vue'
 import StepBar from './components/StepBar.vue'
 import ChapterIntroduction from './components/ChapterIntroduction.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
@@ -845,10 +847,12 @@ export default {
   enhanceApp({ app }) {
     app.use(ElementPlus)
     app.component('HomeFeatures', HomeFeatures)
+    app.component('WelcomeScreen', WelcomeScreen)
     app.component('NavGrid', NavGrid)
     app.component('NavCard', NavCard)
     app.component('CategoryIndex', CategoryIndex)
     app.component('ArticleGrid', ArticleGrid)
+    app.component('RelatedArticlesSection', RelatedArticlesSection)
     app.component('StepBar', StepBar)
     app.component('ChapterIntroduction', ChapterIntroduction)
     app.component('ReadingProgress', ReadingProgress)
@@ -1743,7 +1747,10 @@ export default {
           url: 'src', // 图片源
           // 过滤掉不想查看的图片（比如表情包等小图标，如果需要的话）
           filter(image) {
-            return !image.classList.contains('no-viewer')
+            return (
+              !image.classList.contains('no-viewer') &&
+              !image.classList.contains('nav-title-logo')
+            )
           }
         })
       }
@@ -1783,6 +1790,7 @@ export default {
     }
 
     const applyImageStyle = (img) => {
+      if (img.classList.contains('nav-title-logo')) return
       const { naturalWidth, naturalHeight } = img
       if (!naturalWidth || !naturalHeight) return
 

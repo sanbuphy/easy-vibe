@@ -1,13 +1,22 @@
 <script setup>
 import DefaultTheme from 'vitepress/theme'
-import { useData } from 'vitepress'
+import { useData, useRoute, withBase } from 'vitepress'
 import TextType from './components/TextType.vue'
 import GitHubStars from './components/GitHubStars.vue'
 import { onMounted, ref, watch, computed } from 'vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import { Setting } from '@element-plus/icons-vue'
+import easyVibePaths from './data/easyVibePaths.json'
 
 const { frontmatter } = useData()
+const route = useRoute()
+
+const openWelcomeFromWordmark = () => {
+  const currentPath = window.location.pathname
+  window.location.href = withBase(
+    `/welcome/?next=${encodeURIComponent(currentPath)}`
+  )
+}
 
 const homeTaglineTyping = {
   typingSpeed: 45,
@@ -86,6 +95,11 @@ const toggleSidebar = () => {
 }
 
 const isHomePage = computed(() => frontmatter.value.layout === 'home')
+const isWelcomePage = computed(() =>
+  route.path === '/welcome/' ||
+  route.path.endsWith('/welcome/') ||
+  route.path.endsWith('/welcome.html')
+)
 
 onMounted(() => {
   const saved = clampFontSize(localStorage.getItem(FONT_SIZE_STORAGE_KEY))
@@ -292,7 +306,7 @@ watch(sidebarCollapsed, (collapsed) => {
 
 <template>
   <DefaultTheme.Layout>
-    <template v-if="!isHomePage" #nav-bar-title-before>
+    <template v-if="!isHomePage && !isWelcomePage" #nav-bar-title-before>
       <button
         class="ev-sidebar-nav-btn"
         type="button"
@@ -410,6 +424,41 @@ watch(sidebarCollapsed, (collapsed) => {
         </el-popover>
       </ClientOnly>
     </template>
+    <template #home-hero-info-before>
+      <button
+        v-if="frontmatter.layout === 'home'"
+        class="vp-home-wordmark"
+        type="button"
+        aria-label="打开欢迎页"
+        @click="openWelcomeFromWordmark"
+      >
+        <svg
+          viewBox="0 0 460 220"
+          class="vp-home-wordmark-svg"
+        >
+          <defs>
+            <linearGradient
+              id="home-hero-ocean"
+              x1="0"
+              y1="0"
+              x2="460"
+              y2="0"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset="0%" stop-color="#06b6d4" />
+              <stop offset="50%" stop-color="#0ea5e9" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+          </defs>
+          <path
+            v-for="(path, index) in easyVibePaths"
+            :key="index"
+            :d="path"
+            class="vp-home-wordmark-path"
+          />
+        </svg>
+      </button>
+    </template>
     <template #home-hero-info-after>
       <div
         v-if="
@@ -430,7 +479,7 @@ watch(sidebarCollapsed, (collapsed) => {
   </DefaultTheme.Layout>
   <ClientOnly>
     <div
-      v-if="!isHomePage"
+      v-if="!isHomePage && !isWelcomePage"
       class="ev-sidebar-hover-area"
       :class="{ collapsed: sidebarCollapsed }"
     >
@@ -454,6 +503,16 @@ watch(sidebarCollapsed, (collapsed) => {
 </template>
 
 <style>
+.VPNavBarTitle .VPImage.logo,
+.VPNavBarTitle .logo {
+  width: 84px !important;
+  height: 40px !important;
+  max-width: 84px !important;
+  max-height: 40px !important;
+  object-fit: contain;
+  display: block;
+}
+
 /* 隐藏默认的 tagline，因为我们用打字机效果替代了它 */
 .VPHomeHero .tagline {
   display: none !important;
@@ -461,7 +520,8 @@ watch(sidebarCollapsed, (collapsed) => {
 
 /* 调整打字机容器的样式，使其看起来像原来的 tagline */
 .vp-typed-tagline {
-  padding-top: 8px;
+  padding-top: 0;
+  margin-top: 8px;
   line-height: 28px;
   font-size: 18px;
   font-weight: 500;
@@ -479,7 +539,7 @@ watch(sidebarCollapsed, (collapsed) => {
   text-align: center;
 }
 .VPHomeHero .main {
-  margin: 0 auto;
+  margin: -18px auto 0;
 }
 .VPHomeHero .name,
 .VPHomeHero .text {
@@ -487,11 +547,35 @@ watch(sidebarCollapsed, (collapsed) => {
   margin-left: auto;
   margin-right: auto;
 }
+.VPHomeHero .name {
+  display: none !important;
+}
 .VPHomeHero .text {
   color: var(--vp-c-text-1) !important;
 }
 .VPHomeHero .actions {
   justify-content: center;
+  margin-top: 20px;
+}
+.vp-home-wordmark {
+  display: flex;
+  justify-content: center;
+  margin-top: -12px;
+  margin-bottom: 18px;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.vp-home-wordmark-svg {
+  width: min(380px, 52vw);
+  height: auto;
+  filter: none;
+}
+.vp-home-wordmark-path {
+  fill: url(#home-hero-ocean);
+  stroke: none;
 }
 
 @media (min-width: 640px) {

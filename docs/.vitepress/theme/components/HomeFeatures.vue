@@ -7,9 +7,17 @@ const router = useRouter()
 const { site, page, lang } = useData()
 const activeTab = ref('home')
 const showLangMenu = ref(false)
+const topPromoProgress = ref(1)
+const topPromoIntroProgress = ref(0)
+const topPromoColorProgress = ref(0)
+let topPromoIntroRaf = 0
+let topPromoColorRaf = 0
+let topPromoColorTimer = 0
+const WELCOME_SEEN_KEY = 'easy-vibe-welcome-seen'
 
 // Appendix Scroll Logic
 const appendixWrapper = ref(null)
+const pmSection = ref(null)
 const totalPages = ref(1)
 const currentPage = ref(0)
 
@@ -101,22 +109,22 @@ const i18n = {
       sub: '从前端到后端，从数据库到上线。',
       cards: [
         {
-          title: '全栈开发',
-          headline: '独立完成前后端。',
-          desc: '从数据库设计到 API 开发，再到前端组件化，完整构建一个现代化 Web 应用。',
-          link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+          title: '全栈路径总览',
+          headline: '先看清全局再动手。',
+          desc: '一页看懂 Stage 2：前端、后端、数据库与部署如何串成完整链路。',
+          link: '/zh-cn/stage-2/'
         },
         {
-          title: '真实项目',
-          headline: '拒绝玩具代码。',
-          desc: '深入理解用户鉴权、数据存储、文件上传等核心业务逻辑。',
-          link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+          title: '真实数据项目',
+          headline: '连上真正的数据库。',
+          desc: '在 Supabase 上设计数据表和权限，用真实读写操作支撑你的产品数据层。',
+          link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
         },
         {
           title: '部署上线',
           headline: '让世界看到你的作品。',
-          desc: '学习服务器配置、域名解析和自动化部署，打通产品落地的最后一公里。',
-          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+          desc: '使用 CloudBase、Vercel、Zeabur 等平台，一口气打通从代码到公网访问的完整流程。',
+          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
         }
       ]
     },
@@ -126,23 +134,23 @@ const i18n = {
       sub: '突破时间与设备限制，让 AI 产品随处可见。',
       cards: [
         {
-          title: '多端发布',
-          desc: '一套代码，覆盖 Web、小程序与 App，触达所有用户。',
-          link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
+          title: '跨平台桌面应用',
+          desc: '用 Electron 做语音转文字桌面程序，一次开发同时跑在 Windows、macOS、Linux。',
+          link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
         },
         {
-          title: 'AI 智能体',
-          desc: '构建具备记忆与规划能力的 Agent，实现自主任务执行。',
-          link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
+          title: 'AI 智能体团队',
+          desc: '用 Claude Agent Teams 组建 AI 开发小队，多代理协作完成大型任务。',
+          link: '/zh-cn/stage-3/core-skills/agent-teams/'
         },
         {
-          title: '长效稳定',
-          desc: '掌握异步任务与队列技术，确保 AI 复杂任务稳定完成。',
-          link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+          title: '长效稳定执行',
+          desc: '用循环脚本和 Ralph 插件管理长时间任务，让 Claude Code 过夜稳定跑完工作。',
+          link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
         },
         {
-          title: '商业闭环',
-          desc: '集成支付与会员系统，将你的 AI 创意转化为商业产品。',
+          title: '个人品牌与输出',
+          desc: '搭建个人网站与技术博客，让你的项目和经验长期沉淀并被更多人看到。',
           link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
         }
       ]
@@ -259,25 +267,25 @@ const i18n = {
       cat: 'Stage 2 · Junior/Mid Dev',
       title:
         'Go Full Stack, <br><span class="highlight">Build Real Apps.</span>',
-      sub: 'Master frontend-backend separation and build commercial-grade projects with DB and API.',
+      sub: 'Understand the full journey from frontend to backend, database and deployment.',
       cards: [
         {
-          title: 'Full Stack',
-          headline: 'Frontend & Backend.',
-          desc: 'From DB design to API and components, build a modern web app completely.',
-          link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+          title: 'Stage Overview',
+          headline: 'See the whole map first.',
+          desc: 'Start from the Stage 2 overview and understand how frontend, backend and infra fit together.',
+          link: '/zh-cn/stage-2/'
         },
         {
-          title: 'Real Projects',
-          headline: 'No Toy Code.',
-          desc: 'Deep dive into Auth, Storage, File Uploads and core business logic.',
-          link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+          title: 'Real Data Project',
+          headline: 'Backed by a real DB.',
+          desc: 'Design tables and permissions on Supabase and wire them into real read/write flows.',
+          link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
         },
         {
           title: 'Deployment',
-          headline: 'Show the World.',
-          desc: 'Server config, DNS, CI/CD. The last mile of product delivery.',
-          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+          headline: 'Ship it to the world.',
+          desc: 'Use CloudBase, Vercel and Zeabur to turn local projects into publicly reachable sites.',
+          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
         }
       ]
     },
@@ -285,26 +293,26 @@ const i18n = {
       cat: 'Stage 3 · Senior Dev',
       title:
         'Advanced Practice, <br><span class="highlight">Infinite Possibilities.</span>',
-      sub: 'Mobile Mini-programs & AI Native Apps. Explore the era of LLMs.',
+      sub: 'Cross-platform apps and AI-native workflows, powered by Claude Code.',
       cards: [
         {
-          title: 'WeChat Mini-app',
-          desc: 'Cross-platform dev, reaching millions of users.',
-          link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
+          title: 'Electron Desktop App',
+          desc: 'Build a speech-to-text desktop app that runs on Windows, macOS and Linux from one codebase.',
+          link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
         },
         {
-          title: 'AI Native Apps',
-          desc: 'RAG, Agent. Explore the limits of LLMs.',
-          link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
+          title: 'Agent Teams',
+          desc: 'Use Claude Agent Teams to orchestrate multiple agents like a real dev team.',
+          link: '/zh-cn/stage-3/core-skills/agent-teams/'
         },
         {
-          title: 'Complex Arch',
-          desc: 'Architecture design for high concurrency and stable AI tasks.',
-          link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+          title: 'Long-running Tasks',
+          desc: 'Design loops and task queues so Claude Code can safely run overnight until work is truly done.',
+          link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
         },
         {
           title: 'Personal Brand',
-          desc: 'Build your own website and academic blog.',
+          desc: 'Build your own website and tech blog to showcase projects and writing.',
           link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
         }
       ]
@@ -789,25 +797,25 @@ const i18n = {
     stage2: {
       cat: 'Stage 2 · Desarrollador Junior/Mid',
       title: 'Full Stack,<br><span class="highlight">Crea Apps Reales.</span>',
-      sub: 'Domina la separación frontend-backend. Crea proyectos de nivel comercial con DB, API e interacciones complejas.',
+      sub: 'De la base de datos al despliegue: conecta frontend, backend y operaciones en un solo recorrido.',
       cards: [
         {
-          title: 'Full Stack',
-          headline: 'Frontend y Backend.',
-          desc: 'Desde el diseño de DB hasta API y componentes, construye una web app moderna completamente.',
-          link: '/es-es/stage-2/'
+          title: 'Mapa de la Etapa',
+          headline: 'Primero entiende el recorrido completo.',
+          desc: 'Revisa la vista general de Stage 2 para ver cómo encajan frontend, backend, DB y despliegue.',
+          link: '/zh-cn/stage-2/'
         },
         {
-          title: 'Proyectos Reales',
-          headline: 'Sin código de juguete.',
-          desc: 'Profundiza en Auth, Almacenamiento, Subida de Archivos y lógica de negocio.',
-          link: '/es-es/stage-2/'
+          title: 'Proyecto con DB real',
+          headline: 'Supabase como base de datos de verdad.',
+          desc: 'Diseña tablas y permisos en Supabase y conéctalos a flujos reales de lectura/escritura.',
+          link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
         },
         {
-          title: 'Despliegue',
-          headline: 'Muestra al mundo.',
-          desc: 'Configuración de servidor, DNS, CI/CD. La última milla de la entrega del producto.',
-          link: '/es-es/stage-2/'
+          title: 'Despliegue en producción',
+          headline: 'Lleva tu app al mundo real.',
+          desc: 'Usa CloudBase, Vercel y Zeabur para convertir tu código local en un sitio público.',
+          link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
         }
       ]
     },
@@ -815,27 +823,27 @@ const i18n = {
       cat: 'Stage 3 · Desarrollador Senior',
       title:
         'Práctica Avanzada,<br><span class="highlight">Posibilidades Infinitas.</span>',
-      sub: 'Mini-programas móviles y Apps Nativas de IA. Explora la era de los LLMs.',
+      sub: 'Apps multiplataforma y flujos de trabajo AI-native impulsados por Claude Code.',
       cards: [
         {
-          title: 'WeChat Mini-app',
-          desc: 'Desarrollo multiplataforma, llegando a millones de usuarios.',
-          link: '/es-es/stage-3/'
+          title: 'App de escritorio multiplataforma',
+          desc: 'Crea con Electron una app de voz a texto que funciona en Windows, macOS y Linux con una sola base de código.',
+          link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
         },
         {
-          title: 'Apps Nativas IA',
-          desc: 'RAG, Agent. Explora los límites de los LLMs.',
-          link: '/es-es/stage-3/'
+          title: 'Equipos de agentes IA',
+          desc: 'Usa Claude Agent Teams para orquestar varios agentes como si fueran un equipo de desarrollo real.',
+          link: '/zh-cn/stage-3/core-skills/agent-teams/'
         },
         {
-          title: 'Arq. Compleja',
-          desc: 'Diseño de arquitectura de alta concurrencia y alta disponibilidad.',
-          link: '/es-es/stage-3/'
+          title: 'Tareas de larga duración',
+          desc: 'Diseña bucles y colas de tareas para que Claude Code pueda trabajar durante horas de forma estable.',
+          link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
         },
         {
-          title: 'Marca Personal',
-          desc: 'Construye tu propio sitio web y blog académico.',
-          link: '/es-es/stage-3/'
+          title: 'Marca personal',
+          desc: 'Construye tu sitio web y blog técnico para dar visibilidad a tus proyectos.',
+          link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
         }
       ]
     },
@@ -1595,21 +1603,145 @@ const closeLangMenu = (e) => {
   }
 }
 
+const updateTopPromoVisibility = () => {
+  if (!pmSection.value) {
+    topPromoProgress.value = 1
+    return
+  }
+  const navHeight = 44
+  const sectionTop = pmSection.value.getBoundingClientRect().top + window.pageYOffset
+  const endY = sectionTop - navHeight
+  const startY = endY - 96
+  const scrollY = window.pageYOffset
+  if (scrollY <= startY) {
+    topPromoProgress.value = 1
+    return
+  }
+  if (scrollY >= endY) {
+    topPromoProgress.value = 0
+    return
+  }
+  topPromoProgress.value = (endY - scrollY) / (endY - startY)
+}
+
+const topPromoStyle = computed(() => {
+  const scrollProgress = topPromoProgress.value
+  const introProgress = topPromoIntroProgress.value
+  const colorProgress = topPromoColorProgress.value
+  const progress = scrollProgress * introProgress
+  const scrollOffset = -100 * (1 - scrollProgress)
+  const startTextColor = { r: 255, g: 255, b: 255 }
+  const endTextColor = { r: 29, g: 29, b: 31 }
+  const startBgColor = { r: 0, g: 113, b: 227 }
+  const endBgColor = { r: 245, g: 245, b: 247 }
+  const startLinkColor = { r: 255, g: 255, b: 255 }
+  const endLinkColor = { r: 0, g: 102, b: 204 }
+  const textColor = `rgb(${Math.round(startTextColor.r + (endTextColor.r - startTextColor.r) * colorProgress)}, ${Math.round(startTextColor.g + (endTextColor.g - startTextColor.g) * colorProgress)}, ${Math.round(startTextColor.b + (endTextColor.b - startTextColor.b) * colorProgress)})`
+  const bgColor = `rgb(${Math.round(startBgColor.r + (endBgColor.r - startBgColor.r) * colorProgress)}, ${Math.round(startBgColor.g + (endBgColor.g - startBgColor.g) * colorProgress)}, ${Math.round(startBgColor.b + (endBgColor.b - startBgColor.b) * colorProgress)})`
+  const linkColor = `rgb(${Math.round(startLinkColor.r + (endLinkColor.r - startLinkColor.r) * colorProgress)}, ${Math.round(startLinkColor.g + (endLinkColor.g - startLinkColor.g) * colorProgress)}, ${Math.round(startLinkColor.b + (endLinkColor.b - startLinkColor.b) * colorProgress)})`
+  return {
+    opacity: progress,
+    transform: `translateY(${scrollOffset}%)`,
+    maxHeight: `${30 * progress}px`,
+    backgroundColor: bgColor,
+    color: textColor,
+    '--top-promo-link-color': linkColor,
+    pointerEvents: progress < 0.02 ? 'none' : 'auto'
+  }
+})
+
 onMounted(() => {
+  const introDuration = 1800
+  const colorDelay = 500
+  const colorDuration = 1800
+  const introStart = performance.now()
+  const stepTopPromoIntro = (now) => {
+    const raw = Math.min(1, (now - introStart) / introDuration)
+    const eased = 1 - Math.pow(1 - raw, 3)
+    topPromoIntroProgress.value = eased
+    if (raw < 1) {
+      topPromoIntroRaf = window.requestAnimationFrame(stepTopPromoIntro)
+      return
+    }
+    topPromoColorTimer = window.setTimeout(() => {
+      const colorStart = performance.now()
+      const stepTopPromoColor = (time) => {
+        const colorRaw = Math.min(1, (time - colorStart) / colorDuration)
+        const colorEased = 1 - Math.pow(1 - colorRaw, 3)
+        topPromoColorProgress.value = colorEased
+        if (colorRaw < 1) {
+          topPromoColorRaf = window.requestAnimationFrame(stepTopPromoColor)
+        }
+      }
+      topPromoColorRaf = window.requestAnimationFrame(stepTopPromoColor)
+    }, colorDelay)
+  }
+  topPromoIntroRaf = window.requestAnimationFrame(stepTopPromoIntro)
+
+  const currentPath = window.location.pathname
+  const basePath = site.value.base || '/'
+  const normalizedBase = basePath.endsWith('/') ? basePath : `${basePath}/`
+  const normalizedPath = currentPath.endsWith('/')
+    ? currentPath
+    : `${currentPath}/`
+  const localeHomeSuffixes = [
+    '/zh-cn/',
+    '/en/',
+    '/zh-tw/',
+    '/ja-jp/',
+    '/ko-kr/',
+    '/es-es/',
+    '/fr-fr/',
+    '/de-de/',
+    '/ar-sa/',
+    '/vi-vn/'
+  ]
+  const isLocaleHome = localeHomeSuffixes.some(
+    (suffix) =>
+      currentPath.endsWith(suffix) ||
+      currentPath.endsWith(`${suffix}index.html`)
+  )
+  const isRootHome =
+    normalizedPath === normalizedBase ||
+    currentPath === `${normalizedBase}index.html`
+  if (isRootHome && !isLocaleHome) {
+    const hasSeenWelcome = window.localStorage.getItem(WELCOME_SEEN_KEY) === '1'
+    if (!hasSeenWelcome) {
+      router.go(withBase(`/welcome/?next=${encodeURIComponent(currentPath)}`))
+      return
+    }
+  }
   document.addEventListener('click', closeLangMenu)
   if (appendixWrapper.value) {
     appendixWrapper.value.addEventListener('scroll', onAppendixScroll)
     updatePagination()
     window.addEventListener('resize', updatePagination)
   }
+  updateTopPromoVisibility()
+  window.addEventListener('scroll', updateTopPromoVisibility, { passive: true })
+  window.addEventListener('resize', updateTopPromoVisibility)
 })
 
 onUnmounted(() => {
+  if (topPromoIntroRaf) {
+    window.cancelAnimationFrame(topPromoIntroRaf)
+    topPromoIntroRaf = 0
+  }
+  if (topPromoColorRaf) {
+    window.cancelAnimationFrame(topPromoColorRaf)
+    topPromoColorRaf = 0
+  }
+  if (topPromoColorTimer) {
+    window.clearTimeout(topPromoColorTimer)
+    topPromoColorTimer = 0
+  }
   document.removeEventListener('click', closeLangMenu)
   if (appendixWrapper.value) {
     appendixWrapper.value.removeEventListener('scroll', onAppendixScroll)
   }
   window.removeEventListener('resize', updatePagination)
+  window.removeEventListener('scroll', updateTopPromoVisibility)
+  window.removeEventListener('resize', updateTopPromoVisibility)
 })
 
 // Stage 1: 产品经理 (Web 原型)
@@ -1643,57 +1775,57 @@ const stage1Cards = [
 // Stage 2: 初中级开发 (全栈)
 const stage2Cards = [
   {
-    title: '全栈开发',
-    headline: '独立完成前后端。',
-    desc: '从数据库设计到 API 开发，再到前端组件化，完整构建一个现代化 Web 应用。',
+    title: '全栈路径总览',
+    headline: '先看清全局再动手。',
+    desc: '一页看懂 Stage 2：前端、后端、数据库与部署如何串成完整链路。',
     imageColor: '#E0C3FC',
     visualType: 'code',
-    link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+    link: '/zh-cn/stage-2/'
   },
   {
-    title: '真实项目',
-    headline: '拒绝玩具代码。',
-    desc: '深入理解用户鉴权、数据存储、文件上传等核心业务逻辑。',
+    title: '真实数据项目',
+    headline: '连上真正的数据库。',
+    desc: '在 Supabase 上设计数据表和权限，用真实读写操作支撑你的产品数据层。',
     imageColor: '#8EC5FC',
     visualType: 'server',
-    link: '/zh-cn/stage-2/backend/2.2-database-supabase/chapter5/'
+    link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
   },
   {
     title: '部署上线',
     headline: '让世界看到你的作品。',
-    desc: '学习服务器配置、域名解析和自动化部署，打通产品落地的最后一公里。',
+    desc: '使用 CloudBase、Vercel、Zeabur 等平台，一口气打通从代码到公网访问的完整流程。',
     imageColor: '#96E6A1',
     visualType: 'cloud',
-    link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/extra6/'
+    link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
   }
 ]
 
 // Stage 3: 高级开发 (小程序 & AI)
 const stage3Cards = [
   {
-    title: '微信小程序',
-    desc: '跨平台开发，触达亿级用户。',
+    title: '跨平台桌面应用',
+    desc: '用 Electron 做语音转文字桌面程序，一次开发同时跑在 Windows、macOS、Linux。',
     tag: 'Stage 3',
     visualType: 'phone',
-    link: '/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/'
+    link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
   },
   {
-    title: 'AI 原生应用',
-    desc: 'RAG、Agent，探索 LLM 的无限可能。',
+    title: 'AI 智能体团队',
+    desc: '用 Claude Agent Teams 组建 AI 开发小队，多代理协作完成大型任务。',
     tag: 'Advanced',
     visualType: 'ai',
-    link: '/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/'
+    link: '/zh-cn/stage-3/core-skills/agent-teams/'
   },
   {
-    title: '复杂业务架构',
-    desc: '应对高并发、高可用场景的架构设计。',
+    title: '长效稳定执行',
+    desc: '用循环脚本和 Ralph 插件管理长时间任务，让 Claude Code 过夜稳定跑完工作。',
     tag: 'Architecture',
     visualType: 'arch',
-    link: '/zh-cn/stage-3/core-skills/3.2-long-running-tasks/'
+    link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
   },
   {
-    title: '个人品牌',
-    desc: '构建属于自己的个人网页与学术博客。',
+    title: '个人品牌与输出',
+    desc: '搭建个人网站与技术博客，让你的项目和经验长期沉淀并被更多人看到。',
     tag: 'Brand',
     visualType: 'brand',
     link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
@@ -1783,7 +1915,19 @@ const appendixCards = [
     <nav class="sticky-nav glass">
       <div class="nav-content">
         <div class="nav-cluster">
-          <span class="nav-title">{{ t.nav.title }}</span>
+          <div
+            class="nav-title"
+            :aria-label="t.nav.title"
+          >
+            <img
+              class="nav-title-logo no-viewer"
+              :src="withBase('/assets/easy-vibe-logo-hd.svg')"
+              :alt="t.nav.title"
+              width="64"
+              height="30"
+              draggable="false"
+            >
+          </div>
           <div class="nav-links">
             <button
               :class="{ active: activeTab === 'home' }"
@@ -1860,7 +2004,10 @@ const appendixCards = [
           </div>
         </div>
       </div>
-      <div class="nav-promo">
+      <div
+        class="nav-promo"
+        :style="topPromoStyle"
+      >
         <span>{{ topPromo.text }}</span>
         <a :href="resolveFooterHref(topPromo.link)">{{ topPromo.cta }}</a>
       </div>
@@ -1875,6 +2022,7 @@ const appendixCards = [
     <!-- Stage 1: Product Manager -->
     <section
       id="pm"
+      ref="pmSection"
       class="section-container section-pm"
     >
       <div class="section-header">
@@ -2188,6 +2336,7 @@ a {
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 2;
 }
 
 .nav-cluster {
@@ -2198,11 +2347,27 @@ a {
 }
 
 .nav-title {
-  font-weight: 500;
-  font-size: 12px;
-  color: var(--vp-c-text-1) !important;
   flex-shrink: 0;
-  letter-spacing: -0.008em;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-title-logo {
+  display: block;
+  max-width: 64px !important;
+  max-height: 30px !important;
+  height: 30px !important;
+  width: 64px !important;
+  min-width: 64px;
+  min-height: 30px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  filter: grayscale(1) brightness(0.28) contrast(1.05);
 }
 
 .nav-links {
@@ -2272,7 +2437,7 @@ a {
 
 .nav-promo {
   height: 30px;
-  border-top: 1px solid #e5e5ea;
+  max-height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2280,11 +2445,23 @@ a {
   font-size: 13px;
   color: #1d1d1f;
   padding: 0 16px;
+  overflow: hidden;
+  transform-origin: top center;
+  position: relative;
+  z-index: 1;
+  will-change: transform, opacity, max-height, background-color, color;
+  transition:
+    transform 0.16s ease-out,
+    opacity 0.16s ease-out,
+    max-height 0.16s ease-out,
+    background-color 0.22s ease-out,
+    color 0.22s ease-out;
 }
 
 .nav-promo a {
-  color: #0066cc;
+  color: var(--top-promo-link-color, #0066cc);
   text-decoration: none;
+  transition: color 0.25s ease-out;
 }
 
 .button {
@@ -2345,6 +2522,7 @@ a {
   gap: 2px;
   max-height: 300px;
   overflow-y: auto;
+  z-index: 20;
 }
 
 .lang-item {
@@ -2681,6 +2859,7 @@ a {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   scroll-snap-align: start;
   width: 100%;
+  min-height: 360px;
   transition: transform 0.25s ease;
 }
 
@@ -2748,14 +2927,14 @@ a {
 }
 
 .appendix-icon-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: 17.5px; /* Apple continuous curve approximation */
+  width: 100%;
+  height: 190px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
-  margin-bottom: 16px;
+  font-size: 88px;
+  margin-bottom: 14px;
   /* Glassmorphism / VisionOS Style */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -2811,7 +2990,7 @@ a {
 }
 
 .appendix-text {
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.5;
   color: #6e6e73;
   margin: 0;
@@ -2823,7 +3002,7 @@ a {
   font-weight: 600;
   color: #1d1d1f;
   margin-right: 6px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* Footer */

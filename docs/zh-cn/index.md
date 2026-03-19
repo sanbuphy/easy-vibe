@@ -16,10 +16,10 @@ hero:
     - 这就是编程该有的样子。
   actions:
     - theme: brand
-      text: 开始学习
+      text: 开始一起 vibe！
       link: /zh-cn/stage-0/0.1-learning-map/
     - theme: alt
-      text: ⭐️ GitHub 加速更新
+      text: GitHub 加速更新
       link: https://github.com/datawhalechina/easy-vibe
 ---
 
