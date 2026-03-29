@@ -103,7 +103,7 @@
 
 <div align="center" style="margin: 30px 0;">
   <a href="https://github.com/datawhalechina/easy-vibe/issues/new?template=story_submission.md">
-    <img src="../../assets/stories_image.png" alt="Share Your Vibe Story" width="80%" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <img src="https://raw.githubusercontent.com/datawhalechina/easy-vibe/main/assets/stories_image.png" alt="Share Your Vibe Story" width="80%" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
   </a>
   <p style="margin-top: 15px; font-size: 1.1em; color: #666;">
     📝 <strong>Have your own vibe coding story?</strong>
@@ -122,6 +122,7 @@
 AI 시대의 프로그래밍은 원하는 것을 설명하는 데서 시작합니다.
 
 Easy-Vibe는 그것을 실제 제품으로 만드는 방법을 가르칩니다.
+
 
 ## 🔥 News
 
@@ -151,6 +152,8 @@ Easy-Vibe는 그것을 실제 제품으로 만드는 방법을 가르칩니다.
 - **学生**：建立 AI 时代的实战技能
 - **初级开发者**：补齐从想法到上线的完整开发链路
 - **中高级开发者**：掌握 AI 协作开发、复杂项目实战与效率升级
+
+
 
 ## 你的学习路径
 

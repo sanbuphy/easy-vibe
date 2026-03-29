@@ -103,7 +103,7 @@
 
 <div align="center" style="margin: 30px 0;">
   <a href="https://github.com/datawhalechina/easy-vibe/issues/new?template=story_submission.md">
-    <img src="assets/stories_image.png" alt="Share Your Vibe Story" width="80%" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <img src="https://raw.githubusercontent.com/datawhalechina/easy-vibe/main/assets/stories_image.png" alt="Share Your Vibe Story" width="80%" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
   </a>
   <p style="margin-top: 15px; font-size: 1.1em; color: #666;">
     📝 <strong>Have your own vibe coding story?</strong> 
@@ -122,6 +122,7 @@ Want a blog with comments? Say it.
 In the AI era, programming starts by describing what you want.
 
 Easy-Vibe teaches you how to turn that into a real product.
+
 
 ## 🔥 News
 
@@ -143,7 +144,6 @@ Easy-Vibe teaches you how to turn that into a real product.
 - **[2026-01-01]** Released the core learning map for the project.
 </details>
 
-
 ## Who This Is For
 
 - **Complete beginners**: Build your first project first, then understand how it works
@@ -151,6 +151,8 @@ Easy-Vibe teaches you how to turn that into a real product.
 - **Students**: Develop practical skills for the AI era
 - **Junior developers**: Learn the full path from idea to launch
 - **Mid-level and senior developers**: Upgrade your AI collaboration workflow for complex projects
+
+
 
 ## Your Learning Paths
 
