@@ -26,8 +26,8 @@
   />
   <NavCard
     href="/zh-cn/stage-2/frontend/2.3-multi-product-ui/"
-    title="参考 UI 设计规范与多产品 UI 设计"
-    description="学习主流 UI 设计规范，提升产品设计的一致性与美感"
+    title="参考 UI 设计规范设计页面和按钮"
+    description="学习主流 UI 设计规范，设计更清晰的页面层级与按钮层级"
   />
   <NavCard
     href="/zh-cn/stage-2/frontend/2.4-llm-skills-beautiful/"
@@ -94,14 +94,14 @@
 
 <NavGrid>
   <NavCard
-    href="/zh-cn/stage-2/assignments/2.1-fullstack-app/"
-    title="构建第一个现代应用程序 - 全栈应用"
-    description="综合运用所学知识，独立完成一个功能完整的全栈应用开发"
+    href="/zh-cn/stage-2/assignments/copywriting-platform-supabase/"
+    title="大作业 1：第一个 SaaS 全栈应用——文案生成网站"
+    description="从零打造一个 AI 营销文案工作台，涵盖登录、生成、支付、管理后台"
   />
   <NavCard
-    href="/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/"
-    title="现代前端组件库 + Trae 实战"
-    description="使用现代组件库与 Trae IDE，高效构建复杂的前端界面"
+    href="/zh-cn/stage-2/assignments/exam-management-express/"
+    title="大作业 2：在线考试与管理系统"
+    description="构建在线考试系统，支持自动出题、答题、后台管理"
   />
 </NavGrid>
 

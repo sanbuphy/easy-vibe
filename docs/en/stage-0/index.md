@@ -82,6 +82,38 @@ Master the Vibe Coding workflow, learn to deconstruct requirements, and independ
   />
 </NavGrid>
 
+### Appendix: User Research and Validation
+
+**Why needed**: When you already have an idea but are not sure whether it is a real need, how to interview users, or what to validate first, this group helps you turn vague instincts into more grounded judgment.
+
+**When to watch**:
+- When you cannot clearly explain what users are really trying to get done
+- When you want to interview users without collecting only polite encouragement
+- When you want to define the problem better before jumping into a solution
+
+<NavGrid>
+  <NavCard
+    href="/en/stage-1/appendix-idea-sources/"
+    title="Where to Find Ideas"
+    description="Use reference apps, trend sources, business signals, and VC lists to narrow down better product directions."
+  />
+  <NavCard
+    href="/en/stage-1/appendix-double-diamond/"
+    title="Double Diamond"
+    description="Learn when to explore the problem first and when to start comparing solutions and prototypes."
+  />
+  <NavCard
+    href="/en/stage-1/appendix-jobs-to-be-done/"
+    title="Jobs to Be Done"
+    description="Use JTBD to understand what users really want to get done and judge product direction more clearly."
+  />
+  <NavCard
+    href="/en/stage-1/appendix-mom-test/"
+    title="The Mom Test"
+    description="Learn how to talk to users properly and avoid false-positive feedback like “that sounds good.”"
+  />
+</NavGrid>
+
 ### Appendix: Technical Solutions
 
 **Why needed**: When you encounter technical problems during development or want to know better tools, these technical appendices provide ready-to-use solutions.

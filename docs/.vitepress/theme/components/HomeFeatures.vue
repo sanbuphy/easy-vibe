@@ -2,12 +2,25 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, withBase, useData } from 'vitepress'
 import GitHubStars from './GitHubStars.vue'
+import VibeStories from './VibeStories.vue'
+import { provide } from 'vue'
+import stage2LovartCover from '../../../zh-cn/stage-2/frontend/2.0-lovart-assets/images/image1.png'
+import stage2FigmaCover from '../../../zh-cn/stage-2/frontend/2.1-figma-mastergo/images/image8.png'
+import stage2DesignToCodeCover from '../../../zh-cn/stage-2/frontend/2.6-design-to-code/images/image42.png'
+import stage2SupabaseCover from '../../../zh-cn/stage-2/backend/2.2-database-supabase/images/image1.png'
+import stage2ZeaburCover from '../../../zh-cn/stage-2/backend/2.5-zeabur-deployment/images/image1.png'
+import stage2DifyCover from '../../../zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/images/image1.png'
+import stage3ElectronCover from '../../../zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/images/image3.png'
+import stage3AgentTeamsCover from '../../../zh-cn/stage-3/core-skills/agent-teams/images/home-cover.svg'
+import stage3LongRunningCover from '../../../zh-cn/stage-3/core-skills/long-running-tasks/images/home-cover.svg'
+import stage3PersonalBrandCover from '../../../zh-cn/stage-3/personal-brand/3.7-personal-website-blog/images/image1.png'
 
 const router = useRouter()
 const { site, page, lang } = useData()
 const activeTab = ref('home')
 const showLangMenu = ref(false)
 const topPromoProgress = ref(1)
+const topPromoDismissed = ref(false)
 const topPromoIntroProgress = ref(0)
 const topPromoColorProgress = ref(0)
 let topPromoIntroRaf = 0
@@ -17,7 +30,7 @@ const WELCOME_SEEN_KEY = 'easy-vibe-welcome-seen'
 
 // Appendix Scroll Logic
 const appendixWrapper = ref(null)
-const pmSection = ref(null)
+const vibeStoriesSection = ref(null)
 const totalPages = ref(1)
 const currentPage = ref(0)
 
@@ -54,6 +67,14 @@ const scrollToPage = (pageIndex) => {
   }
 }
 
+const scrollAppendixByPage = (direction) => {
+  const nextPage = Math.min(
+    totalPages.value - 1,
+    Math.max(0, currentPage.value + direction)
+  )
+  scrollToPage(nextPage)
+}
+
 const autoScroll = () => {
   if (appendixWrapper.value) {
     const { scrollLeft, clientWidth, scrollWidth } = appendixWrapper.value
@@ -71,11 +92,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe 教程',
       home: '首页',
+      stories: '用户故事',
       pm: '零基础入门',
       junior: '初中级开发',
       senior: '高级开发',
       appendix: '附录',
       start: '开始学习'
+    },
+    stories: {
+      cat: '用户故事',
+      title: '看见每一个<br><span class="highlight">闪亮的你</span>',
+      sub: '加入他们，分享你的 vibe coding 故事',
+      s1: { title: '放弃月入过万，他在农村小学带孩子们“用AI赶苍蝇”', author: '小学老师小浩' },
+      s2: { title: '期末考试周，我偷偷用AI造了个“校园闲鱼”', author: '一位大二学生' },
+      s3: { title: '我给每个学生，做了一个不会累的“学霸同桌”', author: '高中信息技术老师' },
+      s4: { title: '48岁货车司机，熬了几个通宵，硬是用AI磕出一个出海工具站', author: '货车司机老黄' },
+      authorPrefix: '讲述者：',
+      ui: {
+        prevLabel: '上一则故事',
+        nextLabel: '下一则故事',
+        selectLabel: '查看这个故事',
+        imageAlt: '用户故事封面'
+      }
     },
     stage1: {
       cat: 'Stage 1 · 零基础入门',
@@ -109,10 +147,22 @@ const i18n = {
       sub: '从前端到后端，从数据库到上线。',
       cards: [
         {
-          title: '全栈路径总览',
-          headline: '先看清全局再动手。',
-          desc: '一页看懂 Stage 2：前端、后端、数据库与部署如何串成完整链路。',
-          link: '/zh-cn/stage-2/'
+          title: '素材生成 Agent',
+          headline: '先把素材生产提速。',
+          desc: '从 Lovart 和 Nanobanana 出发，搭建自己的素材生产工作流和绘图 Agent。',
+          link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
+        },
+        {
+          title: 'Figma 与 MasterGo',
+          headline: '先把设计工具用顺。',
+          desc: '掌握专业 UI 设计工具的基础操作，理解从设计稿到开发协作的关键链路。',
+          link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
+        },
+        {
+          title: '设计稿转代码',
+          headline: '把原型真正变成页面。',
+          desc: '学习如何将设计原型转成可以在浏览器里运行的前端代码，减少手工重搭。',
+          link: '/zh-cn/stage-2/frontend/2.6-design-to-code/'
         },
         {
           title: '真实数据项目',
@@ -125,6 +175,12 @@ const i18n = {
           headline: '让世界看到你的作品。',
           desc: '使用 CloudBase、Vercel、Zeabur 等平台，一口气打通从代码到公网访问的完整流程。',
           link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
+        },
+        {
+          title: 'AI 知识库集成',
+          headline: '让应用接上智能问答。',
+          desc: '学习用 Dify 构建 AI 应用和知识库，把检索增强能力接进你的真实产品。',
+          link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
         }
       ]
     },
@@ -232,11 +288,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe Tutorial',
       home: 'Home',
+      stories: 'Vibe Stories',
       pm: 'Product Manager',
       junior: 'Junior Dev',
       senior: 'Senior Dev',
       appendix: 'Appendix',
       start: 'Start Learning'
+    },
+    stories: {
+      cat: 'Vibe Stories',
+      title: 'Meet every <br><span class="highlight">shining builder.</span>',
+      sub: 'See how people from different backgrounds use AI to solve real problems.',
+      s1: { title: 'He gave up a high salary to help rural kids "fight flies" with AI', author: 'Xiaohao, primary school teacher' },
+      s2: { title: 'During finals week, I secretly built a campus marketplace with AI', author: 'A sophomore student' },
+      s3: { title: 'I built every student a tireless AI study buddy', author: 'A high school IT teacher' },
+      s4: { title: 'A 48-year-old truck driver stayed up for nights to build an overseas AI tool site', author: 'Lao Huang, truck driver' },
+      authorPrefix: 'By',
+      ui: {
+        prevLabel: 'Previous story',
+        nextLabel: 'Next story',
+        selectLabel: 'View this story',
+        imageAlt: 'Vibe story cover'
+      }
     },
     stage1: {
       cat: 'Stage 1 · Getting Started',
@@ -270,10 +343,22 @@ const i18n = {
       sub: 'Understand the full journey from frontend to backend, database and deployment.',
       cards: [
         {
-          title: 'Stage Overview',
-          headline: 'See the whole map first.',
-          desc: 'Start from the Stage 2 overview and understand how frontend, backend and infra fit together.',
-          link: '/zh-cn/stage-2/'
+          title: 'Asset Agent',
+          headline: 'Speed up content production.',
+          desc: 'Build your own design-asset workflow and drawing agent with Lovart and Nanobanana.',
+          link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
+        },
+        {
+          title: 'Figma & MasterGo',
+          headline: 'Get fluent with design tools.',
+          desc: 'Learn the basics of modern UI design tools and how design files flow into development.',
+          link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
+        },
+        {
+          title: 'Design to Code',
+          headline: 'Turn mockups into pages.',
+          desc: 'Convert prototypes into real frontend code that runs in the browser instead of staying as static designs.',
+          link: '/zh-cn/stage-2/frontend/2.6-design-to-code/'
         },
         {
           title: 'Real Data Project',
@@ -286,6 +371,12 @@ const i18n = {
           headline: 'Ship it to the world.',
           desc: 'Use CloudBase, Vercel and Zeabur to turn local projects into publicly reachable sites.',
           link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
+        },
+        {
+          title: 'AI Knowledge Base',
+          headline: 'Plug AI into the app.',
+          desc: 'Use Dify to build AI workflows and knowledge-base powered product experiences.',
+          link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
         }
       ]
     },
@@ -395,11 +486,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe チュートリアル',
       home: 'ホーム',
+      stories: 'ユーザーストーリー',
       pm: 'プロダクトマネージャー',
       junior: '初中級開発者',
       senior: '上級開発者',
       appendix: '付録',
       start: '学習を開始'
+    },
+    stories: {
+      cat: 'ユーザーストーリー',
+      title: 'それぞれの<br><span class="highlight">輝く物語を見よう。</span>',
+      sub: 'さまざまな背景の人たちが、AIで現実の課題をどう解決したかを紹介します。',
+      s1: { title: '高収入の仕事を辞め、農村の子どもたちとAIで「ハエ対策」アプリを作った先生', author: '小学校教師 小浩' },
+      s2: { title: '期末試験の週に、AIでこっそり「学内版フリマ」を作った', author: '大学2年生' },
+      s3: { title: '生徒一人ひとりに、疲れない「AI優等生の隣の席」を作った', author: '高校の情報技術教師' },
+      s4: { title: '48歳のトラック運転手が、徹夜で海外向けAIツールサイトを作り上げた', author: 'トラック運転手 老黄' },
+      authorPrefix: '語り手：',
+      ui: {
+        prevLabel: '前のストーリー',
+        nextLabel: '次のストーリー',
+        selectLabel: 'このストーリーを見る',
+        imageAlt: 'ユーザーストーリーのカバー'
+      }
     },
     stage1: {
       cat: 'Stage 1 · 初心者とPM',
@@ -518,11 +626,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe 教學',
       home: '首頁',
+      stories: '使用者故事',
       pm: '產品經理',
       junior: '初中級開發',
       senior: '高級開發',
       appendix: '附錄',
       start: '開始學習'
+    },
+    stories: {
+      cat: '使用者故事',
+      title: '看見每一個<br><span class="highlight">閃光的你。</span>',
+      sub: '看看不同背景的人，如何用 AI 解決真實問題、做出真實產品。',
+      s1: { title: '放棄月入過萬，他在鄉村小學帶孩子們「用 AI 趕蒼蠅」', author: '小學老師小浩' },
+      s2: { title: '期末考週，我偷偷用 AI 做了個「校園閒魚」', author: '一位大二學生' },
+      s3: { title: '我給每個學生，做了一個不會累的「學霸同桌」', author: '高中資訊科技老師' },
+      s4: { title: '48 歲貨車司機熬了幾個通宵，硬是用 AI 做出一個出海工具站', author: '貨車司機老黃' },
+      authorPrefix: '講述者：',
+      ui: {
+        prevLabel: '上一則故事',
+        nextLabel: '下一則故事',
+        selectLabel: '查看這個故事',
+        imageAlt: '使用者故事封面'
+      }
     },
     stage1: {
       cat: 'Stage 1 · 新手與產品原型',
@@ -639,11 +764,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe 튜토리얼',
       home: '홈',
+      stories: '사용자 이야기',
       pm: '제품 관리자',
       junior: '초/중급 개발자',
       senior: '고급 개발자',
       appendix: '부록',
       start: '학습 시작'
+    },
+    stories: {
+      cat: '사용자 이야기',
+      title: '빛나는 모두의<br><span class="highlight">이야기를 만나보세요.</span>',
+      sub: '서로 다른 배경의 사람들이 AI로 현실의 문제를 어떻게 해결했는지 살펴보세요.',
+      s1: { title: '높은 월급을 포기하고 시골 초등학교 아이들과 AI로 "파리 막기"를 만든 선생님', author: '초등학교 교사 샤오하오' },
+      s2: { title: '기말고사 주간에 몰래 AI로 "캠퍼스 중고장터"를 만든 이야기', author: '대학교 2학년 학생' },
+      s3: { title: '모든 학생에게 지치지 않는 "AI 우등생 짝꿍"을 만들어 준 선생님', author: '고등학교 정보기술 교사' },
+      s4: { title: '48세 트럭 운전사가 며칠 밤을 새워 해외용 AI 툴 사이트를 만든 이야기', author: '트럭 운전사 라오황' },
+      authorPrefix: '화자:',
+      ui: {
+        prevLabel: '이전 이야기',
+        nextLabel: '다음 이야기',
+        selectLabel: '이 이야기 보기',
+        imageAlt: '사용자 이야기 표지'
+      }
     },
     stage1: {
       cat: 'Stage 1 · 초보자 & PM',
@@ -762,11 +904,28 @@ const i18n = {
     nav: {
       title: 'Tutorial Easy-Vibe',
       home: 'Inicio',
+      stories: 'Historias de usuarios',
       pm: 'Gerente de Producto',
       junior: 'Desarrollador Junior',
       senior: 'Desarrollador Senior',
       appendix: 'Apéndice',
       start: 'Empezar'
+    },
+    stories: {
+      cat: 'Historias de usuarios',
+      title: 'Conoce cada <br><span class="highlight">historia que brilla.</span>',
+      sub: 'Descubre cómo personas de distintos contextos usan la IA para resolver problemas reales.',
+      s1: { title: 'Dejó un salario de cinco cifras para ayudar a niños rurales a "ahuyentar moscas" con IA', author: 'Xiaohao, maestro de primaria rural' },
+      s2: { title: 'Durante la semana de finales, construí en secreto un mercado universitario con IA', author: 'Una estudiante de segundo año' },
+      s3: { title: 'Le construí a cada alumno un compañero de estudio con IA que nunca se cansa', author: 'Un profesor de informática de secundaria' },
+      s4: { title: 'Un camionero de 48 años pasó varias noches despierto para crear una web de herramientas de IA para el extranjero', author: 'Lao Huang, camionero' },
+      authorPrefix: 'Por',
+      ui: {
+        prevLabel: 'Historia anterior',
+        nextLabel: 'Siguiente historia',
+        selectLabel: 'Ver esta historia',
+        imageAlt: 'Portada de la historia'
+      }
     },
     stage1: {
       cat: 'Stage 1 · Principiante y PM',
@@ -885,11 +1044,28 @@ const i18n = {
     nav: {
       title: 'Tutoriel Easy-Vibe',
       home: 'Accueil',
+      stories: 'Histoires d’utilisateurs',
       pm: 'Chef de Produit',
       junior: 'Dév Junior',
       senior: 'Dév Senior',
       appendix: 'Annexe',
       start: 'Commencer'
+    },
+    stories: {
+      cat: 'Histoires d’utilisateurs',
+      title: 'Découvrez chaque <br><span class="highlight">parcours inspirant.</span>',
+      sub: 'Voyez comment des personnes de tous horizons utilisent l’IA pour résoudre de vrais problèmes.',
+      s1: { title: 'Il a quitté un salaire confortable pour aider des enfants d’une école rurale à "chasser les mouches" avec l’IA', author: 'Xiaohao, instituteur' },
+      s2: { title: 'Pendant la semaine des examens, j’ai secrètement créé une marketplace de campus avec l’IA', author: 'Une étudiante de deuxième année' },
+      s3: { title: 'J’ai créé pour chaque élève un binôme d’étude IA qui ne se fatigue jamais', author: 'Un professeur d’informatique au lycée' },
+      s4: { title: 'Un chauffeur routier de 48 ans a veillé plusieurs nuits pour lancer un site d’outils IA à l’international', author: 'Lao Huang, chauffeur routier' },
+      authorPrefix: 'Par',
+      ui: {
+        prevLabel: 'Histoire précédente',
+        nextLabel: 'Histoire suivante',
+        selectLabel: 'Voir cette histoire',
+        imageAlt: 'Couverture de l’histoire'
+      }
     },
     stage1: {
       cat: 'Stage 1 · Débutant & PM',
@@ -1009,11 +1185,28 @@ const i18n = {
     nav: {
       title: 'Easy-Vibe Tutorial',
       home: 'Startseite',
+      stories: 'Nutzergeschichten',
       pm: 'Produktmanager',
       junior: 'Junior Dev',
       senior: 'Senior Dev',
       appendix: 'Anhang',
       start: 'Starten'
+    },
+    stories: {
+      cat: 'Nutzergeschichten',
+      title: 'Entdecke jede <br><span class="highlight">inspirierende Geschichte.</span>',
+      sub: 'Sieh, wie Menschen mit ganz unterschiedlichen Hintergründen mit KI echte Probleme lösen.',
+      s1: { title: 'Er gab ein hohes Gehalt auf, um Kindern auf dem Land mit KI beim "Fliegenvertreiben" zu helfen', author: 'Xiaohao, Grundschullehrer' },
+      s2: { title: 'In der Prüfungswoche habe ich heimlich mit KI einen Campus-Marktplatz gebaut', author: 'Eine Studentin im zweiten Jahr' },
+      s3: { title: 'Ich habe jedem Schüler einen unermüdlichen KI-Lernpartner gebaut', author: 'Ein Informatiklehrer an einer Oberschule' },
+      s4: { title: 'Ein 48-jähriger Lkw-Fahrer blieb mehrere Nächte wach, um eine internationale KI-Toolseite zu bauen', author: 'Lao Huang, Lkw-Fahrer' },
+      authorPrefix: 'Von',
+      ui: {
+        prevLabel: 'Vorherige Geschichte',
+        nextLabel: 'Nächste Geschichte',
+        selectLabel: 'Diese Geschichte ansehen',
+        imageAlt: 'Titelbild der Geschichte'
+      }
     },
     stage1: {
       cat: 'Stage 1 · Anfänger & PM',
@@ -1130,13 +1323,30 @@ const i18n = {
   },
   'ar-sa': {
     nav: {
-      title: 'Easy-Vibe درس تعليمي',
+      title: 'دليل Easy-Vibe',
       home: 'الرئيسية',
+      stories: 'قصص المستخدمين',
       pm: 'مدير المنتج',
       junior: 'مطور مبتدئ',
       senior: 'مطور خبير',
       appendix: 'ملحق',
       start: 'ابدأ التعلم'
+    },
+    stories: {
+      cat: 'قصص المستخدمين',
+      title: 'تعرّف على كل <br><span class="highlight">قصة ملهمة.</span>',
+      sub: 'اكتشف كيف يستخدم أشخاص من خلفيات مختلفة الذكاء الاصطناعي لحل مشكلات حقيقية.',
+      s1: { title: 'تخلّى عن راتب مرتفع ليساعد أطفال مدرسة ريفية على "طرد الذباب" باستخدام الذكاء الاصطناعي', author: 'شياوهاو، معلم مدرسة ابتدائية' },
+      s2: { title: 'خلال أسبوع الامتحانات النهائية، بنيت سرًا سوقًا جامعيًا باستخدام الذكاء الاصطناعي', author: 'طالبة في السنة الثانية' },
+      s3: { title: 'صنعت لكل طالب زميل دراسة بالذكاء الاصطناعي لا يتعب أبدًا', author: 'معلم تقنية معلومات في الثانوية' },
+      s4: { title: 'سائق شاحنة يبلغ 48 عامًا سهر عدة ليالٍ ليبني موقع أدوات ذكاء اصطناعي للأسواق الخارجية', author: 'لاو هوانغ، سائق شاحنة' },
+      authorPrefix: 'الراوي:',
+      ui: {
+        prevLabel: 'القصة السابقة',
+        nextLabel: 'القصة التالية',
+        selectLabel: 'عرض هذه القصة',
+        imageAlt: 'غلاف القصة'
+      }
     },
     stage1: {
       cat: 'Stage 1 · مدير المنتج',
@@ -1256,11 +1466,28 @@ const i18n = {
     nav: {
       title: 'Hướng dẫn Easy-Vibe',
       home: 'Trang chủ',
+      stories: 'Câu chuyện người dùng',
       pm: 'Quản lý sản phẩm',
       junior: 'Dev Sơ/Trung cấp',
       senior: 'Dev Cao cấp',
       appendix: 'Phụ lục',
       start: 'Bắt đầu học'
+    },
+    stories: {
+      cat: 'Câu chuyện người dùng',
+      title: 'Gặp gỡ từng <br><span class="highlight">câu chuyện tỏa sáng.</span>',
+      sub: 'Khám phá cách những người từ nhiều xuất phát điểm khác nhau dùng AI để giải quyết vấn đề thật.',
+      s1: { title: 'Anh bỏ mức lương cao để giúp trẻ em vùng quê "đuổi ruồi" bằng AI', author: 'Xiaohao, giáo viên tiểu học' },
+      s2: { title: 'Trong tuần thi cuối kỳ, tôi lặng lẽ làm một chợ đồ cũ trong trường bằng AI', author: 'Một sinh viên năm hai' },
+      s3: { title: 'Tôi tạo cho mỗi học sinh một bạn học giỏi AI không biết mệt', author: 'Một giáo viên CNTT trung học' },
+      s4: { title: 'Một tài xế xe tải 48 tuổi thức trắng nhiều đêm để làm một website công cụ AI cho thị trường quốc tế', author: 'Lao Huang, tài xế xe tải' },
+      authorPrefix: 'Người kể:',
+      ui: {
+        prevLabel: 'Câu chuyện trước',
+        nextLabel: 'Câu chuyện tiếp theo',
+        selectLabel: 'Xem câu chuyện này',
+        imageAlt: 'Ảnh bìa câu chuyện'
+      }
     },
     stage1: {
       cat: 'Stage 1 · Người mới & PM',
@@ -1382,6 +1609,8 @@ const t = computed(() => {
   const code = lang.value ? lang.value.toLowerCase() : 'zh-cn'
   return i18n[code] || i18n['en']
 })
+
+provide('t', t)
 
 const isCjkLocale = computed(() => {
   const code = lang.value ? lang.value.toLowerCase() : ''
@@ -1556,6 +1785,27 @@ const toggleLangMenu = () => {
   showLangMenu.value = !showLangMenu.value
 }
 
+const updateHash = (id) => {
+  const targetHash = id === 'home' ? '#home' : `#${id}`
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  const nextUrl = `${window.location.pathname}${window.location.search}${targetHash}`
+  if (currentUrl !== nextUrl) {
+    window.history.replaceState(null, '', nextUrl)
+  }
+}
+
+const syncTopPromoWithHash = () => {
+  const rawHash = window.location.hash.replace(/^#/, '')
+  const targetId = rawHash || 'home'
+  if (targetId === 'home') {
+    topPromoDismissed.value = false
+    topPromoProgress.value = 1
+    return
+  }
+  topPromoDismissed.value = true
+  topPromoProgress.value = 0
+}
+
 const changeLang = (targetLocale) => {
   const currentPath = router.route.path
   // Find current locale based on path prefix
@@ -1574,7 +1824,8 @@ const changeLang = (targetLocale) => {
     newPath = `/${targetLocale}/`
   }
 
-  router.go(withBase(newPath))
+  const hash = window.location.hash || ''
+  router.go(withBase(`${newPath}${hash}`))
   showLangMenu.value = false
 }
 
@@ -1582,17 +1833,43 @@ const scrollTo = (id) => {
   if (id === 'home') {
     window.scrollTo({ top: 0, behavior: 'smooth' })
     activeTab.value = 'home'
+    updateHash('home')
+    syncTopPromoWithHash()
+    updateTopPromoVisibility()
     return
   }
   const el = document.getElementById(id)
   if (el) {
-    const navHeight = 48 // Approximate nav height
-    // Use getBoundingClientRect for better accuracy
+    const navHeight = 48
     const elementPosition = el.getBoundingClientRect().top + window.pageYOffset
-    // Increase buffer to ensure section header is clearly visible below nav
-    const offset = elementPosition - navHeight - 64
+    const extraOffset = id === 'vibe-stories' ? 20 : 40
+    const offset = elementPosition - navHeight - extraOffset
     window.scrollTo({ top: offset, behavior: 'smooth' })
     activeTab.value = id
+    updateHash(id)
+    syncTopPromoWithHash()
+  }
+}
+
+const scrollToHashTarget = (behavior = 'auto') => {
+  const rawHash = window.location.hash.replace(/^#/, '')
+  const targetId = rawHash || 'home'
+  if (targetId === 'home') {
+    window.scrollTo({ top: 0, behavior })
+    activeTab.value = 'home'
+    syncTopPromoWithHash()
+    updateTopPromoVisibility()
+    return
+  }
+  const el = document.getElementById(targetId)
+  if (el) {
+    const navHeight = 48
+    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset
+    const extraOffset = targetId === 'vibe-stories' ? 20 : 40
+    const offset = elementPosition - navHeight - extraOffset
+    window.scrollTo({ top: offset, behavior })
+    activeTab.value = targetId
+    syncTopPromoWithHash()
   }
 }
 
@@ -1604,12 +1881,17 @@ const closeLangMenu = (e) => {
 }
 
 const updateTopPromoVisibility = () => {
-  if (!pmSection.value) {
+  if (topPromoDismissed.value) {
+    topPromoProgress.value = 0
+    return
+  }
+  if (!vibeStoriesSection.value) {
     topPromoProgress.value = 1
     return
   }
   const navHeight = 44
-  const sectionTop = pmSection.value.getBoundingClientRect().top + window.pageYOffset
+  const sectionTop =
+    vibeStoriesSection.value.getBoundingClientRect().top + window.pageYOffset
   const endY = sectionTop - navHeight
   const startY = endY - 96
   const scrollY = window.pageYOffset
@@ -1619,6 +1901,7 @@ const updateTopPromoVisibility = () => {
   }
   if (scrollY >= endY) {
     topPromoProgress.value = 0
+    topPromoDismissed.value = true
     return
   }
   topPromoProgress.value = (endY - scrollY) / (endY - startY)
@@ -1711,15 +1994,21 @@ onMounted(() => {
       return
     }
   }
+
   document.addEventListener('click', closeLangMenu)
   if (appendixWrapper.value) {
     appendixWrapper.value.addEventListener('scroll', onAppendixScroll)
     updatePagination()
     window.addEventListener('resize', updatePagination)
   }
+  syncTopPromoWithHash()
+  window.setTimeout(() => {
+    scrollToHashTarget('auto')
+  }, 0)
   updateTopPromoVisibility()
   window.addEventListener('scroll', updateTopPromoVisibility, { passive: true })
   window.addEventListener('resize', updateTopPromoVisibility)
+  window.addEventListener('hashchange', scrollToHashTarget)
 })
 
 onUnmounted(() => {
@@ -1742,6 +2031,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', updatePagination)
   window.removeEventListener('scroll', updateTopPromoVisibility)
   window.removeEventListener('resize', updateTopPromoVisibility)
+  window.removeEventListener('hashchange', scrollToHashTarget)
 })
 
 // Stage 1: 产品经理 (Web 原型)
@@ -1775,30 +2065,52 @@ const stage1Cards = [
 // Stage 2: 初中级开发 (全栈)
 const stage2Cards = [
   {
-    title: '全栈路径总览',
-    headline: '先看清全局再动手。',
-    desc: '一页看懂 Stage 2：前端、后端、数据库与部署如何串成完整链路。',
     imageColor: '#E0C3FC',
-    visualType: 'code',
-    link: '/zh-cn/stage-2/'
+    image: stage2LovartCover,
+    imageAlt: 'Lovart 素材生产 Agent 界面截图',
+    link: '/zh-cn/stage-2/frontend/2.0-lovart-assets/'
   },
   {
-    title: '真实数据项目',
-    headline: '连上真正的数据库。',
-    desc: '在 Supabase 上设计数据表和权限，用真实读写操作支撑你的产品数据层。',
+    imageColor: '#D8C4F8',
+    image: stage2FigmaCover,
+    imageAlt: 'Figma 与 MasterGo 设计工具截图',
+    link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
+  },
+  {
+    imageColor: '#C7DDFB',
+    image: stage2DesignToCodeCover,
+    imageAlt: '设计稿转代码示意截图',
+    link: '/zh-cn/stage-2/frontend/2.6-design-to-code/'
+  },
+  {
     imageColor: '#8EC5FC',
-    visualType: 'server',
+    image: stage2SupabaseCover,
+    imageAlt: 'Supabase 数据库控制台截图',
     link: '/zh-cn/stage-2/backend/2.2-database-supabase/'
   },
   {
-    title: '部署上线',
-    headline: '让世界看到你的作品。',
-    desc: '使用 CloudBase、Vercel、Zeabur 等平台，一口气打通从代码到公网访问的完整流程。',
     imageColor: '#96E6A1',
-    visualType: 'cloud',
+    image: stage2ZeaburCover,
+    imageAlt: 'Zeabur 部署流程截图',
     link: '/zh-cn/stage-2/backend/2.5-zeabur-deployment/'
+  },
+  {
+    imageColor: '#A7F3D0',
+    image: stage2DifyCover,
+    imageAlt: 'Dify 知识库工作台截图',
+    link: '/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/'
   }
 ]
+
+const localizedStage2Cards = computed(() => {
+  return t.value.stage2.cards.map((card, index) => {
+    const visual = stage2Cards.find((item) => item.link === card.link) || stage2Cards[index]
+    return {
+      ...card,
+      ...visual
+    }
+  })
+})
 
 // Stage 3: 高级开发 (小程序 & AI)
 const stage3Cards = [
@@ -1807,6 +2119,8 @@ const stage3Cards = [
     desc: '用 Electron 做语音转文字桌面程序，一次开发同时跑在 Windows、macOS、Linux。',
     tag: 'Stage 3',
     visualType: 'phone',
+    image: stage3ElectronCover,
+    imageAlt: 'Electron 语音转文字桌面应用预览图',
     link: '/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/'
   },
   {
@@ -1814,6 +2128,8 @@ const stage3Cards = [
     desc: '用 Claude Agent Teams 组建 AI 开发小队，多代理协作完成大型任务。',
     tag: 'Advanced',
     visualType: 'ai',
+    image: stage3AgentTeamsCover,
+    imageAlt: 'Claude Agent Teams 协作流程封面图',
     link: '/zh-cn/stage-3/core-skills/agent-teams/'
   },
   {
@@ -1821,6 +2137,8 @@ const stage3Cards = [
     desc: '用循环脚本和 Ralph 插件管理长时间任务，让 Claude Code 过夜稳定跑完工作。',
     tag: 'Architecture',
     visualType: 'arch',
+    image: stage3LongRunningCover,
+    imageAlt: 'Claude Code 长时间执行与循环任务封面图',
     link: '/zh-cn/stage-3/core-skills/long-running-tasks/'
   },
   {
@@ -1828,6 +2146,9 @@ const stage3Cards = [
     desc: '搭建个人网站与技术博客，让你的项目和经验长期沉淀并被更多人看到。',
     tag: 'Brand',
     visualType: 'brand',
+    image: stage3PersonalBrandCover,
+    imageAlt: '个人网站与学术博客示例截图',
+    imageClass: 'prod-image--personal-brand',
     link: '/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/'
   }
 ]
@@ -1937,6 +2258,13 @@ const appendixCards = [
               {{ t.nav.home }}
             </button>
             <button
+              :class="{ active: activeTab === 'vibe-stories' }"
+              class="nav-link-item"
+              @click="scrollTo('vibe-stories')"
+            >
+              {{ t.nav.stories || 'Vibe 故事' }}
+            </button>
+            <button
               :class="{ active: activeTab === 'pm' }"
               class="nav-link-item"
               @click="scrollTo('pm')"
@@ -2019,85 +2347,96 @@ const appendixCards = [
       style="height: 0"
     />
 
-    <!-- Stage 1: Product Manager -->
+    <!-- Vibe Stories -->
     <section
-      id="pm"
-      ref="pmSection"
-      class="section-container section-pm"
+      id="vibe-stories"
+      ref="vibeStoriesSection"
+      class="section-container"
     >
-      <div class="section-header">
-        <h2 class="section-category">
-          {{ t.stage1.cat }}
-        </h2>
-        <h3
-          class="section-headline"
-          v-html="t.stage1.title"
-        />
-        <p class="section-sub">
-          {{ t.stage1.sub }}
-        </p>
-      </div>
-
-      <div class="feature-grid">
-        <a
-          v-for="(card, i) in stage1Cards"
-          :key="i"
-          :href="withBase(t.stage1.cards[i].link)"
-          class="feature-card glass"
-        >
-          <div
-            class="feature-icon"
-            :style="{ background: card.color }"
-          >
-            {{ card.icon }}
-          </div>
-          <div class="feature-content">
-            <h4>{{ t.stage1.cards[i].title }}</h4>
-            <p>{{ t.stage1.cards[i].desc }}</p>
-          </div>
-        </a>
-      </div>
+      <VibeStories />
     </section>
 
-    <!-- Stage 2: Junior/Mid Dev -->
-    <section
-      id="junior"
-      class="section-container section-junior"
-    >
-      <div class="section-header">
-        <h2 class="section-category">
-          {{ t.stage2.cat }}
-        </h2>
-        <h3
-          class="section-headline"
-          v-html="t.stage2.title"
-        />
-        <p class="section-sub">
-          {{ t.stage2.sub }}
-        </p>
-      </div>
+    <div class="section-band section-band-learning">
+      <!-- Stage 1: Product Manager -->
+      <section id="pm" class="section-container section-pm">
+        <div class="section-header">
+          <h2 class="section-category">
+            {{ t.stage1.cat }}
+          </h2>
+          <h3
+            class="section-headline"
+            v-html="t.stage1.title"
+          />
+          <p class="section-sub">
+            {{ t.stage1.sub }}
+          </p>
+        </div>
 
-      <div class="comm-grid">
-        <a
-          v-for="(card, index) in stage2Cards"
-          :key="index"
-          :href="withBase(t.stage2.cards[index].link)"
-          class="comm-card glass"
-        >
-          <div
-            class="comm-visual"
-            :style="{ backgroundColor: card.imageColor }"
+        <div class="feature-grid">
+          <a
+            v-for="(card, i) in stage1Cards"
+            :key="i"
+            :href="withBase(t.stage1.cards[i].link)"
+            class="feature-card glass"
           >
-            <div class="visual-placeholder" />
-          </div>
-          <div class="comm-text">
-            <h4 class="comm-title">{{ t.stage2.cards[index].title }}</h4>
-            <p class="comm-desc">{{ t.stage2.cards[index].desc }}</p>
-            <span class="comm-note">进一步了解 ›</span>
-          </div>
-        </a>
-      </div>
-    </section>
+            <div
+              class="feature-icon"
+              :style="{ background: card.color }"
+            >
+              {{ card.icon }}
+            </div>
+            <div class="feature-content">
+              <h4>{{ t.stage1.cards[i].title }}</h4>
+              <p>{{ t.stage1.cards[i].desc }}</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Stage 2: Junior/Mid Dev -->
+      <section
+        id="junior"
+        class="section-container section-junior"
+      >
+        <div class="section-header">
+          <h2 class="section-category">
+            {{ t.stage2.cat }}
+          </h2>
+          <h3
+            class="section-headline"
+            v-html="t.stage2.title"
+          />
+          <p class="section-sub">
+            {{ t.stage2.sub }}
+          </p>
+        </div>
+
+        <div class="comm-grid">
+          <a
+            v-for="(card, index) in localizedStage2Cards"
+            :key="index"
+            :href="withBase(card.link)"
+            class="comm-card glass"
+          >
+            <div
+              class="comm-visual"
+              :style="{ backgroundColor: card.imageColor }"
+            >
+              <img
+                :src="card.image"
+                :alt="card.imageAlt || card.title"
+                loading="lazy"
+              >
+            </div>
+            <div class="comm-text">
+              <h4 class="comm-title">{{ card.title }}</h4>
+              <p class="comm-desc">{{ card.desc }}</p>
+              <span class="comm-note">进一步了解 ›</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
 
     <!-- Stage 3: Senior Dev -->
     <section
@@ -2128,7 +2467,14 @@ const appendixCards = [
             <div class="prod-tag">{{ card.tag }}</div>
             <h4>{{ t.stage3.cards[index].title }}</h4>
             <p>{{ t.stage3.cards[index].desc }}</p>
-            <div class="prod-visual" />
+            <div class="prod-visual">
+              <img
+                :src="card.image"
+                :alt="card.imageAlt"
+                :class="card.imageClass"
+                loading="lazy"
+              >
+            </div>
           </a>
         </div>
       </div>
@@ -2163,55 +2509,72 @@ const appendixCards = [
             :href="withBase(card.link)"
             class="appendix-card"
           >
-            <div
-              class="appendix-icon-wrapper"
-              :class="'icon-' + (index % 4)"
-            >
-              <span class="appendix-emoji">{{
-                ['🤖', '🧠', '🎨', '🚀', '⚙️', '💾', '🛠️', '🌐'][index] || '📚'
-              }}</span>
-            </div>
-            <div class="appendix-content">
-              <p class="appendix-text">
-                <span class="appendix-title">{{ card.title }}.</span>
-                {{ card.desc }}
-              </p>
-            </div>
+            <span class="appendix-emoji">{{
+              ['🤖', '🧠', '🎨', '🚀', '⚙️', '💾', '🛠️', '🌐'][index] || '📚'
+            }}</span>
+            <span class="appendix-title">{{ card.title }}</span>
           </a>
         </div>
       </div>
 
-      <!-- Slider Indicator -->
       <div
         v-if="totalPages > 1"
-        class="appendix-controls"
+        class="appendix-scroll-hint"
       >
-        <button
-          class="control-btn play-btn"
-          aria-label="Auto Scroll"
-          @click="autoScroll"
-        >
-          <svg
-            width="12"
-            height="14"
-            viewBox="0 0 12 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M10.5 5.76795C11.1667 6.15285 11.1667 7.1151 10.5 7.5L2.25 12.2631C1.58333 12.648 0.75 12.1669 0.75 11.3971L0.75 1.87084C0.75 1.10104 1.58333 0.61991 2.25 1.00481L10.5 5.76795Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div class="indicator-track">
+        <div class="appendix-progress-track">
           <div
-            v-for="i in totalPages"
-            :key="i"
-            class="indicator-dot"
-            :class="{ active: currentPage === i - 1 }"
-            @click="scrollToPage(i - 1)"
+            class="appendix-progress-thumb"
+            :style="{
+              width: `${100 / totalPages}%`,
+              transform: `translateX(${currentPage * 100}%)`
+            }"
           />
+        </div>
+        <div class="appendix-scroll-actions">
+          <button
+            class="appendix-arrow-btn"
+            :class="{ disabled: currentPage === 0 }"
+            :disabled="currentPage === 0"
+            aria-label="向左滑动"
+            @click="scrollAppendixByPage(-1)"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M11.5 5.5L7 10L11.5 14.5"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            class="appendix-arrow-btn"
+            :class="{ disabled: currentPage >= totalPages - 1 }"
+            :disabled="currentPage >= totalPages - 1"
+            aria-label="向右滑动"
+            @click="scrollAppendixByPage(1)"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M8.5 5.5L13 10L8.5 14.5"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </section>
@@ -2298,9 +2661,35 @@ const appendixCards = [
   background: transparent;
 }
 
+#vibe-stories,
+#vibe-stories:focus,
+#vibe-stories:focus-visible,
+#vibe-stories:target {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 a {
   text-decoration: none;
   color: inherit;
+}
+
+:is(.feature-card, .comm-card, .prod-card, .appendix-card, .buy-btn) {
+  border-bottom: none !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:is(
+    .feature-card,
+    .comm-card,
+    .prod-card,
+    .appendix-card,
+    .buy-btn
+  ):is(:hover, :focus, :focus-visible, :active) {
+  border-bottom-color: transparent !important;
+  text-decoration: none !important;
+  outline: none !important;
 }
 
 .highlight {
@@ -2572,17 +2961,41 @@ a {
   padding: 0 40px;
 }
 
-.section-junior,
-.section-appendix {
+.section-band-learning {
+  width: 100vw;
+  max-width: none;
+  margin: 0 calc(50% - 50vw) 96px;
   background: #f5f5f7;
-  border-radius: 40px;
+  border-radius: 0;
+  padding-top: 64px;
+  padding-bottom: 64px;
+  padding-left: max(40px, calc((100vw - 1280px) / 2 + 40px));
+  padding-right: max(40px, calc((100vw - 1280px) / 2 + 40px));
+}
+
+.section-band-learning .section-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.section-band-learning .section-junior {
+  margin-top: 72px;
+}
+
+.section-appendix {
+  background: transparent;
+  border-radius: 0;
   padding-top: 64px;
   padding-bottom: 64px;
 }
 
-.dark .section-junior,
-.dark .section-appendix {
+.dark .section-band-learning {
   background: rgba(255, 255, 255, 0.03);
+}
+
+.dark .section-appendix {
+  background: transparent;
 }
 
 .section-header {
@@ -2688,41 +3101,53 @@ a {
 
 /* Communication Grid (Now used for Stage 2) */
 .comm-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 24px;
+  overflow-x: auto;
+  width: calc(100% + 40px);
+  margin: 0 -20px;
+  padding: 12px 20px 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.comm-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .comm-card {
+  flex: 0 0 380px;
   border-radius: 32px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.025);
   transition: transform 0.3s;
+  transform-origin: center top;
   display: block;
+  scroll-snap-align: start;
 }
 
 .comm-card:hover {
-  transform: translateY(-6px);
+  transform: scale(1.015);
 }
 
 .comm-visual {
   height: 220px;
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 
-.visual-placeholder {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  backdrop-filter: blur(10px);
+.comm-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .comm-text {
@@ -2758,9 +3183,16 @@ a {
   overflow-x: auto;
   padding-bottom: 40px;
   margin: 0 -20px;
-  padding: 0 20px 40px;
+  padding: 12px 20px 40px;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .scroll-track {
@@ -2773,7 +3205,7 @@ a {
   width: 300px;
   height: 400px;
   border-radius: 32px;
-  background: #fff;
+  background: #f7f7f9;
   padding: 30px;
   scroll-snap-align: center;
   text-decoration: none !important;
@@ -2781,12 +3213,13 @@ a {
   display: flex;
   flex-direction: column;
   transition: transform 0.3s;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transform-origin: center top;
+  border: 1px solid rgba(0, 0, 0, 0.025);
+  box-shadow: none;
 }
 
 .prod-card:hover {
-  transform: translateY(-6px);
+  transform: scale(1.015);
 }
 
 .prod-tag {
@@ -2817,19 +3250,33 @@ a {
 .prod-visual {
   margin-top: auto;
   height: 150px;
-  background: linear-gradient(135deg, #dbeafe 0%, #e5e7eb 100%);
   border-radius: 20px;
-  opacity: 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #dbeafe 0%, #e5e7eb 100%);
+}
+
+.prod-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.prod-visual img.prod-image--personal-brand {
+  transform: scale(1.18) translateY(-10px);
+  transform-origin: center top;
 }
 
 /* Appendix Horizontal Scroll */
 .appendix-scroll-wrapper {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding-bottom: 10px;
   margin: 0 -20px;
-  padding: 0 20px;
+  padding: 0 20px 12px;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
 }
 
 .appendix-scroll-wrapper::-webkit-scrollbar {
@@ -2837,172 +3284,123 @@ a {
 }
 
 .appendix-track {
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(280px, 1fr);
-  gap: 32px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
   width: max-content;
-  padding-bottom: 10px;
 }
 
 .appendix-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
   text-decoration: none !important;
   color: inherit !important;
-  background: #fff;
-  padding: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  background: transparent;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
   scroll-snap-align: start;
-  width: 100%;
-  min-height: 360px;
+  width: 120px;
+  min-height: 120px;
   transition: transform 0.25s ease;
+  text-align: center;
 }
 
-/* Slider Controls */
-.appendix-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 40px;
-}
-
-.control-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--vp-c-text-1);
-  transition: all 0.2s;
-}
-
-.control-btn:hover {
-  background: #f0f0f2;
-  transform: scale(1.05);
-}
-
-.indicator-track {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  height: 44px;
-}
-
-.indicator-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  background: #b8b8bd;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-  opacity: 0.5;
-}
-
-.indicator-dot.active {
-  width: 32px;
-  background: #1d1d1f;
-  opacity: 1;
-}
-
-.indicator-dot:hover {
-  opacity: 0.8;
-}
-
-/* Remove hover effects */
 .appendix-card:hover {
-  transform: translateY(-4px);
+  transform: scale(1.03);
 }
 
-.appendix-icon-wrapper {
-  width: 100%;
-  height: 190px;
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 88px;
-  margin-bottom: 14px;
-  /* Glassmorphism / VisionOS Style */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  /* No transition */
-}
-
-/* Remove hover effects on icon */
-.appendix-card:hover .appendix-icon-wrapper {
-  /* No transform or shadow change */
-}
-
-/* Transparent Tinted Gradients for icons (VisionOS Style) */
-/* AI - Blue */
-.icon-0 {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 122, 255, 0.16) 0%,
-    rgba(0, 122, 255, 0.06) 100%
-  );
-  border: 1px solid rgba(0, 122, 255, 0.15);
-}
-/* Frontend - Orange */
-.icon-1 {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 149, 0, 0.16) 0%,
-    rgba(255, 149, 0, 0.06) 100%
-  );
-  border: 1px solid rgba(255, 149, 0, 0.15);
-}
-/* Backend - Pink */
-.icon-2 {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 45, 85, 0.16) 0%,
-    rgba(255, 45, 85, 0.06) 100%
-  );
-  border: 1px solid rgba(255, 45, 85, 0.15);
-}
-/* General - Green */
-.icon-3 {
-  background: linear-gradient(
-    180deg,
-    rgba(52, 199, 89, 0.16) 0%,
-    rgba(52, 199, 89, 0.06) 100%
-  );
-  border: 1px solid rgba(52, 199, 89, 0.15);
-}
-
-.appendix-content {
-  text-align: left;
-}
-
-.appendix-text {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #6e6e73;
-  margin: 0;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+.appendix-emoji {
+  font-size: 52px;
+  line-height: 1;
+  display: block;
 }
 
 .appendix-title {
   font-weight: 600;
-  color: #1d1d1f;
-  margin-right: 6px;
-  font-size: 12px;
+  color: #3c3c43;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  white-space: normal;
+}
+
+.appendix-scroll-hint {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 20px;
+  min-height: 40px;
+}
+
+.appendix-progress-track {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(60, 60, 67, 0.08);
+  overflow: hidden;
+}
+
+.appendix-progress-thumb {
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(60, 60, 67, 0.28);
+  transition: transform 0.25s ease;
+}
+
+.appendix-scroll-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 56px;
+}
+
+.appendix-arrow-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(60, 60, 67, 0.05);
+  background: rgba(60, 60, 67, 0.05);
+  color: rgba(60, 60, 67, 0.62);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.appendix-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(60, 60, 67, 0.08);
+  color: rgba(60, 60, 67, 0.74);
+  transform: scale(1.04);
+}
+
+.appendix-arrow-btn.disabled,
+.appendix-arrow-btn:disabled {
+  opacity: 0.42;
+  cursor: default;
+  transform: none;
+}
+
+.appendix-arrow-btn.disabled:hover,
+.appendix-arrow-btn:disabled:hover {
+  background: rgba(60, 60, 67, 0.05);
+  color: rgba(60, 60, 67, 0.62);
 }
 
 /* Footer */
@@ -3255,10 +3653,6 @@ a {
     height: auto;
   }
 
-  .comm-grid {
-    grid-template-columns: 1fr;
-  }
-
   .nav-links {
     display: none;
   }
@@ -3271,11 +3665,21 @@ a {
     white-space: nowrap;
   }
 
-  .section-junior,
   .section-appendix {
-    border-radius: 28px;
     padding-top: 42px;
     padding-bottom: 42px;
+  }
+
+  .section-band-learning {
+    margin-bottom: 96px;
+    padding-top: 42px;
+    padding-bottom: 42px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .section-band-learning .section-junior {
+    margin-top: 56px;
   }
 
   .footer-callout {
@@ -3329,22 +3733,22 @@ a {
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
   height: 100%;
   position: relative;
   overflow: hidden;
   text-decoration: none !important;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.025);
 }
 
 .dark .feature-card {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   background: var(--vp-c-bg-mute);
 }
 
 .feature-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: scale(1.015);
+  box-shadow: none;
 }
 
 .feature-icon {
@@ -3388,6 +3792,10 @@ a {
   .feature-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .comm-card {
+    flex-basis: 340px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -3396,6 +3804,10 @@ a {
   }
   .feature-card {
     padding: 24px;
+  }
+
+  .comm-card {
+    flex-basis: min(86vw, 340px);
   }
 }
 </style>

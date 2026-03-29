@@ -386,6 +386,28 @@ const productManagerSidebarEn = [
     ]
   },
   {
+    text: 'Appendix: User Research and Validation',
+    collapsed: false,
+    items: [
+      {
+        text: 'Where to Find Ideas: 3 Reference Sources That Work Best for Beginners',
+        link: '/en/stage-1/appendix-idea-sources/'
+      },
+      {
+        text: 'Double Diamond: First Do the Right Thing, Then Do It Right',
+        link: '/en/stage-1/appendix-double-diamond/'
+      },
+      {
+        text: 'Use Jobs to Be Done to Find What Users Really Want to Get Done',
+        link: '/en/stage-1/appendix-jobs-to-be-done/'
+      },
+      {
+        text: 'The Mom Test: A User Interview Method for Validating Demand',
+        link: '/en/stage-1/appendix-mom-test/'
+      }
+    ]
+  },
+  {
     text: 'Appendix: Technical Solutions',
     collapsed: false,
     items: [
@@ -1175,6 +1197,28 @@ const productManagerSidebar = [
     ]
   },
   {
+    text: '附录：用户研究与需求验证',
+    collapsed: false,
+    items: [
+      {
+        text: '从哪里找点子：3 种最适合新手的参考来源',
+        link: '/zh-cn/stage-1/appendix-idea-sources/'
+      },
+      {
+        text: '双钻模型：先做对的事，再把事做对',
+        link: '/zh-cn/stage-1/appendix-double-diamond/'
+      },
+      {
+        text: '用 Jobs to Be Done 找到用户真正想完成的事',
+        link: '/zh-cn/stage-1/appendix-jobs-to-be-done/'
+      },
+      {
+        text: 'The Mom Test 用户访谈法',
+        link: '/zh-cn/stage-1/appendix-mom-test/'
+      }
+    ]
+  },
+  {
     text: '附录：技术方案',
     collapsed: false,
     items: [
@@ -1370,9 +1414,38 @@ Sitemap: ${siteUrl}/sitemap.xml
             text: '附录知识库',
             link: '/zh-cn/appendix/index',
             activeMatch: '/zh-cn/appendix/'
+          },
+          {
+            text: 'Vibe 故事',
+            link: '/zh-cn/vibe-stories/story-1',
+            activeMatch: '/zh-cn/vibe-stories/'
           }
         ],
         sidebar: {
+          '/zh-cn/vibe-stories/': [
+            {
+              text: 'Vibe 故事',
+              collapsed: false,
+              items: [
+                {
+                  text: '放弃月入过万，他在农村小学带孩子们“用AI赶苍蝇”',
+                  link: '/zh-cn/vibe-stories/story-1'
+                },
+                {
+                  text: '期末考试周，我偷偷用AI造了个“校园闲鱼”',
+                  link: '/zh-cn/vibe-stories/story-2'
+                },
+                {
+                  text: '我给每个学生，做了一个不会累的“学霸同桌”',
+                  link: '/zh-cn/vibe-stories/story-3'
+                },
+                {
+                  text: '48岁货车司机，熬了几个通宵，硬是用AI磕出一个出海工具站',
+                  link: '/zh-cn/vibe-stories/story-4'
+                }
+              ]
+            }
+          ],
           '/zh-cn/stage-0/': productManagerSidebar,
           '/zh-cn/stage-1/': productManagerSidebar,
           '/zh-cn/stage-2/': [
@@ -1389,7 +1462,7 @@ Sitemap: ${siteUrl}/sitemap.xml
                   link: '/zh-cn/stage-2/frontend/2.1-figma-mastergo/'
                 },
                 {
-                  text: '参考 UI 设计规范与多产品 UI 设计',
+                  text: '参考 UI 设计规范设计页面和按钮',
                   link: '/zh-cn/stage-2/frontend/2.3-multi-product-ui/'
                 },
                 {
@@ -1455,12 +1528,12 @@ Sitemap: ${siteUrl}/sitemap.xml
                   link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
                 },
                 {
-                  text: '构建第一个现代应用程序 - 全栈应用',
-                  link: '/zh-cn/stage-2/assignments/2.1-fullstack-app/'
+                  text: '大作业 1：第一个 SaaS 全栈应用——文案生成网站',
+                  link: '/zh-cn/stage-2/assignments/copywriting-platform-supabase/'
                 },
                 {
-                  text: '现代前端组件库 + Trae 实战',
-                  link: '/zh-cn/stage-2/assignments/2.2-modern-frontend-trae/'
+                  text: '大作业 2：在线考试与管理系统',
+                  link: '/zh-cn/stage-2/assignments/exam-management-express/'
                 }
               ]
             }
@@ -2153,7 +2226,7 @@ Sitemap: ${siteUrl}/sitemap.xml
         nav: [
           { text: 'Home', link: '/en/' },
           {
-            text: 'Novice & PM',
+            text: 'Getting Started',
             link: '/en/stage-0/',
             activeMatch: '/en/stage-[01]/'
           },
