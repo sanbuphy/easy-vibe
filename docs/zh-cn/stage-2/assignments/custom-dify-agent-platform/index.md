@@ -1,274 +1,190 @@
-# 自制 Dify 智能体平台
+# 类 Dify 智能体平台开发实战
 
-如果你已经会用 Dify，下一步最值得挑战的不是“再配一个工作流”，而是自己做一个“类 Dify 平台”。
+## 概述
 
-这个大作业会带你完成一个简化但完整的智能体平台：支持创建智能体、配置 Prompt、接知识库、发起对话、查看日志和调用统计。
+本实战项目要求你围绕一份真实的 PRD，从零完成一个模仿 Dify 核心体验的智能体平台。你将构建用户控制台、管理后台和平台后端，实现智能体管理、对话、日志和知识库等核心功能。
 
-::: tip 🎯 这次做什么？
-打造一个 **最小可用的智能体平台（Mini Dify）**。平台至少包含：智能体管理、会话问答、知识库接入（可选第一版简化）、调用记录与基础权限控制。目标是让用户能“创建一个智能体并真实对话”。
+这是 Stage 2 的综合实战环节。与前面的单页面或单功能项目不同，这个项目要求你构建一个有"平台感"的 AI 产品——包含多角色、多模块、数据持久化和模型调用链路。
+
+## 前置知识
+
+在开始本项目之前，你应该已经掌握以下内容：
+
+- 前端页面设计与组件库使用（[UI 设计](../../frontend/2.2-ui-design/)、[现代组件库](../../frontend/2.7-modern-component-library/)）
+- 后端接口设计与开发（[接口代码编写](../../backend/2.3-ai-interface-code/)）
+- 数据库基础与 Supabase（[从数据库到 Supabase](../../backend/2.2-database-supabase/)）
+- Git 工作流与部署（[Git 和 GitHub](../../backend/2.4-git-workflow/)、[部署 Web 应用](../../backend/2.5-zeabur-deployment/)）
+
+## 学习目标
+
+完成本实战后，你将能够：
+
+1. 阅读并理解一份真实的 PRD，从中提取开发任务清单
+2. 设计智能体平台的页面架构和数据模型
+3. 实现智能体创建、对话、日志记录的完整链路
+4. 使用 AI 辅助完成平台型产品开发
+5. 完成端到端联调，交付一个可演示的 AI 平台原型
+
+## 项目简介
+
+你要构建的产品是一个类 Dify 智能体平台，包含两个子系统：
+
+| 子系统 | 职责 |
+|--------|------|
+| **用户控制台** | 创建智能体、配置 Prompt、发起对话、查看日志、管理知识库 |
+| **管理后台** | 查看用户数据、平台资源使用情况、调用统计 |
+
+后端需要支持以下核心能力：智能体管理、会话管理、消息存储、模型调用、调用日志记录、知识库接入。
+
+::: tip PRD 入口
+本项目的需求文档在 GitHub： [查看 PRD](https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/custom-dify-agent-platform/PRD.md)
 :::
 
 <div style="margin: 32px 0;">
   <ClientOnly>
     <StepBar :active="0" :items="[
-      { title: '定能力边界', description: '先明确第一版做什么，不做什么' },
-      { title: '搭平台骨架', description: '完成前后端结构、鉴权与数据库设计' },
-      { title: '接智能体链路', description: '跑通创建智能体到对话返回的主流程' },
-      { title: '上线交付', description: '补日志、文档、部署与演示材料' }
+      { title: '需求分析', description: '阅读 PRD，明确页面、能力边界、鉴权、数据模型' },
+      { title: '搭建骨架', description: '用 AI 生成用户控制台和管理后台骨架' },
+      { title: '迭代开发', description: '逐模块补充智能体、对话、日志、知识库' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
     ]" />
   </ClientOnly>
 </div>
 
-## 为什么这个题目值得做？
+## 第一部分：需求分析
 
-因为它几乎覆盖了 AI 应用工程化的核心能力：
+### 1.1 阅读 PRD
 
-- 从“调用一个模型”升级到“管理多个智能体”
-- 从“单页 Demo”升级到“有后台、有数据、有权限的平台”
-- 从“能回答”升级到“可配置、可追踪、可维护”
+打开 PRD 文档，重点回答以下问题：
 
-如果你未来想做 Agent 产品、企业知识助手或 AI SaaS，这个项目会是非常有含金量的一次训练。
+- 智能体、会话、日志、知识库哪些要进 MVP？
+- 页面和路由清单是否拍板？
+- 模型调用和日志记录的边界是什么？
+- 多租户和复杂工作流是否先不做？
 
-## 先看全景：平台核心模块
+::: warning
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。
+:::
+
+### 1.2 确认系统架构
+
+根据 PRD 梳理出系统的整体架构：
 
 ```mermaid
-flowchart LR
-  user["平台用户"] --> web["Web 控制台"]
-  web --> auth["登录与鉴权"]
-  web --> agent["智能体管理"]
-  web --> chat["会话对话页"]
-  web --> logs["调用日志页"]
-  agent --> api["后端 API"]
-  chat --> api
-  logs --> api
-  api --> db["PostgreSQL"]
-  api --> llm["LLM Provider"]
-  api --> kb["知识库检索(可选第一版)"]
-  api --> trace["日志/成本统计"]
+flowchart TD
+  prd["PRD"] --> app["用户控制台"]
+  prd --> admin["管理后台"]
+  app --> auth["鉴权"]
+  app --> agent["智能体配置"]
+  app --> chat["会话对话"]
+  chat --> llm["模型调用"]
+  chat --> db["数据库"]
+  app --> kb["知识库接入"]
+  admin --> logs["调用日志与平台概览"]
+  logs --> db
 ```
 
-核心目标只有一个：用户能在后台创建智能体，然后在对话页选择该智能体并得到可追踪的回答。
+## 第二部分：搭建项目骨架
 
-## 1. 定能力边界：第一版先收住
+### 2.1 生成前端页面
 
-### MVP 范围（建议）
-
-- 用户注册/登录
-- 智能体 CRUD（创建、编辑、启停、删除）
-- 每个智能体可配置：名称、系统提示词、模型、温度
-- 对话页可选择智能体进行聊天
-- 记录每轮会话和调用日志
-
-### 第一版暂不做
-
-- 多租户复杂权限
-- 复杂工作流编排器
-- 工具调用沙箱
-- 向量数据库高级检索策略
-- 计费系统与支付闭环
-
-### 角色与页面规划
-
-| 角色 | 页面 | 核心动作 |
-|------|------|------|
-| 普通用户 | `/agents` | 创建/编辑自己的智能体 |
-| 普通用户 | `/chat` | 选择智能体并发起对话 |
-| 普通用户 | `/logs` | 查看调用记录和错误信息 |
-| 管理员（可选） | `/admin/users` | 查看用户与资源使用情况 |
-
-### 数据模型建议
-
-```sql
-profiles (
-  id uuid primary key,
-  email text,
-  role text,                 -- user / admin
-  created_at timestamptz
-)
-
-agents (
-  id uuid primary key,
-  user_id uuid,
-  name text,
-  system_prompt text,
-  model text,
-  temperature numeric,
-  status text,               -- active / inactive
-  created_at timestamptz
-)
-
-conversations (
-  id uuid primary key,
-  user_id uuid,
-  agent_id uuid,
-  title text,
-  created_at timestamptz
-)
-
-messages (
-  id uuid primary key,
-  conversation_id uuid,
-  role text,                 -- user / assistant
-  content text,
-  token_usage int,
-  created_at timestamptz
-)
-
-llm_logs (
-  id uuid primary key,
-  user_id uuid,
-  agent_id uuid,
-  model text,
-  latency_ms int,
-  prompt_tokens int,
-  completion_tokens int,
-  status text,               -- success / error
-  error_message text,
-  created_at timestamptz
-)
-```
-
-## 2. 搭平台骨架：前后端先跑起来
-
-### 推荐技术栈
-
-- **Next.js App Router**（前端 + 部分 BFF）
-- **TypeScript**
-- **Tailwind CSS + shadcn/ui**
-- **Node.js + Express/NestJS**（如你想分离后端）
-- **PostgreSQL / Supabase**
-- **OpenAI / 兼容 OpenAI 协议模型接口**
-
-### 第一步：让 AI IDE 先搭骨架
+提示词参考：
 
 ```text
-请帮我创建一个 Mini Dify 平台骨架（Next.js + TypeScript + Tailwind）。
-
-页面要求：
-1. /login 登录页
-2. /agents 智能体管理页（列表 + 新建弹窗）
-3. /chat 对话页（左侧会话列表 + 右侧聊天区）
-4. /logs 调用日志页（表格 + 状态筛选）
-
-后端要求：
-- 提供 /api/agents、/api/chat、/api/logs 的基础接口
-- 所有接口只允许登录用户访问
-
-先用 mock 数据跑通页面交互，再补真实数据库。
-```
-
-### 第二步：补鉴权与数据库
-
-你可以继续让 AI IDE 分步骤落地：
-
-```text
-请把我当成 0 基础，带我完成 Mini Dify 的鉴权和数据库接入。
-
-目标：
-1. 用户可以注册、登录、退出
-2. 登录后才能访问 /agents、/chat、/logs
-3. 创建 agents 表并实现新增/查询
-4. 只有 agent 所有者可编辑自己的 agent
+请基于当前 PRD，帮我生成一个类 Dify 智能体平台的前端骨架。
 
 要求：
-- 说明每步修改了哪些文件
-- 明确需要在数据库后台操作的 SQL
-- 完成后给我一份验证清单
+1. 用户侧包括：登录、智能体列表、智能体配置、对话页、日志页、知识库页
+2. 后台侧包括：后台首页、用户概览、资源使用概览
+3. 先只生成页面结构和假数据，不接真实接口
+4. 风格要像现代 AI 平台
 ```
 
-## 3. 接智能体主链路：从“创建”到“回答”
+### 2.2 验证页面结构
 
-### 智能体调用时序图
+逐项检查：
 
-```mermaid
-sequenceDiagram
-  autonumber
-  actor U as 用户
-  participant FE as 前端对话页
-  participant API as 后端 /api/chat
-  participant DB as 数据库
-  participant LLM as 模型服务
+- [ ] 用户控制台和管理后台入口是否分开
+- [ ] 智能体列表、配置、对话、日志、知识库页面是否完整
+- [ ] 管理后台首页、用户概览页面是否可访问
+- [ ] 假数据展示了基本的 UI 状态
 
-  U->>FE: 选择智能体并发送问题
-  FE->>API: POST /api/chat {agentId, message}
-  API->>DB: 读取 agent 配置与历史消息
-  API->>LLM: 组装 system prompt + 历史上下文
-  LLM-->>API: 返回回答
-  API->>DB: 保存 user/assistant 消息 + 日志
-  API-->>FE: 返回回答内容
-  FE-->>U: 渲染回复
-```
+## 第三部分：迭代开发
 
-### 第三步：实现聊天接口（最小版本）
+### 3.1 按模块推进
 
-第一版聊天接口建议做到：
+在骨架的基础上，按以下顺序逐模块补充功能：
 
-- 接收 `agentId` 和用户输入
-- 根据 `agentId` 加载对应系统提示词
-- 调用模型并返回结果
-- 将问答落库到 `messages`
-- 将耗时/状态写入 `llm_logs`
+1. **鉴权**：注册、登录、角色区分
+2. **智能体管理**：创建、编辑、删除、Prompt 配置
+3. **对话功能**：会话创建、消息收发、模型调用
+4. **日志记录**：耗时、token 用量、错误记录
+5. **知识库接入**（加分项）：文档上传、检索、结果注入
+6. **管理后台**：用户数据、资源使用、调用统计
 
-提示词示例：
+每完成一个模块，使用下表进行自检：
 
-```text
-请帮我实现 /api/chat 接口。
+| 检查项 | 验证方法 |
+|--------|----------|
+| 页面一致性 | 页面数量、功能是否符合 PRD |
+| 接口闭环 | agents、chat、logs、knowledge 接口是否完整 |
+| 权限隔离 | 用户是否只能管理自己的 agent 和会话 |
+| 数据一致性 | messages、logs、documents 数据是否对得上 |
+| 可演示性 | 是否能演示"创建 agent → 对话 → 查看日志"完整链路 |
 
-业务规则：
-1. 必须校验用户是否已登录
-2. 必须校验 agent 属于当前用户
-3. 请求体包含 agentId 和 message
-4. 调用 LLM 前拼接系统提示词和最近 10 条上下文
-5. 返回 assistant 内容并写入消息表
-6. 无论成功失败都写一条 llm_logs
+### 3.2 知识库接入（加分项）
 
-请给出：
-- 路由层代码
-- service 层代码
-- 错误处理策略
-- 如何本地测试
-```
-
-### 第四步：可选接入知识库（加分项）
-
-你可以给每个智能体增加一个“知识库开关”：
+如果你想增加知识库能力，可以给每个智能体增加一个"知识库开关"：
 
 - 开启后先检索知识片段，再和用户问题一起发送给模型
 - 关闭后按普通对话模式响应
 
-第一版不必追求复杂 RAG，只要有“检索结果可见、调用链路可解释”即可。
+第一版不必追求复杂 RAG，只要有"检索结果可见、调用链路可解释"即可。
 
-## 4. 上线与交付：把平台做成可演示产品
+## 第四部分：联调与上线
 
-### 部署前检查
+### 4.1 端到端测试
 
-- 所有核心接口都做了登录校验
-- 智能体归属权限检查通过
-- 会话记录、日志记录真实落库
-- 模型 Key 使用环境变量，不硬编码
-- 错误提示可在前端看到，不只打控制台
+至少验证以下场景：
 
-### 交付物
+- 注册 → 创建智能体 → 配置 Prompt → 发起对话 → 查看日志
+- 管理员登录 → 查看用户数据 → 查看调用统计
 
-- 可访问演示链接
-- 源码仓库链接
-- 智能体管理页截图
-- 对话页截图
-- 日志页截图
-- 60 秒演示视频（创建智能体 -> 对话 -> 查看日志）
-- README（架构、运行、环境变量、接口说明）
+部署前检查：
 
-## 验收标准
+- [ ] 所有核心接口都做了登录校验
+- [ ] 智能体归属权限检查通过
+- [ ] 会话记录、日志记录真实落库
+- [ ] 模型 Key 使用环境变量，不硬编码
+- [ ] 错误提示可在前端看到，不只打控制台
 
-| 维度 | 最低达标 | 加分项 |
-|------|------|------|
-| 平台完整度 | `agents/chat/logs` 三页可用 | 有清晰导航与统一设计语言 |
+### 4.2 部署
+
+将项目部署到公网环境。部署教程参考：[Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)、[如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)。
+
+## 交付物
+
+完成本项目后，你需要提交以下内容：
+
+- [ ] 可访问的线上演示链接
+- [ ] 源码仓库链接（含 README）
+- [ ] PRD 文档
+- [ ] 核心页面截图（智能体管理页、对话页、日志页、后台首页）
+- [ ] 60 秒演示视频（覆盖创建智能体 → 对话 → 查看日志）
+
+README 至少包含：项目简介、架构说明、技术栈、本地启动步骤、环境变量清单、接口说明。
+
+## 评分标准
+
+| 维度 | 基本要求 | 进阶要求 |
+|------|---------|---------|
+| 平台完整度 | agents / chat / logs 三页可用 | 有清晰导航与统一设计语言 |
 | 业务闭环 | 可创建智能体并真实对话 | 支持多智能体切换与历史会话 |
-| 数据与追踪 | 消息与调用日志可查询 | 有 token/耗时统计看板 |
+| 数据与追踪 | 消息与调用日志可查询 | 有 token / 耗时统计看板 |
 | 权限安全 | 仅登录用户可访问核心接口 | 资源归属校验完善 |
 | 工程交付 | 可部署、可演示、README 清晰 | 接入知识库并可解释检索结果 |
 
-## 提交前最后检查
+## 提交前检查
 
 <el-card shadow="hover" style="margin: 20px 0; border-radius: 12px;">
   <template #header>
@@ -284,6 +200,11 @@ sequenceDiagram
   </ul>
 </el-card>
 
-::: tip 🚀 完成后你会得到什么？
-你将获得一个真正有平台感的 AI 项目，而不只是单点功能 Demo。这会显著提升你在“AI 产品工程化”方向的说服力。
-:::
+## 参考资料
+
+- [UI 设计](../../frontend/2.2-ui-design/)
+- [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
+- [从数据库到 Supabase](../../backend/2.2-database-supabase/)
+- [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
+- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
+- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)

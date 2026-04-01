@@ -1,253 +1,172 @@
-# 简单买菜微服务网站
+# 生鲜电商微服务系统开发实战
 
-做完单体应用后，很多同学会进入一个新困惑：功能越来越多，代码还能写，但项目越来越难维护。
+## 概述
 
-这个大作业的目标，就是让你在一个可控规模里，体验一次“从单体到微服务”的完整过程。
+本实战项目要求你围绕一份真实的 PRD，从零完成一个生鲜电商微服务系统。与前面的单服务项目不同，这个项目的后端按业务拆分成多个独立服务，通过 API 网关统一对外。你将学习如何设计服务边界、如何处理跨服务的数据一致性问题。
 
-::: tip 🎯 这次做什么？
-打造一个 **简单买菜微服务网站**。用户可以浏览商品、下单、查看订单；管理员可以管理商品与库存。后端拆成多个服务，通过 API 网关统一对外提供接口。
+这是 Stage 2 的综合实战环节。微服务架构在实际工作中非常常见，掌握服务拆分和网关路由的基本思路后，你能够应对更复杂的后端系统设计。
+
+## 前置知识
+
+在开始本项目之前，你应该已经掌握以下内容：
+
+- 前端页面设计与组件库使用（[UI 设计](../../frontend/2.2-ui-design/)、[现代组件库](../../frontend/2.7-modern-component-library/)）
+- 后端接口设计与开发（[接口代码编写](../../backend/2.3-ai-interface-code/)）
+- 数据库基础与 Supabase（[从数据库到 Supabase](../../backend/2.2-database-supabase/)）
+- Git 工作流与部署（[Git 和 GitHub](../../backend/2.4-git-workflow/)、[部署 Web 应用](../../backend/2.5-zeabur-deployment/)）
+
+## 学习目标
+
+完成本实战后，你将能够：
+
+1. 阅读 PRD 并提取微服务系统的开发任务清单
+2. 按业务领域拆分服务边界（鉴权、商品、库存、订单）
+3. 设计和实现 API 网关路由
+4. 处理库存扣减和订单一致性等跨服务问题
+5. 完成端到端联调，交付可演示的微服务原型
+
+## 项目简介
+
+你要构建的产品是一个生鲜电商微服务系统：
+
+| 子系统 | 职责 |
+|--------|------|
+| **用户端** | 浏览商品、下单、查看订单 |
+| **管理端** | 商品管理、库存管理、订单管理 |
+
+后端按业务拆分为以下服务：
+
+| 服务 | 职责 |
+|------|------|
+| **API Gateway** | 统一入口、路由转发、鉴权校验 |
+| **Auth Service** | 用户注册、登录、JWT 颁发 |
+| **Catalog Service** | 商品信息管理 |
+| **Inventory Service** | 库存数量管理 |
+| **Order Service** | 订单创建、状态管理 |
+
+::: tip PRD 入口
+本项目的需求文档在 GitHub： [查看 PRD](https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/simple-grocery-microservices/PRD.md)
 :::
 
 <div style="margin: 32px 0;">
   <ClientOnly>
     <StepBar :active="0" :items="[
-      { title: '定边界', description: '先明确服务拆分和业务范围' },
-      { title: '搭基础', description: '网关、鉴权、数据库连接先跑通' },
-      { title: '接业务', description: '商品、订单、库存链路打通' },
-      { title: '交付上线', description: '部署、文档、演示材料补齐' }
+      { title: '需求分析', description: '阅读 PRD，明确服务拆分、页面和交易链路' },
+      { title: '搭建骨架', description: '生成前端、网关和各服务骨架' },
+      { title: '迭代开发', description: '逐模块补接口、修库存与订单一致性' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
     ]" />
   </ClientOnly>
 </div>
 
-## 为什么这个项目值得做？
+## 第一部分：需求分析
 
-这个题目看起来是“买菜网站”，本质上练的是三个能力：
+### 1.1 阅读 PRD
 
-- **拆服务**：学会按业务边界拆分，而不是按技术层硬拆
-- **控复杂度**：在多服务协作下保持清晰的接口和数据流
-- **做稳定链路**：让“下单 -> 扣库存 -> 查订单”能够稳定可追踪
+打开 PRD 文档，重点回答以下问题：
 
-这会直接影响你后续做电商、SaaS 后台、内容平台等多模块项目的上限。
+- 服务如何拆分？每个服务的职责边界是什么？
+- 前台和管理端分别有哪些页面？
+- 下单后库存扣减的策略是什么？成功 / 失败 / 超时各怎么处理？
+- 第一版哪些复杂能力（如分布式事务、消息队列）先不做？
 
-## 先看全景：系统由哪些模块组成？
+::: warning
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。
+:::
 
-```mermaid
-flowchart LR
-  user["用户端 Web"] --> gateway["API Gateway"]
-  admin["管理端 Web"] --> gateway
-  gateway --> auth["Auth 服务"]
-  gateway --> catalog["商品服务"]
-  gateway --> order["订单服务"]
-  gateway --> inventory["库存服务"]
-  order --> inventory
-  catalog --> db1["Catalog DB"]
-  order --> db2["Order DB"]
-  inventory --> db3["Inventory DB"]
-  auth --> db4["User DB"]
-```
-
-这张图的核心意思是：前端不用直接找多个服务，只和网关交互。复杂性由网关和服务间协作承担。
-
-## 1. 定边界：先把范围控制住
-
-### 建议服务拆分
-
-第一版只保留 4 个核心服务：
-
-| 服务 | 职责 |
-|------|------|
-| `auth-service` | 登录、注册、令牌校验、角色识别 |
-| `catalog-service` | 商品列表、商品详情、分类查询 |
-| `inventory-service` | 库存查询、库存扣减、库存回滚 |
-| `order-service` | 创建订单、查询订单、订单状态管理 |
-
-### 建议角色与页面
-
-| 角色 | 页面 | 关键动作 |
-|------|------|------|
-| 用户 | 首页、商品页、购物车、订单页 | 浏览商品、下单、看订单 |
-| 管理员 | 商品管理、库存管理、订单管理 | 上下架商品、调库存、查看异常订单 |
-
-### 范围控制（一定要先做“能交付”的版本）
-
-- 只做最小支付模拟，不接真实支付网关
-- 不做复杂促销（满减、优惠券、拼团）
-- 不做推荐算法，商品排序先按上架时间或销量
-- 不做分布式事务框架，先用“本地事务 + 失败补偿”思路
-- 不做消息中间件集群，第一版可同步调用
-
-## 2. 架构与时序
-
-### 请求路由链路
-
-```mermaid
-sequenceDiagram
-  autonumber
-  actor U as 用户
-  participant FE as 前端
-  participant GW as API Gateway
-  participant AUTH as Auth
-  participant CATALOG as Catalog
-  participant ORDER as Order
-  participant INV as Inventory
-
-  U->>FE: 打开商品页并下单
-  FE->>GW: POST /api/orders
-  GW->>AUTH: 校验 JWT
-  AUTH-->>GW: 用户身份合法
-  GW->>ORDER: 创建订单请求
-  ORDER->>INV: 扣减库存
-  INV-->>ORDER: 扣减结果
-  ORDER-->>GW: 订单创建成功
-  GW-->>FE: 返回订单号和状态
-```
-
-### 失败补偿思路（避免“扣了库存却没订单”）
+### 1.2 确认系统架构
 
 ```mermaid
 flowchart TD
-  A["创建订单请求"] --> B["校验库存是否足够"]
-  B -->|不足| C["返回失败"]
-  B -->|充足| D["预扣库存"]
-  D --> E["写入订单记录"]
-  E -->|成功| F["确认扣减完成"]
-  E -->|失败| G["回滚库存"]
-  G --> H["记录补偿日志"]
-  F --> I["返回下单成功"]
+  prd["PRD"] --> fe["前端页面"]
+  fe --> gw["API Gateway"]
+  gw --> auth["Auth Service"]
+  gw --> catalog["Catalog Service"]
+  gw --> inventory["Inventory Service"]
+  gw --> order["Order Service"]
+  order --> inventory
 ```
 
-## 3. 推荐技术栈
+## 第二部分：搭建项目骨架
 
-- **前端**：Next.js + TypeScript + Tailwind CSS + shadcn/ui
-- **服务端**：Node.js + Express / Fastify
-- **网关**：Express Gateway 或自建 BFF 网关
-- **数据库**：PostgreSQL（每个服务独立库或独立 schema）
-- **缓存（可选）**：Redis（热商品列表、会话短缓存）
-- **部署**：Docker Compose（本地）+ Zeabur / Railway（云端）
+### 2.1 生成项目结构
 
-## 4. 分步实现路径（可直接照做）
-
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="1" :items="[
-      { title: '定边界', description: '先明确服务拆分和业务范围' },
-      { title: '搭基础', description: '网关、鉴权、数据库连接先跑通' },
-      { title: '接业务', description: '商品、订单、库存链路打通' },
-      { title: '交付上线', description: '部署、文档、演示材料补齐' }
-    ]" />
-  </ClientOnly>
-</div>
-
-### 第一步：起项目骨架与网关
+提示词参考：
 
 ```text
-请帮我搭建一个买菜微服务项目骨架。
+请基于当前 PRD，帮我生成一个生鲜电商微服务系统的项目骨架。
 
 要求：
-1. 创建 api-gateway、auth-service、catalog-service、inventory-service、order-service 五个服务目录
-2. 每个服务都包含最小可运行的 Express 入口
-3. gateway 支持把 /api/catalog/* 转发到 catalog-service，把 /api/orders/* 转发到 order-service
-4. 使用 TypeScript
-5. 给出本地启动脚本（可用 pnpm workspace 或 npm workspaces）
+1. 生成前端用户端和管理端骨架
+2. 生成 api-gateway、auth-service、catalog-service、inventory-service、order-service 五个目录
+3. 每个服务先只做最小可运行入口
+4. 先不接真实数据库和支付
 ```
 
-### 第二步：先做鉴权，再做业务接口
+### 2.2 验证项目结构
 
-先完成：
+逐项检查：
 
-- 用户注册 / 登录
-- JWT 发放和校验中间件
-- 网关统一鉴权（白名单接口可放行）
+- [ ] 五个服务目录结构清晰
+- [ ] API Gateway 可以启动并转发请求
+- [ ] 各服务健康检查接口可用
+- [ ] 前端用户端和管理端页面可访问
 
-```text
-请帮我实现 auth-service 的最小鉴权链路。
+## 第三部分：迭代开发
 
-目标：
-1. POST /register
-2. POST /login
-3. 输出 access token
-4. gateway 中间件可以验证 token 并把 userId、role 注入请求上下文
-5. 提供一个受保护示例接口用于测试
-```
+### 3.1 按模块推进
 
-### 第三步：商品与库存服务
+1. **API Gateway**：路由配置、JWT 校验中间件
+2. **Auth Service**：注册、登录、JWT 颁发
+3. **Catalog Service**：商品 CRUD、列表查询
+4. **Inventory Service**：库存查询、库存扣减
+5. **Order Service**：订单创建、状态流转、库存联动
+6. **管理端**：商品管理、库存管理、订单管理
 
-优先做这几个接口：
+### 3.2 模块自检
 
-- `GET /api/catalog/products`
-- `GET /api/catalog/products/:id`
-- `PATCH /api/inventory/:productId`（管理员）
+| 检查项 | 验证方法 |
+|--------|----------|
+| 网关路由 | 各服务接口是否通过网关正确转发 |
+| 权限隔离 | 用户端和管理端接口是否隔离 |
+| 数据一致 | 商品和库存数据是否同步 |
+| 交易闭环 | 下单后库存扣减、订单状态是否一致 |
+| 失败处理 | 库存不足或超时时是否有补偿机制 |
 
-### 第四步：订单服务打通主链路
+## 第四部分：联调与上线
 
-优先做下单和查单：
+### 4.1 端到端测试
 
-- `POST /api/orders`
-- `GET /api/orders/:id`
-- `GET /api/orders/my`
+至少验证以下场景：
 
-下单流程必须至少包含：
+- 浏览商品 → 加入购物车 → 下单 → 查看订单
+- 管理员 → 添加商品 → 更新库存 → 查看订单
 
-1. 鉴权通过
-2. 校验商品和库存
-3. 创建订单
-4. 扣减库存
-5. 失败时回滚或补偿
+## 交付物
 
-### 第五步：管理端最小闭环
+完成本项目后，你需要提交以下内容：
 
-管理员界面先做三块就够：
+- [ ] 可访问的线上演示链接
+- [ ] 源码仓库链接（含 README）
+- [ ] PRD 文档
+- [ ] 核心页面截图（商品列表、下单页、订单页、管理后台）
+- [ ] 60 秒演示视频
 
-- 商品列表 + 上下架按钮
-- 库存调整表单
-- 订单列表（含状态筛选）
+## 评分标准
 
-### 第六步：部署与文档
+| 维度 | 基本要求 | 进阶要求 |
+|------|---------|---------|
+| PRD 对齐 | 页面、功能、服务拆分基本符合 PRD | 能清晰说明服务拆分的理由 |
+| 产品闭环 | 浏览 → 下单 → 库存扣减 → 查看订单可跑通 | 订单超时或库存不足有补偿机制 |
+| 服务架构 | 各服务可独立启动，通过网关统一访问 | 服务间通信有错误处理和重试 |
+| 后台能力 | 商品、库存、订单管理可操作 | 管理端有数据统计 |
+| 工程完整度 | 前端、网关、服务、数据库链路已接通 | 有 Docker Compose 或类似编排 |
 
-至少完成：
+## 参考资料
 
-- 一份项目结构图
-- 一份服务启动说明
-- 一份关键接口说明
-- 一份本地联调步骤
-
-## 5. 交付物要求
-
-你至少要提交这些内容：
-
-- 可运行项目代码（网关 + 4 个服务 + 前端）
-- 演示地址或本地可复现说明
-- README（含架构图、启动方式、接口概览）
-- 60 秒到 120 秒演示视频
-- 关键页面截图（用户下单、管理员改库存、订单详情）
-
-## 6. 验收标准
-
-| 维度 | 最低达标 | 加分项 |
-|------|------|------|
-| 架构清晰度 | 服务边界明确，网关可用 | 有统一错误码和服务间追踪日志 |
-| 业务闭环 | 浏览商品 -> 下单 -> 查单跑通 | 有库存不足、下单失败等异常处理 |
-| 权限控制 | 用户与管理员权限隔离 | 服务端接口也有角色校验，不只前端隐藏 |
-| 工程质量 | 项目可启动、接口可调试 | 有 Docker Compose、一键启动脚本 |
-| 交付完整度 | README、截图、演示视频齐全 | 有性能优化或缓存策略说明 |
-
-## 7. 提交前最后检查
-
-<el-card shadow="hover" style="margin: 20px 0; border-radius: 12px;">
-  <template #header>
-    <div style="font-weight: bold; font-size: 16px;">提交前最后看一眼</div>
-  </template>
-
-  <ul style="list-style-type: none; padding-left: 0;">
-    <li><label><input type="checkbox" disabled /> 网关已接入鉴权并能正确转发请求</label></li>
-    <li><label><input type="checkbox" disabled /> 商品、库存、订单三个核心服务已打通</label></li>
-    <li><label><input type="checkbox" disabled /> 下单失败时有清晰错误提示和补偿处理</label></li>
-    <li><label><input type="checkbox" disabled /> 用户端和管理端都可完成核心操作</label></li>
-    <li><label><input type="checkbox" disabled /> README、架构图、演示视频已准备完整</label></li>
-    <li><label><input type="checkbox" disabled /> 项目已部署或有完整本地复现步骤</label></li>
-  </ul>
-</el-card>
-
-::: tip
-这个作业最重要的不是“服务越多越好”，而是你能不能把边界、协作和失败处理讲清楚并做扎实。
-:::
+- [UI 设计](../../frontend/2.2-ui-design/)
+- [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
+- [从数据库到 Supabase](../../backend/2.2-database-supabase/)
+- [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
+- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
+- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)

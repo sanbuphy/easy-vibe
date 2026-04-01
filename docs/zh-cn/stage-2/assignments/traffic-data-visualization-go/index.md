@@ -1,239 +1,163 @@
-# 交通大数据可视化分析 (Go项目)
+# Go 交通数据分析平台开发实战
 
-很多同学学 Go 时会卡在一个问题：会写接口，但不知道怎么把“数据处理能力”和“业务展示能力”组合成一个完整项目。
+## 概述
 
-这个大作业就是为了解这个问题。你会做一个可运行的交通数据平台，从数据接入、清洗、聚合，到可视化展示和告警，一条链路走完。
+本实战项目要求你围绕一份真实的 PRD，使用 Go 完成一个交通数据分析平台。这个项目的方向与前面的增删改查系统不同——你需要构建一条"数据接入 → 聚合 → 告警 → 可视化"的完整数据链路。这种数据产品在 IoT、监控、运营分析等场景中非常常见。
 
-::: tip 🎯 这次做什么？
-打造一个 **交通大数据可视化分析平台（Go 后端）**。系统可以接收交通流量数据，完成时间窗口聚合与异常检测，并在可视化页面展示趋势、拥堵热力、路口排名和告警记录。
+这是 Stage 2 的综合实战环节，也是你第一次接触 Go 语言。不用担心，有了前面 JavaScript / TypeScript 的基础，学习 Go 并不难——重点是理解数据链路的设计思路。
+
+## 前置知识
+
+在开始本项目之前，你应该已经掌握以下内容：
+
+- 前端页面设计与组件库使用（[UI 设计](../../frontend/2.2-ui-design/)、[现代组件库](../../frontend/2.7-modern-component-library/)）
+- 后端接口设计与开发（[接口代码编写](../../backend/2.3-ai-interface-code/)）
+- 数据库基础与 Supabase（[从数据库到 Supabase](../../backend/2.2-database-supabase/)）
+- Git 工作流与部署（[Git 和 GitHub](../../backend/2.4-git-workflow/)、[部署 Web 应用](../../backend/2.5-zeabur-deployment/)）
+
+## 学习目标
+
+完成本实战后，你将能够：
+
+1. 阅读 PRD 并提取数据产品的开发任务清单
+2. 使用 Go（Gin 或 Fiber）搭建后端 API 服务
+3. 设计数据接入、窗口聚合和告警的完整链路
+4. 让后端数据和前端看板保持一致
+5. 完成端到端联调，交付可演示的数据产品原型
+
+## 项目简介
+
+你要构建的产品是一个 Go 交通数据分析平台：
+
+| 模块 | 职责 |
+|------|------|
+| **数据接入** | 接收原始交通事件并入库 |
+| **数据聚合** | 按时间窗口计算趋势和拥堵指标 |
+| **告警** | 基于规则生成告警记录 |
+| **看板展示** | 在前端展示趋势图、排行榜和告警列表 |
+
+::: tip PRD 入口
+本项目的需求文档在 GitHub： [查看 PRD](https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/traffic-data-visualization-go/PRD.md)
 :::
 
 <div style="margin: 32px 0;">
   <ClientOnly>
     <StepBar :active="0" :items="[
-      { title: '定场景', description: '先明确数据来源、指标口径和展示目标' },
-      { title: '搭管道', description: '接入、清洗、存储、聚合链路先跑通' },
-      { title: '做分析', description: '完成趋势图、热力图和异常告警' },
-      { title: '交付上线', description: '部署、文档、演示材料补齐' }
+      { title: '需求分析', description: '阅读 PRD，明确数据来源、指标口径和告警规则' },
+      { title: '搭建骨架', description: '用 AI 生成 Go API 服务和前端看板骨架' },
+      { title: '迭代开发', description: '补充聚合逻辑、告警规则和看板接口' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
     ]" />
   </ClientOnly>
 </div>
 
-## 为什么这个项目值得做？
+## 第一部分：需求分析
 
-这个题目同时练了三种在真实项目里非常关键的能力：
+### 1.1 阅读 PRD
 
-- **工程能力**：Go 接口设计、并发处理、任务调度
-- **数据能力**：时间序列聚合、指标建模、异常检测
-- **产品能力**：把分析结果变成可读、可操作的可视化页面
+打开 PRD 文档，重点回答以下问题：
 
-做完后，你不只是“写了个后端”，而是能说清一个数据产品如何从输入走到决策。
+- 数据来源是什么？字段有哪些？
+- 核心指标的定义是什么？（比如"拥堵"的具体标准）
+- 告警规则是什么？第一版是否先收敛到简单规则？
+- 看板包含哪些页面和图表？
 
-## 1. 项目全景与范围控制
+::: warning
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。
+:::
 
-### 系统模块图
-
-```mermaid
-flowchart LR
-  source["数据源<br/>路口设备 / CSV / 模拟器"] --> ingest["Go Ingest API"]
-  ingest --> clean["数据清洗与标准化"]
-  clean --> rawdb["原始数据表"]
-  clean --> agg["聚合任务（1m/5m/1h）"]
-  agg --> aggdb["聚合结果表"]
-  agg --> detect["异常检测任务"]
-  detect --> alertdb["告警表"]
-  aggdb --> dashboard["可视化看板"]
-  alertdb --> dashboard
-```
-
-### 建议分析维度
-
-第一版只聚焦这些核心指标：
-
-- 时间窗口车流量（每分钟 / 每 5 分钟 / 每小时）
-- 路口拥堵指数（可用速度反比或排队长度估算）
-- TOP 拥堵路口排名
-- 异常突增告警（同比前 5 分钟或滑动均值）
-
-### 范围控制（防止项目失控）
-
-- 第一版不做实时流处理平台（如 Kafka/Flink 集群）
-- 第一版不做复杂地图引擎，热力可先用网格或散点替代
-- 第一版不做机器学习预测，先用规则阈值异常检测
-- 第一版不做多租户权限系统，只保留普通用户 + 管理员
-
-## 2. 数据链路与时序
-
-### 数据从接入到看板的主流程
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant Device as 数据源
-  participant API as Go API
-  participant DB as PostgreSQL
-  participant Job as 聚合任务
-  participant FE as Dashboard
-
-  Device->>API: POST /api/traffic/events
-  API->>API: 参数校验与标准化
-  API->>DB: 写入 raw_traffic_events
-  Job->>DB: 定时读取原始数据
-  Job->>DB: 写入 traffic_agg_1m / traffic_agg_5m
-  Job->>DB: 写入 alerts
-  FE->>API: GET /api/dashboard/overview
-  API->>DB: 查询聚合结果与告警
-  API-->>FE: 返回图表数据
-```
-
-### 异常检测逻辑（简版）
+### 1.2 确认数据链路
 
 ```mermaid
 flowchart TD
-  A["读取最近 10 分钟聚合值"] --> B["计算近 5 分钟均值"]
-  B --> C["当前值 > 均值 * 阈值?"]
-  C -->|否| D["正常，无告警"]
-  C -->|是| E["生成告警记录"]
-  E --> F["标记级别（低/中/高）"]
-  F --> G["写入 alerts 表"]
+  prd["PRD"] --> ingest["数据接入 API"]
+  ingest --> raw["原始数据表"]
+  raw --> agg["聚合任务"]
+  agg --> alert["告警规则"]
+  agg --> dashboard["看板接口"]
+  alert --> dashboard
 ```
 
-## 3. 推荐技术栈
+## 第二部分：搭建项目骨架
 
-- **后端**：Go + Gin / Fiber
-- **数据处理**：Go `cron` / `robfig/cron`（定时聚合）
-- **数据库**：PostgreSQL（可选 TimescaleDB）
-- **缓存（可选）**：Redis（热点看板数据）
-- **前端**：React / Next.js + ECharts / AntV
-- **部署**：Docker Compose + Zeabur / Railway / 自托管
+### 2.1 生成 Go API 服务
 
-## 4. 分步实现路径
-
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="1" :items="[
-      { title: '定场景', description: '先明确数据来源、指标口径和展示目标' },
-      { title: '搭管道', description: '接入、清洗、存储、聚合链路先跑通' },
-      { title: '做分析', description: '完成趋势图、热力图和异常告警' },
-      { title: '交付上线', description: '部署、文档、演示材料补齐' }
-    ]" />
-  </ClientOnly>
-</div>
-
-### 第一步：搭 Go 项目骨架和数据模型
+提示词参考：
 
 ```text
-请帮我创建一个 Go 交通数据分析项目骨架。
+请基于当前 PRD，帮我生成一个 Go 交通数据分析平台骨架。
 
 要求：
-1. 使用 Gin（或 Fiber）创建 API 服务
-2. 按 handler / service / repository / model 分层
-3. 设计并创建数据表：
-   - raw_traffic_events
-   - traffic_agg_1m
-   - traffic_agg_5m
-   - alerts
-4. 提供一个健康检查接口 /health
-5. 给出本地启动步骤（含数据库连接配置）
+1. 使用 Gin 或 Fiber
+2. 提供数据接入接口
+3. 提供聚合任务骨架
+4. 提供 dashboard 和 alerts 接口骨架
+5. 先不做真实复杂分析，只做可运行结构
 ```
 
-### 第二步：完成数据接入接口
+### 2.2 验证项目结构
 
-先做事件写入：
+逐项检查：
 
-- `POST /api/traffic/events`
-- 字段至少包含：`intersection_id`、`timestamp`、`vehicle_count`、`avg_speed`
+- [ ] Go 服务可以正常启动
+- [ ] 数据接入接口可接收并存储数据
+- [ ] 聚合任务框架已搭好
+- [ ] 前端看板页面可展示基本图表
 
-```text
-请帮我实现 POST /api/traffic/events。
+## 第三部分：迭代开发
 
-要求：
-1. 做参数校验（空值、类型、时间格式）
-2. 标准化 timestamp 到统一时区
-3. 写入 raw_traffic_events
-4. 返回统一 JSON 结构（code、message、data）
-5. 提供一组可直接用于调试的 curl 示例
-```
+### 3.1 按模块推进
 
-### 第三步：实现聚合任务
+1. **数据接入 API**：接收原始交通事件，写入数据库
+2. **数据聚合**：按时间窗口聚合，计算趋势和拥堵指标
+3. **告警规则**：基于阈值生成告警记录
+4. **看板接口**：提供趋势数据、排行数据、告警列表
+5. **前端看板**：趋势图、排行榜、告警列表页面
 
-至少完成：
+### 3.2 模块自检
 
-- 1 分钟窗口聚合
-- 5 分钟窗口聚合
-- 聚合结果接口 `GET /api/dashboard/trend`
+| 检查项 | 验证方法 |
+|--------|----------|
+| 数据接入 | 原始数据是否正确入库 |
+| 聚合口径 | 趋势、排名指标的计算逻辑是否一致 |
+| 告警规则 | 告警触发条件是否符合预期 |
+| 数据一致性 | 看板展示和后端数据是否对得上 |
+| API 规范 | 是否有统一返回结构和错误处理 |
 
-### 第四步：实现告警规则
+## 第四部分：联调与上线
 
-建议第一版规则：
+### 4.1 端到端测试
 
-- 当前流量 `> 近 5 分钟均值 * 1.8` 触发中级告警
-- 当前平均速度 `< 阈值` 且持续 3 个窗口，触发高级拥堵告警
+至少验证以下场景：
 
-### 第五步：完成可视化页面
+- 接入一批测试数据 → 聚合任务执行 → 看板展示更新
+- 触发告警条件 → 告警记录生成 → 告警页面显示
 
-建议页面模块：
+## 交付物
 
-- 总览卡片：今日总车流、当前告警数、最拥堵路口
-- 趋势图：近 24 小时车流曲线
-- 路口排行：拥堵指数 TOP10
-- 告警面板：实时/历史告警列表
+完成本项目后，你需要提交以下内容：
 
-### 第六步：补齐部署与文档
+- [ ] 可访问的线上演示链接
+- [ ] 源码仓库链接（含 README）
+- [ ] PRD 文档
+- [ ] 核心页面截图（数据接入演示、趋势看板、告警列表）
+- [ ] 60 秒演示视频
 
-至少包含：
+## 评分标准
 
-- 数据口径说明（每个指标如何计算）
-- 接口文档（输入/输出示例）
-- 本地与线上部署步骤
-- 示例数据导入方法
+| 维度 | 基本要求 | 进阶要求 |
+|------|---------|---------|
+| PRD 对齐 | 功能和数据结构基本符合 PRD | 能清晰说明指标口径和聚合逻辑 |
+| 数据链路 | 接入 → 聚合 → 告警 → 看板可跑通 | 聚合任务支持增量更新 |
+| 分析能力 | 趋势、排行、告警三个模块可用 | 指标可配置、告警规则可自定义 |
+| 前端展示 | 看板能展示基本图表 | 图表支持时间范围筛选 |
+| 工程完整度 | Go API、数据库、前端链路已接通 | API 有统一错误处理和日志 |
 
-## 5. 可直接使用的接口清单（最小可用）
+## 参考资料
 
-| 模块 | 接口 |
-|------|------|
-| 数据接入 | `POST /api/traffic/events` |
-| 总览数据 | `GET /api/dashboard/overview` |
-| 趋势数据 | `GET /api/dashboard/trend?range=24h` |
-| 热点路口 | `GET /api/dashboard/intersections/top` |
-| 告警列表 | `GET /api/alerts?level=high&status=open` |
-| 告警处理 | `PATCH /api/alerts/:id/resolve` |
-
-## 6. 交付物要求
-
-- 可运行项目代码（Go API + 可视化前端）
-- 数据库表结构与初始化脚本
-- README（架构图、运行说明、指标解释）
-- 关键页面截图（趋势图、排名、告警）
-- 60 秒到 120 秒演示视频
-
-## 7. 验收标准
-
-| 维度 | 最低达标 | 加分项 |
-|------|------|------|
-| 数据链路 | 接入、存储、聚合、展示完整跑通 | 支持重放历史数据和批量导入 |
-| 分析能力 | 有趋势、排名、告警三个核心模块 | 告警支持分级与处理状态流转 |
-| Go 工程质量 | 代码分层清晰，错误处理明确 | 有结构化日志与基础性能优化 |
-| 可视化质量 | 关键图表可读，指标口径一致 | 增加地图层或交互筛选能力 |
-| 交付完整度 | README、截图、演示视频齐全 | 有线上演示地址和压测说明 |
-
-## 8. 提交前最后检查
-
-<el-card shadow="hover" style="margin: 20px 0; border-radius: 12px;">
-  <template #header>
-    <div style="font-weight: bold; font-size: 16px;">提交前最后看一眼</div>
-  </template>
-
-  <ul style="list-style-type: none; padding-left: 0;">
-    <li><label><input type="checkbox" disabled /> 数据接入接口可稳定写入原始事件</label></li>
-    <li><label><input type="checkbox" disabled /> 聚合任务能按窗口产出统计结果</label></li>
-    <li><label><input type="checkbox" disabled /> 告警规则生效并可在页面查看</label></li>
-    <li><label><input type="checkbox" disabled /> 看板页面可展示趋势、排名和告警</label></li>
-    <li><label><input type="checkbox" disabled /> README 已写清口径、接口和运行步骤</label></li>
-    <li><label><input type="checkbox" disabled /> 项目已部署或可完整本地复现</label></li>
-  </ul>
-</el-card>
-
-::: tip
-这个作业的关键，不是图表多炫，而是你能不能保证“口径一致、链路闭环、告警可信”。
-:::
+- [UI 设计](../../frontend/2.2-ui-design/)
+- [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
+- [从数据库到 Supabase](../../backend/2.2-database-supabase/)
+- [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
+- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
+- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)

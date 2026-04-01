@@ -1,282 +1,164 @@
-# 智能旅游规划 Agent 平台
+# 智能旅游规划 Agent 平台开发实战
 
-很多人做 AI 项目时，常见问题不是模型不会调，而是应用链路不完整：能聊天，但不能真正“规划一趟旅行”。
+## 概述
 
-这个大作业的目标，就是把一个“会说话的 Demo”做成“可执行的产品原型”。
+本实战项目要求你围绕一份真实的 PRD，从零完成一个智能旅游规划 Agent 平台。你将构建一个能接收结构化输入、生成每日行程、支持保存和重用的完整 AI 产品——不只是聊天机器人，而是一个有任务管理能力的产品。
 
-::: tip 🎯 这次做什么？
-打造一个 **智能旅游规划 Agent 平台**。用户输入出发地、目的地、日期、预算和偏好后，系统自动生成每日行程、预算拆分、景点与餐饮建议，并支持导出或保存计划。管理员可查看热门目的地、生成成功率和用户反馈。
+这是 Stage 2 的综合实战环节。这个项目的核心挑战在于：如何让 AI 生成结构化、可用的行程规划，而不是一大段不可操作的文字。
+
+## 前置知识
+
+在开始本项目之前，你应该已经掌握以下内容：
+
+- 前端页面设计与组件库使用（[UI 设计](../../frontend/2.2-ui-design/)、[现代组件库](../../frontend/2.7-modern-component-library/)）
+- 后端接口设计与开发（[接口代码编写](../../backend/2.3-ai-interface-code/)）
+- 数据库基础与 Supabase（[从数据库到 Supabase](../../backend/2.2-database-supabase/)）
+- Git 工作流与部署（[Git 和 GitHub](../../backend/2.4-git-workflow/)、[部署 Web 应用](../../backend/2.5-zeabur-deployment/)）
+
+## 学习目标
+
+完成本实战后，你将能够：
+
+1. 阅读 PRD 并从中提取 Agent 平台的开发任务清单
+2. 设计结构化的输入表单和结构化的输出格式
+3. 实现 Agent 编排层，处理用户输入、模型调用和结果存储
+4. 构建"生成 → 保存 → 重用"的业务闭环
+5. 完成端到端联调，交付可演示的 AI 产品原型
+
+## 项目简介
+
+你要构建的产品是一个智能旅游规划 Agent 平台：
+
+| 功能 | 描述 |
+|------|------|
+| **行程规划** | 用户输入出发地、目的地、日期、预算和偏好，系统生成每日行程 |
+| **预算拆分** | 行程结果包含预算分配和建议 |
+| **历史管理** | 用户可以保存历史计划、再次生成、导出 |
+| **管理后台** | 管理员查看热门目的地、失败任务和用户反馈 |
+
+::: tip PRD 入口
+本项目的需求文档在 GitHub： [查看 PRD](https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/travel-planning-agent-platform/PRD.md)
 :::
 
 <div style="margin: 32px 0;">
   <ClientOnly>
     <StepBar :active="0" :items="[
-      { title: '定范围', description: '先锁定场景、角色和最小功能闭环' },
-      { title: '搭前台', description: '把搜索、行程页、历史页先做出来' },
-      { title: '接智能', description: '把 Agent 编排、外部数据和存储接通' },
-      { title: '交付上线', description: '补齐后台、部署、README 和演示' }
+      { title: '需求分析', description: '阅读 PRD，明确页面、Agent 编排、输入输出结构' },
+      { title: '搭建骨架', description: '用 AI 生成首页、规划页、历史页、后台页骨架' },
+      { title: '迭代开发', description: '逐模块补充结构化输出、任务状态、历史管理' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
     ]" />
   </ClientOnly>
 </div>
 
-## 为什么这个题目值得做？
+## 第一部分：需求分析
 
-因为它同时覆盖了现代 AI 应用最关键的 4 类能力：
+### 1.1 阅读 PRD
 
-- **结构化输入**：把用户偏好转成可计算参数
-- **Agent 编排**：任务拆解、信息收集、行程生成与校验
-- **真实业务约束**：预算、时长、交通可行性、营业时间
-- **产品化交付**：保存历史、查看详情、导出分享
+打开 PRD 文档，重点回答以下问题：
 
-做完这个项目，你学到的不只是“会调用 LLM”，而是“会做一个可落地的 AI 产品”。
+- 第一版是否只做单目的地？
+- 行程输出是否必须结构化？结构是什么？
+- 导出能力做多深？（分享链接 / PDF / 图片）
+- 后台统计和任务日志的范围是什么？
 
-## 先看全景：系统主链路是什么？
+::: warning
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。
+:::
+
+### 1.2 确认系统架构
 
 ```mermaid
 flowchart TD
-  user["用户"] --> form["填写旅行需求"]
-  form --> orchestrator["Agent 编排层"]
-  orchestrator --> planner["行程生成器"]
-  orchestrator --> poi["POI / 景点与餐饮数据"]
-  orchestrator --> weather["天气与交通信息"]
-  planner --> validator["预算与时间校验"]
-  validator --> result["输出每日行程"]
-  result --> db["保存到数据库"]
-  db --> history["历史计划页"]
-  result --> export["导出 PDF / 图片 / 文本"]
+  prd["PRD"] --> planner["规划页"]
+  planner --> agent["Agent 编排层"]
+  agent --> model["模型调用"]
+  agent --> db["数据库"]
+  db --> history["历史计划"]
+  db --> admin["后台统计与日志"]
 ```
 
-```mermaid
-sequenceDiagram
-  autonumber
-  actor U as 用户
-  participant FE as 前端页面
-  participant API as 后端 API
-  participant AG as Agent 服务
-  participant DB as 数据库
+## 第二部分：搭建项目骨架
 
-  U->>FE: 输入目的地、日期、预算、偏好
-  FE->>API: POST /api/trips/plan
-  API->>AG: 创建规划任务
-  AG->>AG: 拆解子任务并生成草案行程
-  AG-->>API: 返回结构化计划
-  API->>DB: 保存 trip 与 itinerary
-  API-->>FE: 返回计划详情
-  U->>FE: 调整偏好并再次生成
-  FE->>API: POST /api/trips/:id/regenerate
-```
+### 2.1 生成前端页面
 
-## 1. 定范围：先把题目收住，避免“越做越大”
-
-### 角色设计
-
-| 角色 | 核心动作 |
-|------|------|
-| 普通用户 | 创建旅行计划、查看每日行程、调整偏好、保存与导出 |
-| 管理员 | 查看使用统计、热门城市、失败任务日志、用户反馈 |
-
-### 核心页面
-
-| 页面 | 路径 | 说明 |
-|------|------|------|
-| 首页 | `/` | 介绍产品价值与创建入口 |
-| 规划页 | `/planner` | 填写需求并发起生成 |
-| 行程详情页 | `/trips/:id` | 查看每日计划与预算拆分 |
-| 历史记录页 | `/history` | 查看过去的规划任务 |
-| 管理后台 | `/admin` | 查看统计数据与任务健康状态 |
-
-### 第一版边界（强烈建议）
-
-- 只做单人行程，不做多人协同编辑
-- 只支持 1 个目的地，不做多城市跳转
-- 只做 3-7 天行程，不做超长旅行计划
-- 先使用一种语言输出，不做多语言切换
-- 先接一个外部信息源，避免数据接入过多导致失控
-
-## 2. 搭前台：先把“用户可见闭环”跑通
-
-### 推荐技术栈
-
-- 前端：Next.js / React + TypeScript + Tailwind CSS + 组件库
-- 后端：Node.js (Nest/Express) 或 Spring Boot
-- 数据库：PostgreSQL / Supabase
-- AI：OpenAI / Claude / Gemini 任选其一
-- 可选：Redis（缓存热门目的地与提示词模板）
-
-### 第一步：生成页面骨架
-
-把这段提示词给你的 AI IDE：
+提示词参考：
 
 ```text
-请帮我生成一个“智能旅游规划 Agent 平台”的前端骨架。
-
-技术栈：
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-
-页面：
-1. 首页 /
-2. 规划页 /planner
-3. 行程详情页 /trips/[id]
-4. 历史记录页 /history
-5. 管理页 /admin
+请基于当前 PRD，帮我生成一个智能旅游规划 Agent 平台的前端骨架。
 
 要求：
-- 规划页左侧是需求表单，右侧是计划预览
-- 行程详情按 Day1 / Day2 分段展示
-- 有 loading、空状态、错误提示
-- 移动端可用
+1. 页面包括：首页、规划页、行程详情页、历史记录页、管理页
+2. 规划页左侧是表单，右侧是结果预览
+3. 先只生成页面结构和假数据，不接真实接口
+4. 风格要像现代 AI 产品
 ```
 
-### 第二步：补齐规划页交互
+### 2.2 验证页面结构
 
-```text
-请完善 /planner 页面。
+逐项检查：
 
-输入字段：
-- 出发地
-- 目的地
-- 出行日期（开始/结束）
-- 总预算
-- 旅行偏好（自然风光/历史文化/亲子/美食）
-- 每日节奏（轻松/标准/高强度）
+- [ ] 规划页的表单字段是否与 PRD 一致
+- [ ] 结果预览区域能展示结构化的行程数据
+- [ ] 历史记录页可以展示多条计划
+- [ ] 管理后台页可以展示统计数据
 
-输出区域：
-- 每日行程卡片
-- 预算拆分
-- 交通建议
-- 注意事项
+## 第三部分：迭代开发
 
-要求：
-- 点击“生成行程”后显示任务进度
-- 失败时显示可重试按钮
-- 首屏有示例数据引导
-```
+### 3.1 按模块推进
 
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="1" :items="[
-      { title: '定范围', description: '先锁定场景、角色和最小功能闭环' },
-      { title: '搭前台', description: '把搜索、行程页、历史页先做出来' },
-      { title: '接智能', description: '把 Agent 编排、外部数据和存储接通' },
-      { title: '交付上线', description: '补齐后台、部署、README 和演示' }
-    ]" />
-  </ClientOnly>
-</div>
+1. **鉴权**：注册、登录
+2. **规划表单**：结构化输入（出发地、目的地、日期、预算、偏好）
+3. **Agent 编排**：接收输入 → 调用模型 → 解析结构化输出
+4. **结果展示**：行程按天展示、预算拆分、建议
+5. **历史管理**：保存计划、再次生成、导出
+6. **管理后台**：热门目的地、失败任务、用户反馈
+7. **任务状态**：生成中 / 成功 / 失败的状态管理和错误记录
 
-## 3. 接智能：让 Agent 真正参与业务
+### 3.2 模块自检
 
-### 数据模型建议
+| 检查项 | 验证方法 |
+|--------|----------|
+| 输入完整性 | 表单字段是否与 PRD 一致 |
+| 输出结构化 | 行程结果是不是结构化数据（而非一大段文字） |
+| 数据一致性 | trip、itinerary、logs 数据是否对得上 |
+| 闭环验证 | 是否能演示"输入 → 生成 → 保存 → 再次生成" |
 
-```sql
-users (
-  id uuid primary key,
-  email text,
-  role text, -- user / admin
-  created_at timestamptz
-)
+## 第四部分：联调与上线
 
-trip_plans (
-  id uuid primary key,
-  user_id uuid,
-  origin text,
-  destination text,
-  start_date date,
-  end_date date,
-  budget numeric,
-  preferences jsonb,
-  status text, -- pending / success / failed
-  created_at timestamptz
-)
+### 4.1 端到端测试
 
-itinerary_days (
-  id uuid primary key,
-  trip_plan_id uuid,
-  day_index int,
-  title text,
-  activities jsonb,
-  day_budget numeric
-)
+至少验证以下场景：
 
-generation_logs (
-  id uuid primary key,
-  trip_plan_id uuid,
-  model_name text,
-  prompt_snapshot text,
-  latency_ms int,
-  status text,
-  created_at timestamptz
-)
-```
+- 输入行程参数 → 生成每日行程 → 查看预算拆分 → 保存到历史
+- 从历史记录中再次生成行程
+- 管理员查看任务统计和失败日志
 
-### 第三步：实现规划接口
+## 交付物
 
-```text
-请帮我实现 /api/trips/plan 接口。
+完成本项目后，你需要提交以下内容：
 
-目标：
-1. 接收用户输入（目的地、日期、预算、偏好）
-2. 调用 LLM 生成结构化 JSON 行程
-3. 校验 JSON 字段完整性
-4. 保存到 trip_plans 和 itinerary_days 表
-5. 返回给前端展示
+- [ ] 可访问的线上演示链接
+- [ ] 源码仓库链接（含 README）
+- [ ] PRD 文档
+- [ ] 核心页面截图（规划页、行程详情页、历史记录页、管理后台）
+- [ ] 60 秒演示视频
 
-要求：
-- 明确 DTO 和校验规则
-- 返回统一错误码
-- 记录模型调用耗时与失败日志
-```
+## 评分标准
 
-### 第四步：实现再生成与优化
+| 维度 | 基本要求 | 进阶要求 |
+|------|---------|---------|
+| PRD 对齐 | 页面、功能、数据结构基本符合 PRD | 能清晰说明设计决策 |
+| 产品闭环 | 规划 → 保存 → 历史 → 重生成可跑通 | 支持导出和分享 |
+| 输出质量 | 行程结果结构化且可读 | 预算拆分合理、建议有针对性 |
+| 后台能力 | 任务统计和失败日志可查看 | 有热门目的地分析 |
+| 工程完整度 | 前端、后端、数据库、模型调用链路已接通 | 任务状态管理完善，错误可追溯 |
 
-```text
-请帮我实现“微调行程”接口 /api/trips/:id/regenerate。
+## 参考资料
 
-用户可输入：
-- “预算再低 20%”
-- “减少步行”
-- “多加亲子场景”
-
-要求：
-- 保留旧版本行程
-- 生成新版本并对比差异
-- 前端支持一键切换版本
-```
-
-## 4. 上线与交付
-
-### 交付物
-
-- 完整项目仓库（前后端或单体）
-- 可访问演示链接
-- README（安装、配置、启动、部署、排障）
-- 60 秒左右演示视频
-- 至少 4 张截图：首页、规划页、结果页、管理页
-
-### 验收标准
-
-| 维度 | 最低达标 | 加分项 |
-|------|------|------|
-| 功能闭环 | 可创建计划、查看结果、保存历史 | 可做二次优化并保留版本 |
-| 智能质量 | 输出结构化、基本可执行 | 有预算校验和冲突提示 |
-| 工程质量 | 接口清晰、错误可追踪 | 有缓存与性能优化 |
-| 产品体验 | loading/空态/错误态完整 | 支持导出分享 |
-| 运维交付 | 可部署、文档可复现 | 有后台统计看板 |
-
-## 提交前最后检查
-
-<el-card shadow="hover" style="margin: 20px 0; border-radius: 12px;">
-  <template #header>
-    <div style="font-weight: bold; font-size: 16px;">提交前最后看一眼</div>
-  </template>
-
-  <ul style="list-style-type: none; padding-left: 0;">
-    <li><label><input type="checkbox" disabled /> 用户可以创建并成功生成一份行程</label></li>
-    <li><label><input type="checkbox" disabled /> 行程结果按天展示且可读</label></li>
-    <li><label><input type="checkbox" disabled /> 生成记录已写入数据库并可回看</label></li>
-    <li><label><input type="checkbox" disabled /> 接口失败时有可理解错误提示</label></li>
-    <li><label><input type="checkbox" disabled /> 管理后台可查看基础统计</label></li>
-    <li><label><input type="checkbox" disabled /> 项目可部署且 README 可复现</label></li>
-  </ul>
-</el-card>
+- [UI 设计](../../frontend/2.2-ui-design/)
+- [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
+- [从数据库到 Supabase](../../backend/2.2-database-supabase/)
+- [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
+- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
+- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)

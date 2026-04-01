@@ -1528,35 +1528,35 @@ Sitemap: ${siteUrl}/sitemap.xml
                   link: '/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/'
                 },
                 {
-                  text: '大作业 1：第一个 SaaS 全栈应用——文案生成网站',
+                  text: 'AI 营销文案 SaaS',
                   link: '/zh-cn/stage-2/assignments/copywriting-platform-supabase/'
                 },
                 {
-                  text: '大作业 2：在线考试与管理系统',
+                  text: '在线考试与管理系统',
                   link: '/zh-cn/stage-2/assignments/exam-management-express/'
                 },
                 {
-                  text: '扩展作业：现代网页落地页',
+                  text: '现代 AI 生图 SaaS',
                   link: '/zh-cn/stage-2/assignments/modern-landing-page/'
                 },
                 {
-                  text: '扩展作业：自制 Dify 智能体平台',
+                  text: '类 Dify 智能体平台',
                   link: '/zh-cn/stage-2/assignments/custom-dify-agent-platform/'
                 },
                 {
-                  text: '扩展作业：智能旅游规划 Agent 平台',
+                  text: '智能旅游规划 Agent 平台',
                   link: '/zh-cn/stage-2/assignments/travel-planning-agent-platform/'
                 },
                 {
-                  text: '扩展作业：电影推荐网（Spring Boot）',
+                  text: 'Spring Boot 电影推荐系统',
                   link: '/zh-cn/stage-2/assignments/movie-recommendation-springboot/'
                 },
                 {
-                  text: '扩展作业：简单买菜微服务网站',
+                  text: '生鲜电商微服务系统',
                   link: '/zh-cn/stage-2/assignments/simple-grocery-microservices/'
                 },
                 {
-                  text: '扩展作业：交通大数据可视化分析（Go）',
+                  text: 'Go 交通数据分析平台',
                   link: '/zh-cn/stage-2/assignments/traffic-data-visualization-go/'
                 }
               ]

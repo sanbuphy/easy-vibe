@@ -1,224 +1,113 @@
-# 大作业 1：第一个 SaaS 全栈应用——文案生成网站
+# AI 营销文案 SaaS 开发实战
 
-第一次做全栈网站，最容易卡住的地方往往不是代码，而是**不知道该做什么**。
+## 概述
 
-题目太大，功能太散，做到一半发现根本收不住。
+本实战项目要求你围绕一份真实的 PRD，从零完成一个面向独立开发者和内容团队的 AI 营销文案 SaaS 产品。你将使用 Supabase 作为后端服务、Stripe 作为支付系统，完成从需求分析到部署上线的全过程。
 
-所以这次换个思路：不给开放题，直接给你一个明确的方向——做一件完整但不复杂的事。
+这是 Stage 2 的综合实战环节。在前面几章中，你已经分别学习了前端页面搭建、后端接口开发、数据库操作、支付集成等单项技能——这个项目要求你把它们全部串起来，交付一个可运行的产品原型。
 
-::: tip 🎯 这次做什么？
-打造一个 **AI 营销文案工作台**。用户登录后填写产品信息，一键生成营销文案，自动保存历史记录。需要更多生成次数？升级套餐即可。管理员可在后台查看所有用户、生成记录和支付情况。
+## 前置知识
+
+在开始本项目之前，你应该已经掌握以下内容：
+
+- 前端页面设计与组件库使用（[UI 设计](../../frontend/2.2-ui-design/)、[现代组件库](../../frontend/2.7-modern-component-library/)）
+- 后端接口设计与开发（[接口代码编写](../../backend/2.3-ai-interface-code/)）
+- 数据库基础与 Supabase（[从数据库到 Supabase](../../backend/2.2-database-supabase/)）
+- 支付集成（[Stripe 收费系统](../../backend/2.7-stripe-payment/)）
+- Git 工作流与部署（[Git 和 GitHub](../../backend/2.4-git-workflow/)、[部署 Web 应用](../../backend/2.5-zeabur-deployment/)）
+
+## 学习目标
+
+完成本实战后，你将能够：
+
+1. 阅读并理解一份真实的 PRD，从中提取开发任务清单
+2. 使用 AI 辅助分步生成前端页面和后端接口
+3. 使用 Supabase 实现用户鉴权、数据库操作
+4. 集成 Stripe 实现付费订阅功能
+5. 搭建管理后台并完成端到端联调
+
+## 项目简介
+
+你要构建的产品是一个 AI 营销文案 SaaS，包含三个子系统：
+
+| 子系统 | 职责 |
+|--------|------|
+| **官网前台** | 产品介绍、定价、FAQ、注册转化 |
+| **用户工作台** | 输入产品信息、生成文案、查看历史、升级套餐 |
+| **后台管理台** | 用户管理、生成记录、支付数据、运营概览 |
+
+后端使用 Supabase 提供数据库和鉴权能力，使用 Stripe 处理支付，使用 AI 模型生成营销文案。
+
+::: tip PRD 入口
+本项目的需求文档在 GitHub： [查看 PRD](https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/copywriting-platform-supabase/PRD.md)
 :::
 
 <div style="margin: 32px 0;">
   <ClientOnly>
     <StepBar :active="0" :items="[
-      { title: '定主题', description: '先把网站的页面和功能定下来' },
-      { title: '搭前台', description: '首页、登录、工作台先做出来' },
-      { title: '接后端', description: '数据库、生成、支付接起来' },
-      { title: '做后台与交付', description: '管理台、部署、演示材料补齐' }
+      { title: '需求分析', description: '阅读 PRD，明确页面、功能、鉴权、支付范围' },
+      { title: '搭建骨架', description: '用 AI 生成三套前端骨架（www / app / admin）' },
+      { title: '后端集成', description: 'Supabase 鉴权、生成接口、Stripe 支付' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
     ]" />
   </ClientOnly>
 </div>
 
-## 先看全景：你最终要做出来的不是“一个页面”，而是一条完整业务链路
+## 第一部分：需求分析
 
-很多人第一次做全栈项目，最容易犯的错不是不会写代码，而是只盯着某一个页面，结果首页挺好看，后端没接上；生成按钮能点，历史记录没保存；支付能跳转，但数据库根本没更新。
+### 1.1 阅读 PRD
 
-这个项目真正要交付的，是下面这条完整链路：
+打开 PRD 文档，重点回答以下问题：
+
+- 系统有几个入口？各自覆盖哪些页面？
+- 每个页面的核心功能是什么？
+- 后端包含哪些模块和数据表？
+- 套餐定价、支付流程、免费额度如何设计？
+- MVP 范围是什么？第一版哪些做，哪些不做？
+
+::: warning
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。
+:::
+
+### 1.2 确认系统架构
+
+根据 PRD 梳理出系统的整体架构：
 
 ```mermaid
 flowchart TD
-  visitor["访客"] --> home["首页 / 落地页"]
-  home --> auth["注册 / 登录"]
-  auth --> dashboard["用户工作台"]
-  dashboard --> generate["生成接口 /api/generate"]
-  generate --> llm["LLM 文案生成"]
-  generate --> generations["generations 表"]
-  dashboard --> history["历史记录读取"]
-  dashboard --> billing["套餐页 /billing"]
-  billing --> stripe["Stripe Checkout"]
-  stripe --> webhook["支付回调 Webhook"]
-  webhook --> subscriptions["subscriptions 表"]
-  subscriptions --> profile["profiles.plan 更新"]
-  profile --> admin["管理后台 /admin"]
-  admin --> report["查看用户 / 生成记录 / 支付状态"]
+  prd["PRD"] --> web["官网前台"]
+  prd --> app["用户工作台"]
+  prd --> admin["后台管理台"]
+  app --> auth["鉴权"]
+  app --> gen["文案生成任务"]
+  gen --> db["数据库"]
+  billing["支付与套餐"] --> db
+  admin --> analytics["用户 / 生成 / 支付看板"]
 ```
 
-只要上面这张图能跑通，你做的就不是课堂 Demo，而是一个真正像产品的最小 SaaS。
+## 第二部分：搭建项目骨架
 
-## 为什么选这个题目？
+### 2.1 生成前端页面
 
-因为它恰到好处——**涵盖了现代网站该有的所有要素，又不会复杂到失控**。
+使用 AI 先生成所有页面的基本结构和假数据。
 
-- **前台有实际用途**：不是摆设，用户真的来解决问题
-- **用户系统有登录权限**：区分访客与注册用户
-- **核心功能是"生成"**：调用 AI 动态产出内容，而非展示静态页面
-- **数据持久化**：生成结果存入数据库，随时可查
-- **付费机制**：看起来像正经 SaaS，而非玩具项目
-- **管理后台**：体验管理员视角，掌控全局
-
-难度适中：不会简单到只有一个表单，也不会复杂到做一周还找不着北。
-
-### 先锁定项目边界，别一上来就做“大而全”
-
-为了让你真的能按时做完，这个项目建议你先只做 **最小可用版本**：
-
-- 只做 **邮箱注册 / 登录**，先不要接第三方 OAuth
-- 支付只做 **免费版 + Pro 版** 两档，先不要做优惠券、年付月付切换
-- AI 生成功能只做 **单次文案生成**，先不要做批量任务队列
-- 管理后台先做 **查看**，暂时不要求复杂运营操作
-- 权限只区分 **user / admin** 两种角色
-
-你会发现，真正难的不是“还能不能继续加功能”，而是“能不能先把主流程稳定交付”。
-
-## 1. 定主题：先搞清楚要做什么
-
-网站名称：**LaunchKit**
-
-定位：AI 营销文案工作台
-
-目标用户：独立开发者、小商家、内容运营者，以及想快速搞定 Landing Page 的人。
-
-他们来这里不是为了闲聊——就是想**快速拿到能用的营销文案**。
-
-### 核心功能
-
-别想太复杂，核心就一件事：
-
-**用户输入**：产品名、一句话介绍、目标用户、3 个卖点、投放渠道
-
-**系统输出**：主标题、副标题、CTA 按钮文案、3 版短文案、1 版长文案
-
-生成结果自动存入账户，下次登录随时查看。
-
-### 页面规划
-
-按这 6 个页面来做：
-
-| 页面 | 路径 | 说明 |
-|------|------|------|
-| 首页 | `/` | 清晰传达产品价值，放置注册/登录入口 |
-| 登录页 | `/login` | 简洁的登录表单 |
-| 注册页 | `/register` | 简洁的注册表单 |
-| 工作台 | `/dashboard` | 填写信息、生成文案、查看结果 |
-| 套餐页 | `/billing` | 展示免费版与 Pro 版，跳转 Stripe 付款 |
-| 管理后台 | `/admin` | 管理员查看用户、生成记录、支付状态 |
-
-### 数据模型
-
-三张核心表足够：
-
-```sql
-profiles (
-  id uuid primary key,
-  email text,
-  role text,         -- user / admin
-  plan text,         -- free / pro
-  created_at timestamptz
-)
-
-generations (
-  id uuid primary key,
-  user_id uuid,
-  product_name text,
-  target_channel text,
-  input_payload jsonb,
-  result_payload jsonb,
-  created_at timestamptz
-)
-
-subscriptions (
-  id uuid primary key,
-  user_id uuid,
-  stripe_customer_id text,
-  stripe_subscription_id text,
-  plan text,
-  status text,
-  created_at timestamptz
-)
-```
-
-到这一步，整个网站的骨架已经清晰。
-
-### 推荐开发顺序
-
-不要按“想到什么做什么”，而要按依赖关系推进：
-
-```mermaid
-flowchart LR
-  A["首页 / 登录 / Dashboard 骨架"] --> B["Supabase Auth"]
-  B --> C["profiles / generations / subscriptions"]
-  C --> D["生成接口 + 历史记录"]
-  D --> E["Stripe 支付 + 套餐限制"]
-  E --> F["Admin 后台"]
-  F --> G["部署 / README / 演示视频"]
-```
-
-这个顺序的好处是：每一步都能看到阶段性成果，也更容易排查问题。
-
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="1" :items="[
-      { title: '定主题', description: '先把网站的页面和功能定下来' },
-      { title: '搭前台', description: '首页、登录、工作台先做出来' },
-      { title: '接后端', description: '数据库、生成、支付接起来' },
-      { title: '做后台与交付', description: '管理台、部署、演示材料补齐' }
-    ]" />
-  </ClientOnly>
-</div>
-
-## 2. 搭前台：先把页面做出来
-
-这一步先别碰数据库，也别急着接支付——**先把前台骨架搭起来**。
-
-### 技术栈
-
-- **Next.js App Router** —— 现代 React 框架
-- **TypeScript** —— 类型安全
-- **Tailwind CSS** —— 原子化样式
-- **shadcn/ui** —— 精致组件库
-- **Supabase** —— 后端服务
-- **Stripe** —— 支付处理
-
-这套组合是目前 AI IDE 最擅长的技术栈，也最符合现代 SaaS 的审美。
-
-### 第一步：搭建项目骨架
-
-把下面这段提示词丢给 Trae / Cursor / Claude Code：
+提示词参考：
 
 ```text
-请帮我创建一个现代 SaaS 网站，名字叫 LaunchKit。
-
-技术栈要求：
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-
-页面清单：
-1. 首页 /
-2. 登录页 /login
-3. 注册页 /register
-4. 用户工作台 /dashboard
-5. 套餐页 /billing
-6. 管理后台 /admin
-
-请先只做前端结构，不接数据库。
+请基于当前 PRD，帮我生成一个 AI 营销文案 SaaS 的前端骨架。
 
 要求：
-- 首页要有现代 AI SaaS 落地页的气质
-- 登录和注册页保持简洁
-- Dashboard 左侧表单，右侧结果展示
-- Billing 页面展示 free 和 pro 两个套餐
-- Admin 页面先做后台框架：侧边栏、顶部栏、表格区域
-- 使用 shadcn/ui 组件
-- 页面风格要像真实产品，不要像课堂 demo
+1. 分成三个入口：www、app、admin
+2. 官网包括：首页、定价、FAQ
+3. app 包括：登录、注册、生成工作台、历史记录、套餐页
+4. admin 包括：后台首页、用户管理、生成记录、支付订单
+5. 先只生成页面结构和假数据，不接真实接口
+6. 风格要像现代 SaaS，不像课堂 demo
 ```
 
-### 第二步：完善工作台细节
+### 2.2 完善核心页面
 
-第一版页面完成后，继续补充：
+骨架搭好后，重点完善文案生成工作台（Dashboard）页面：
 
 ```text
 请继续完善 /dashboard 页面。
@@ -247,32 +136,28 @@ flowchart LR
 - 响应式布局，宽屏窄屏都能正常显示
 ```
 
+### 2.3 验证页面结构
+
+逐项检查：
+
+- [ ] 三个入口的路由是否独立
+- [ ] 页面数量是否与 PRD 一致
+- [ ] Dashboard 的表单和结果区域布局合理
+- [ ] 假数据展示了基本的 UI 状态
+
 ### 遇到阻碍？
 
-回头看看这几篇：
+如果你在前端搭建阶段卡住，可以回顾这些章节：
 
-- [构建第一个现代应用程序 - UI 设计](../../frontend/2.2-ui-design/)
+- [UI 设计](../../frontend/2.2-ui-design/)
 - [参考 UI 设计规范设计页面和按钮](../../frontend/2.3-multi-product-ui/)
 - [用 LLM 和 Skills 让界面变好看](../../frontend/2.4-llm-skills-beautiful/)
 - [从设计原型到项目代码](../../frontend/2.6-design-to-code/)
 - [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
 
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="2" :items="[
-      { title: '定主题', description: '先把网站的页面和功能定下来' },
-      { title: '搭前台', description: '首页、登录、工作台先做出来' },
-      { title: '接后端', description: '数据库、生成、支付接起来' },
-      { title: '做后台与交付', description: '管理台、部署、演示材料补齐' }
-    ]" />
-  </ClientOnly>
-</div>
+## 第三部分：后端集成
 
-## 3. 接后端：把数据库、生成、支付串起来
-
-这一步才算真正的"全栈"。
-
-### 第三步：接入 Supabase 登录
+### 3.1 接入 Supabase 登录
 
 ```text
 请把我当成 0 基础，一步一步带我完成 Supabase 登录接入。
@@ -293,7 +178,7 @@ flowchart LR
 - 完成后说明如何验证注册和登录
 ```
 
-### 第四步：接入生成接口和数据库
+### 3.2 接入生成接口和数据库
 
 ```text
 请把我当成 0 基础，帮我完成网站的核心功能：生成营销文案并保存。
@@ -324,7 +209,7 @@ flowchart LR
 - 如何测试完整生成链路
 ```
 
-### 第五步：接入 Stripe 付费
+### 3.3 接入 Stripe 付费
 
 ```text
 请把我当成 0 基础，帮我给 LaunchKit 加上最简可用的 Stripe 付费。
@@ -345,7 +230,7 @@ flowchart LR
 - 完成后说明如何测试完整支付流程
 ```
 
-### 第六步：搭建管理后台
+### 3.4 搭建管理后台
 
 ```text
 请把我当成 0 基础，帮我做一个简洁可用的管理后台。
@@ -354,10 +239,7 @@ flowchart LR
 
 需要你完成：
 1. 仅 role = admin 的用户可访问 /admin
-2. 后台包含 3 个 Tab：
-   - 用户列表
-   - 生成记录
-   - 订阅状态
+2. 后台包含 3 个 Tab：用户列表、生成记录、订阅状态
 3. 用户列表显示：email、plan、创建时间
 4. 生成记录显示：用户、产品名、渠道、创建时间
 5. 订阅状态显示：用户、套餐、支付状态
@@ -370,37 +252,22 @@ flowchart LR
 
 ### 遇到阻碍？
 
-回头看看这几篇：
+如果你在后端开发阶段卡住，可以回顾这些章节：
 
 - [从数据库到 Supabase](../../backend/2.2-database-supabase/)
 - [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
 - [如何集成 Stripe 等收费系统](../../backend/2.7-stripe-payment/)
 
-<div style="margin: 32px 0;">
-  <ClientOnly>
-    <StepBar :active="3" :items="[
-      { title: '定主题', description: '先把网站的页面和功能定下来' },
-      { title: '搭前台', description: '首页、登录、工作台先做出来' },
-      { title: '接后端', description: '数据库、生成、支付接起来' },
-      { title: '做后台与交付', description: '管理台、部署、演示材料补齐' }
-    ]" />
-  </ClientOnly>
-</div>
+## 第四部分：联调与上线
 
-## 4. 做后台与交付：真正上线
+### 4.1 端到端测试
 
-网站基本成型，最后三件事：
+至少验证以下场景：
 
-### 4.1 部署
+- 注册 → 登录 → 生成文案 → 查看历史 → 升级套餐
+- 管理员登录 → 查看用户数据 → 查看生成记录 → 查看支付状态
 
-代码推送到 GitHub，部署到公网。
-
-参考：
-
-- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
-- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)
-
-### 第七步：部署前检查
+部署前检查：
 
 ```text
 请把我当成 0 基础，帮我检查项目是否具备部署条件。
@@ -418,52 +285,37 @@ flowchart LR
 3. 说明修复后的部署步骤
 ```
 
-### 4.2 README
+### 4.2 部署
 
-至少包含：
-- 项目简介
-- 核心页面说明
-- 技术栈
-- 本地启动步骤
-- 环境变量清单
+将项目部署到公网环境。部署教程参考：[Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)、[如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)。
 
-### 4.3 演示材料
+## 交付物
 
-至少准备：
-- 首页截图
-- Dashboard 生成截图
-- Billing 页面截图
-- Admin 后台截图
-- 60 秒左右演示视频
+完成本项目后，你需要提交以下内容：
 
-## 验收标准
+- [ ] 可访问的线上演示链接
+- [ ] 源码仓库链接（含 README）
+- [ ] PRD 文档
+- [ ] 核心页面截图（首页、Dashboard、Billing、Admin）
+- [ ] 60 秒演示视频（覆盖注册 → 生成 → 支付 → 后台）
 
-如果你想判断这个作业到底算不算“完成”，不要只看页面有没有写完，而要看下面这几个维度是不是都达标：
+README 至少包含：项目简介、核心页面说明、技术栈、本地启动步骤、环境变量清单。
 
-| 维度 | 最低达标 | 加分项 |
-|------|------|------|
-| 产品完整度 | 首页、登录、Dashboard、Billing、Admin 都能访问 | 首页文案和视觉风格明显像真实 SaaS |
-| 业务闭环 | 用户可以注册、登录、生成并查看历史 | 免费 / Pro 权限差异清晰可见 |
-| 数据正确性 | 生成结果和支付状态都会写入数据库 | 有明确的错误提示、空状态和 Loading |
+## 评分标准
+
+| 维度 | 基本要求 | 进阶要求 |
+|------|---------|---------|
+| 产品完整度 | 首页、登录、Dashboard、Billing、Admin 都能访问 | 首页文案和视觉风格像真实 SaaS |
+| 业务闭环 | 注册 → 登录 → 生成 → 查看历史可以跑通 | 免费/Pro 权限差异清晰可见 |
+| 数据正确性 | 生成结果和支付状态都写入数据库 | 有明确的错误提示、空状态和 loading |
 | 权限与安全 | 未登录不能访问受保护页面，普通用户不能进 Admin | 有基本的输入校验和服务端鉴权 |
 | 工程交付 | 项目可本地启动，也可部署到公网 | README 清楚，演示视频结构完整 |
 
-如果你现在还觉得任务太大，就记住一个标准：**优先保证“能跑通”，再去追求“做漂亮”。**
+::: tip
+如果你觉得任务太大，记住一个原则：**先保证"能跑通"，再去追求"做漂亮"。**
+:::
 
-## 5. 最终成果
-
-按这篇指南做完，你拿到的不是"练习页"，而是一个**最小但完整的 SaaS 产品**：
-
-- ✅ 现代组件库前端
-- ✅ Supabase 数据库与登录
-- ✅ 真实 AI 生成功能
-- ✅ Stripe 支付系统
-- ✅ 管理员后台
-- ✅ 可部署上线
-
-这完全够资格作为**第一个全栈作品**。
-
-## 6. 提交前最后检查
+## 提交前检查
 
 <el-card shadow="hover" style="margin: 20px 0; border-radius: 12px;">
   <template #header>
@@ -480,6 +332,15 @@ flowchart LR
   </ul>
 </el-card>
 
-::: tip 🚀 下一篇
-完成这个网站后，继续阅读 [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)，把产品界面的完成度再提升一层。
-:::
+## 参考资料
+
+- [UI 设计](../../frontend/2.2-ui-design/)
+- [参考 UI 设计规范设计页面和按钮](../../frontend/2.3-multi-product-ui/)
+- [用 LLM 和 Skills 让界面变好看](../../frontend/2.4-llm-skills-beautiful/)
+- [从设计原型到项目代码](../../frontend/2.6-design-to-code/)
+- [使用现代组件库更新你的界面](../../frontend/2.7-modern-component-library/)
+- [从数据库到 Supabase](../../backend/2.2-database-supabase/)
+- [大模型辅助编写接口代码与接口文档](../../backend/2.3-ai-interface-code/)
+- [Git 和 GitHub 工作流](../../backend/2.4-git-workflow/)
+- [如何部署 Web 应用](../../backend/2.5-zeabur-deployment/)
+- [如何集成 Stripe 等收费系统](../../backend/2.7-stripe-payment/)
